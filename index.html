@@ -2899,15 +2899,7 @@ function show64() {
 
 	//예외로 체용 정보로 효사가 아닌 단사를 읽어야 한다면...
 	//alert(tmp_cheyong64_list[0]);
-	if (my_byunhyo_cnt==3) {
-		//alert("3");
-		//본괘의 단사, 지괘의 단사
-		che_info = get_juyeok_64_dansa(tmp_cheyong64_list[0]);
-		yong_info = get_juyeok_64_dansa(tmp_cheyong64_list[1]);
-
-		document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = che_info;
-		document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = yong_info;
-	} else {
+	
 		
 		var tmp_che_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[0]);
 		var tmp_yong_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[1]);
@@ -2917,7 +2909,7 @@ function show64() {
 		
 		document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = che_info;
 		document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = yong_info;
-	}
+	
 	
 	
 	
