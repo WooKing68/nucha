@@ -84,6 +84,16 @@ var g_juyeok_dansa = {
 	'9.9':'9.9단사'
 };
 
+//a_dansa_key: "3.2" 혹은 "3.2.1"
+function get_juyeok_64_dansa(a_dansa_key) {
+	var my_key = a_dansa_key.substr(0, 3);
+
+	var my_val = g_juyeok_dansa[my_key];
+	
+
+	return my_val;
+}
+
 
 
 //주역 효사 데이타
@@ -490,3 +500,12 @@ var g_juyeok_hyosa = {
 	'9.9.5':'六五/出涕沱若 戚嗟若 吉/출체타약 척차약 길/',
 	'9.9.6':'上九/王用出征 有嘉 折首 獲匪其醜 无咎/왕용출정 유가 절수 획비기추 무구/'
 	};
+
+
+function get_juyeok_384_hyosa(a_hyosa_key) {
+	var my_val = g_juyeok_hyosa[a_hyosa_key];
+	var s_split = my_val.split("/");
+
+	return [s_split[0], s_split[1], s_split[2], s_split[3]];
+}
+

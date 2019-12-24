@@ -2164,6 +2164,35 @@ var g_base64_list;
 var g_byunhyo_list;
 var g_ji64_list;
 
+	//['0', '1', '1', '0', '0', '0']를 입력받아 
+	//['011', '000']로 바꾼 후
+	//g_juyeok_5의 키로 사용하여 최종적으로 '7.2'(택지췌)를 얻어낸다.
+	function get_juyeok_64_dansa_key(a_list) {
+		var tmp_up_key = `${a_list[0]}${a_list[1]}${a_list[2]}`;
+		var tmp_dn_key = `${a_list[3]}${a_list[4]}${a_list[5]}`;
+
+		var up_key = g_juyeok_5[tmp_up_key];
+		var dn_key = g_juyeok_5[tmp_dn_key];
+
+		var juyeok_64_key = `${up_key}.${dn_key}`;
+		
+		return juyeok_64_key;
+	}
+
+	//a_key: "3.4" or "3.4.5"
+	function get_juyeok_64_name(a_key) {
+			var name64 = "";
+
+			if (a_key.substr(0, 1) != "0" || a_key.substr(0, 1) != "5") {
+				var my_key = a_key.substr(0, 3);
+				var tmp_val = g_juyeok_64[my_key];
+				var tmp_arr_val = tmp_val.split("/");
+				name64 = tmp_arr_val[1];   //g_juyeok_64[g_juyeok_64_key];
+			}
+
+		return name64;
+	}
+
 	function initJuYeok() {
 		//this.ltime = localtime()
 
@@ -2246,30 +2275,30 @@ var g_ji64_list;
 
 	
 	function make_64_info(a_name, a_up_key, a_dn_key) {
-        		if (a_up_key==null || a_dn_key==null) {
-            		//s = "-------------------------------\n"
-            		//s += "%s: %s\n" % (a_name, "없음")
-            		return [a_name, "", "", "", ""];
+		if (a_up_key==null || a_dn_key==null) {
+			//s = "-------------------------------\n"
+			//s += "%s: %s\n" % (a_name, "없음")
+			return [a_name, "", "", "", ""];
 		}
 
-        		var up_idx = g_juyeok_5[a_up_key];
-        		var dn_idx = g_juyeok_5[a_dn_key];
-        		var g_juyeok_64_key = `${up_idx}.${dn_idx}`; //스트링 포맷
+		var up_idx = g_juyeok_5[a_up_key];
+		var dn_idx = g_juyeok_5[a_dn_key];
+		var g_juyeok_64_key = `${up_idx}.${dn_idx}`; //스트링 포맷
 
-        		//s = "-------------------------------\n"
-        		//s += "%s: %s\n" % (a_name, g_juyeok_64[g_juyeok_64_key])
-        		//s += "%s\n%s" % (g_juyeok_0[up_idx], g_juyeok_0[dn_idx])
+		//s = "-------------------------------\n"
+		//s += "%s: %s\n" % (a_name, g_juyeok_64[g_juyeok_64_key])
+		//s += "%s\n%s" % (g_juyeok_0[up_idx], g_juyeok_0[dn_idx])
 
-        		var up8 = g_juyeok_0[up_idx];
-        		var dn8 = g_juyeok_0[dn_idx];
+		var up8 = g_juyeok_0[up_idx];
+		var dn8 = g_juyeok_0[dn_idx];
 
 		var tmp_val = g_juyeok_64[g_juyeok_64_key];
 		var tmp_arr_val = tmp_val.split("/");
-        		var name64 = tmp_arr_val[1];   //g_juyeok_64[g_juyeok_64_key];
+		var name64 = tmp_arr_val[1];   //g_juyeok_64[g_juyeok_64_key];
 
-        		var a_info = tmp_arr_val[2]; //s
+		var a_info = tmp_arr_val[2]; //s
 
-        		return [a_name, name64, up8, dn8, a_info];
+		return [a_name, name64, up8, dn8, a_info];
 	}
 
 	//'天/坎爲水/위험의 연속, 강(江) 건너 강(江)'에서 "坎爲水" 부분만 떼어내어 리턴. 
@@ -2298,15 +2327,17 @@ var g_ji64_list;
 
 
 	function get_byunhyo_cnt() {
-        		var byunhyo_cnt = 0
-        		for (var i=0;i<6;i++) {
-            		if (g_byunhyo_list[i]=="1") {
-                			byunhyo_cnt += 1;
+		var byunhyo_cnt = 0
+		for (var i=0;i<6;i++) {
+			if (g_byunhyo_list[i]=="1") {
+				byunhyo_cnt += 1;
 			}
 		}
 
-        		return byunhyo_cnt;
+		return byunhyo_cnt;
 	}
+
+	
 
 
 
@@ -2317,11 +2348,117 @@ var g_ji64_list;
 
 	function get_ji64_list() {
 		
-        		if (get_byunhyo_cnt()==0) {
-            		return make_64_info_from_list("지괘", null);
+		if (get_byunhyo_cnt()==0) {
+			return make_64_info_from_list("지괘", null);
 		}
 
-        		return make_64_info_from_list("지괘", g_ji64_list);
+		return make_64_info_from_list("지괘", g_ji64_list);
+	}
+
+
+	//'체'와 '용'
+	//위 지괘의 결과를 이용해야 할 수 있으므로 '지괘' 수행 후, 이 함수를 수행하는 것이 좋다.
+	//[체: "1.1.2", 용: "2.3.5"]와 같은 형식의 리스트를 리턴해준다.
+	//이를테면 체: "1.1.2"(중수감의 2효)를 보여주고, 용:"2.3.5"(지뢰복의 5효)를 보여주면 된다.
+	function get_cheyong64_list() {
+		var byunhyo_cnt = get_byunhyo_cnt();
+
+		var bon64_dansa_key = get_juyeok_64_dansa_key(g_base64_list); //리턴 형식: "2.3"
+		var ji64_dansa_key = get_juyeok_64_dansa_key(g_ji64_list); //리턴 형식: "2.3"
+
+		if (byunhyo_cnt==0) { //괘사를 주로 볼 것
+			//그러나 만약 괘가 건괘, 곤괘라면 
+			//건괘는 용구, 곤괘는 용육을 본다. 
+			//무슨 말인지?
+			if (bon64_dansa_key == "6.6") {
+				return ["6.6.6", "6.6.6"];
+			} else if (bon64_dansa_key == "2.2") {
+				return ["2.2.2", "2.2.2"];
+			}
+			else {
+				return ["0.0.0", "0.0.0"];
+			}
+		}
+
+		
+
+		
+
+		if (byunhyo_cnt==1) { //체: 본괘 중 변효, 용: 지괘 중 변효
+			var byeonhyo_position = "";
+
+			for (var i=0;i<6;i++) {
+				if (g_byunhyo_list[i] != "0") {
+					byeonhyo_position = byeonhyo_position + (6-i);
+					break;
+				}
+			}
+
+			return [bon64_dansa_key + "." + byeonhyo_position, ji64_dansa_key + "." + byeonhyo_position];
+
+		} else if (byunhyo_cnt==2) { //체: 괘 변효 중 상효, 용: 괘 변효 중 하효
+			var byeonhyo_position_up = "";
+			var byeonhyo_position_dn = "";
+
+			var tmp_cnt = 0;
+			for (var i=0;i<6;i++) {
+				if (g_byunhyo_list[i] != "0") {
+					tmp_cnt = tmp_cnt + 1;
+
+					if (tmp_cnt == 1) {
+						byeonhyo_position_up = byeonhyo_position_up + (6-i);
+					}
+
+					if (tmp_cnt == 2) {
+						byeonhyo_position_dn = byeonhyo_position_dn + (6-i);
+					}
+				}
+			}
+
+			return [ji64_dansa_key + "." + byeonhyo_position_up, ji64_dansa_key + "." + byeonhyo_position_dn];
+
+		} else if (byunhyo_cnt==3) { //체: 본괘의 단사, 용: 지괘의 단사
+			return [bon64_dansa_key + "." + "0", ji64_dansa_key + "." + "0"];
+
+		} else if (byunhyo_cnt==4) { //체: 지괘 불변효 중 하효, 용: 지괘 불변효 중 상효
+			var bul_byeonhyo_position_up = "";
+			var bul_byeonhyo_position_dn = "";
+			
+			var tmp_cnt = 0;
+			for (var i=0;i<6;i++) {
+				if (g_byunhyo_list[i] == "0") {
+					tmp_cnt = tmp_cnt + 1;
+
+					if (tmp_cnt == 1) {
+						bul_byeonhyo_position_up = bul_byeonhyo_position_up + (6-i);
+					}
+
+					if (tmp_cnt == 2) {
+						bul_byeonhyo_position_dn = bul_byeonhyo_position_dn + (6-i);
+					}
+				}
+			}
+
+			return [ji64_dansa_key + "." + bul_byeonhyo_position_dn, ji64_dansa_key + "." + bul_byeonhyo_position_up];
+
+		} else if (byunhyo_cnt==5) { //체: 지괘 중 불변효, 용: 본괘 중 불변효
+
+			var bul_byeonhyo_position = "";
+
+			for (var i=0;i<6;i++) {
+				if (g_byunhyo_list[i] == "0") {
+					bul_byeonhyo_position = bul_byeonhyo_position + (6-i);
+					break;
+				}
+			}
+
+			return [ji64_dansa_key + "." + bul_byeonhyo_position, bon64_dansa_key + "." + bul_byeonhyo_position];
+
+		} else if (byunhyo_cnt==6) { //체: 지괘의 단사, 용: 본괘의 단사
+			return [ji64_dansa_key + ".0", bon64_dansa_key + ".0"];
+		}
+
+
 	}
 
 
@@ -2546,6 +2683,13 @@ function clear64() {
 	document.getElementById("tbl_ji64").rows[0].cells[5].innerHTML = "";
 	document.getElementById("tbl_ji64").rows[0].cells[6].innerHTML = "";
 	document.getElementById("tbl_ji64").rows[0].cells[7].innerHTML = "";
+
+	//체용
+	document.getElementById("tbl_cheyong64").rows[1].cells[0].innerHTML = "";
+	document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = "";
+	document.getElementById("tbl_cheyong64").rows[1].cells[2].innerHTML = "";
+	document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = "";
+
 	JuYeokForm.txt_byunhyo.value = "";
 
 	document.getElementById("tbl_ho64").rows[0].cells[0].innerHTML = "";
@@ -2668,6 +2812,7 @@ function show64() {
 	//a_name, name64, up8, dn8, a_info
 	var tmp_base64_list = get_base64_list();
 	var tmp_ji64_list = get_ji64_list();
+	var tmp_cheyong64_list = get_cheyong64_list(); //리턴 형식: ["1.1.1", "3.4.6"]
 	var tmp_ho64_list = get_ho64_list();
 	var tmp_mirae64_list = get_mirae64_list();
 	var tmp_dojeon64_list = get_dojeon64_list();
@@ -2738,6 +2883,43 @@ function show64() {
 		j++;
 		document.getElementById("tbl_ji64").rows[0].cells[j].innerHTML = tmp_ji_list_4 + "<b><br>" + tmp_ji64_list[4] + "<b>";
 	}
+
+	//------------------------------------------------------------------------------------------------------
+
+	//체용 표시
+	var tmp_che_name = get_juyeok_64_name(tmp_cheyong64_list[0]);
+	var tmp_yong_name = get_juyeok_64_name(tmp_cheyong64_list[1]);
+
+	//괘 명 표시
+	document.getElementById("tbl_cheyong64").rows[1].cells[0].innerHTML = tmp_che_name + "<br><br>" + g_juyeok_0[tmp_cheyong64_list[0].substr(0, 1)] + "<br>" + g_juyeok_0[tmp_cheyong64_list[0].substr(2, 1)] + "<br><br>";
+	document.getElementById("tbl_cheyong64").rows[1].cells[2].innerHTML = tmp_yong_name + "<br><br>" + g_juyeok_0[tmp_cheyong64_list[1].substr(0, 1)] + "<br>" + g_juyeok_0[tmp_cheyong64_list[1].substr(2, 1)] + "<br><br>";
+
+	var che_info = "";
+	var yong_info = "";
+
+	//예외로 체용 정보로 효사가 아닌 단사를 읽어야 한다면...
+	//alert(tmp_cheyong64_list[0]);
+	if (my_byunhyo_cnt==3) {
+		//alert("3");
+		//본괘의 단사, 지괘의 단사
+		che_info = get_juyeok_64_dansa(tmp_cheyong64_list[0]);
+		yong_info = get_juyeok_64_dansa(tmp_cheyong64_list[1]);
+
+		document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = che_info;
+		document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = yong_info;
+	} else {
+		
+		var tmp_che_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[0]);
+		var tmp_yong_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[1]);
+
+		che_info = tmp_che_hyosa_info[0] + "<br><br>" + tmp_che_hyosa_info[1] + "<br>" + tmp_che_hyosa_info[2] + "<br><br>" + tmp_che_hyosa_info[3];
+		yong_info = tmp_yong_hyosa_info[0] + "<br><br>" + tmp_yong_hyosa_info[1] + "<br>" + tmp_yong_hyosa_info[2] + "<br><br>" + tmp_yong_hyosa_info[3];
+		
+		document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = che_info;
+		document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = yong_info;
+	}
+	
+	
 	
 	//------------------------------------------------------------------------------------------------------
 
@@ -6930,7 +7112,10 @@ function moveSaju() {
 <table><tr><td><h3><체용>:</h3></td></tr>
 	<tr>
 	<td>
-	<table id="tbl_cheyong" border="1"><tr><td align="center"></td><td></td><td></td><td></td></tr></table>
+	<table id="tbl_cheyong64" border="1">
+		<tr><td align="center" colspan=2><h3>체</h3></td><td align="center" colspan=2><h3>용</h3></td></tr>
+		<tr><td align="center"></td><td align="center"></td><td align="center"></td><td align="center"></td></tr>
+	</table>
 	</td>
 	</tr></table><br>
 
@@ -7005,10 +7190,10 @@ function moveSaju() {
 		var my_txt = document.JuYeokForm.want_to_move_hoysa.value;
 		var len = document.JuYeokForm.lstJuyeolMean64_2.options.length;
 		for (var i=0;i<len; i++) {
-			var list_val = document.JuYeokForm.lstJuyeolMean64_2.options[i].value;
+			var list_val = document.JuYeokForm.lstJuyeolMean64_2.options[i].value; //옵션의 키 값이 반환됨.
 			list_val_3 = list_val.substr(0, 3);
 
-
+			
 			if (my_txt == list_val_3) {
 				s = s + "찾았음: " + i + "\n";
 				document.JuYeokForm.lstJuyeolMean64_2.options[i].selected = true;
