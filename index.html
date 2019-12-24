@@ -1,16 +1,16 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html lang="ko">
  <head>
   <title> 천류역학(天流易學) </title>
-  <meta name="Generator" content="EditPlus">
+  <meta charset="UTF-8">
+  <meta name="Generator" content="Visual Studio Code">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="Author" content="">
-  <meta name="Keywords" content="">
-  <meta name="Description" content="구성학 프로그램">
-  <meta name="Keywords" content="구성학, 구성기학"">
+  <meta name="Keywords" content="구성, 주역, 사주, 체질">
+  <meta name="Description" content="구성, 주역, 사주, 체질">
 
+  <SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
 
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 .navbar {
@@ -131,60 +131,7 @@
  	
 
 <script type="text/javascript">
-<!--
 
-	///////////////////////////////////////////////
-	
-	//매 년도의 12절(12기는 생략) 정보를 간직한 배열.
-	//동지와 하지 관련 정적 데이타 지원할까? 말까?
-	//보다 정확한 윤둔(치윤)을 위해서는 필요할 듯 한데...
-	//방대한 데이타 입력을 필요로 함.(헐~~~)
-	var JEOL_KI_INFO = new Array(
-		"1921-01소한060534대한202255/02입춘041720우수191320/03경칩061145춘분211251/04051709/05061104/06061542/07080207/08081144/09081410/10090511/11080746/12080012",
-		""
-		);
-	
-	/** 
-	* year=1921, month=2인 경우 
-	* (입춘, 우수)와 관련된 
-	* ("041720", "191320") 문자열 배열을 리턴함.
-	*/
-	function get24JeolKiInfo(year, month) {
-		var yearInfo = JEOL_KI_INFO[year - 1921];
-		
-		
-		var jeolKiInfo = new Array(2);
-
-		//12절 시작점 위치 -> 9 + (month - 1) * 19
-		//12기 시작점 위치 -> 17 + (month - 1) * 19
-
-		//month월의 12절, 12기 정보 시작점.
-		var jeolIndex = 9 + (month - 1) * 19;
-		var kiIndex = 17 + (month - 1) * 19;
-
-
-		
-		jeolKiInfo[0] = yearInfo.substr(jeolIndex, 6);
-		jeolKiInfo[1] = yearInfo.substr(kiIndex, 6);
-
-		return jeolKiInfo;
-	}
-
-	
-	
-	//document.write(get24JeolKiInfo(1921, 1)[0]); document.write("<br>");
-	//document.write(get24JeolKiInfo(1921, 1)[1]); document.write("<br>");
-	//document.write(get24JeolKiInfo(1921, 2)[0]); document.write("<br>");
-	//document.write(get24JeolKiInfo(1921, 2)[1]); document.write("<br>");
-	//document.write(get24JeolKiInfo(1921, 3)[0]); document.write("<br>");
-	//document.write(get24JeolKiInfo(1921, 2)[1]); document.write("<br>");
-
-//-->
-</script>
-
-
-
-<script type="text/javascript">
 	function my_split(aStr, aDelimiter) {
 		var s = "";
 		var s_split = aStr.split(aDelimiter);
@@ -2131,7 +2078,7 @@ function changeNextMonth() {
 -->
 <script type="text/javascript">
 
-var g_juyeok_0 = ["", "☵", "☷", "☳", "☴", "", "☰", "☱", "☶", "☲"];
+var g_juyeok_0 = ["", "<img src=1.png>", "<img src=2.png>", "<img src=3.png>", "<img src=4.png>", "", "<img src=6.png>", "<img src=7.png>", "<img src=8.png>", "<img src=9.png>"];//["", "☵", "☷", "☳", "☴", "", "☰", "☱", "☶", "☲"];
 var g_juyeok_1 = ["", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 var g_juyeok_2 = ["", "감", "곤", "진", "손", "", "건", "태", "간", "리"];
 var g_juyeok_3 = ["", "수", "지", "뢰", "풍", "", "천", "택", "산", "화"];
@@ -2150,105 +2097,8 @@ var g_juyeok_64 = {
 	'9.1':'地/火水未濟(04.26)/(★) 실망하지 말라 이제부터 발전한다. 吉凶悔吝을 상기하라.', '9.2':'水/火地晉(01.25)/나아가다. (해 지기 전의 저녁, 무너져 내린다.)', '9.3':'澤/火雷噬嗑(11.23)/활발히 씹어서 깨트려야 한다.', '9.4':'山/火風鼎(06.11)/안전하게 나아가다.', '9.6':'火/火天大有(07.10)/양(陽)이 가득하다.', '9.7':'雷/火澤睽(08.24)/(★) 배반하다.', '9.8':'風/火山旅(03.12)/멍청하지 말고 로마법을 따르라.', '9.9':'天/離爲火(10.09)/명석한 능력을 발휘하라.'
 };
 
-//주역 단사 데이타
-var g_juyeok_dansa = {
-	'1.1':'단사','1.2':'단사','1.3':'단사','1.4':'단사','1.5':'단사','1.6':'단사','1.7':'단사','1.8':'단사','1.9':'단사',
-	'2.1':'단사','2.2':'단사','2.3':'단사','2.4':'단사','2.5':'단사','2.6':'단사','2.7':'단사','2.8':'단사','2.9':'단사',
-	'3.1':'단사','3.2':'단사','3.3':'단사','3.4':'단사','3.5':'단사','3.6':'단사','3.7':'단사','3.8':'단사','3.9':'단사',
-	'4.1':'단사','4.2':'단사','4.3':'단사','4.4':'단사','4.5':'단사','4.6':'단사','4.7':'단사','4.8':'단사','4.9':'단사',
-	'5.1':'단사','5.2':'단사','5.3':'단사','5.4':'단사','5.5':'단사','5.6':'단사','5.7':'단사','5.8':'단사','5.9':'단사',
-	'6.1':'단사','6.2':'단사','6.3':'단사','6.4':'단사','6.5':'단사','6.6':'重天乾/중천건','6.7':'단사','6.8':'단사','6.9':'단사',
-	'7.1':'단사','7.2':'단사','7.3':'단사','7.4':'단사','7.5':'단사','7.6':'단사','7.7':'단사','7.8':'단사','7.9':'단사',
-	'8.1':'단사','8.2':'단사','8.3':'단사','8.4':'단사','8.5':'단사','8.6':'단사','8.7':'단사','8.8':'단사','8.9':'단사',
-	'9.1':'단사','9.2':'단사','9.3':'단사','9.4':'단사','9.5':'단사','9.6':'단사','9.7':'단사','9.8':'단사','9.9':'단사'
-};
 
 
-
-//주역 효사 데이타
-var g_juyeok_hyosa = {
-	'1.1.1':'단사','1.1.2':'단사','1.1.3':'단사','1.1.4':'단사','1.1.5':'단사','1.1.6':'단사',
-	'1.2.1':'단사','1.2.2':'단사','1.2.3':'단사','1.2.4':'단사','1.2.5':'단사','1.2.6':'단사',
-	'1.3.1':'단사','1.3.2':'단사','1.3.3':'단사','1.3.4':'단사','1.3.5':'단사','1.3.6':'단사',
-	'1.4.1':'단사','1.4.2':'단사','1.4.3':'단사','1.4.4':'단사','1.4.5':'단사','1.4.6':'단사',
-	'1.5.1':'단사','1.5.2':'단사','1.5.3':'단사','1.5.4':'단사','1.5.5':'단사','1.5.6':'단사',
-	'1.6.1':'단사','1.6.2':'단사','1.6.3':'단사','1.6.4':'단사','1.6.5':'단사','1.6.6':'단사',
-	'1.7.1':'단사','1.7.2':'단사','1.7.3':'단사','1.7.4':'단사','1.7.5':'단사','1.7.6':'단사',
-	'1.8.1':'단사','1.8.2':'단사','1.8.3':'단사','1.8.4':'단사','1.8.5':'단사','1.8.6':'단사',
-	'1.9.1':'단사','1.9.2':'단사','1.9.3':'단사','1.9.4':'단사','1.9.5':'단사','1.9.6':'단사',
-	'2.1.1':'단사','2.1.2':'단사','2.1.3':'단사','2.1.4':'단사','2.1.5':'단사','2.1.6':'단사',
-	'2.2.1':'단사','2.2.2':'단사','2.2.3':'단사','2.2.4':'단사','2.2.5':'단사','2.2.6':'단사',
-	'2.3.1':'단사','2.3.2':'단사','2.3.3':'단사','2.3.4':'단사','2.3.5':'단사','2.3.6':'단사',
-	'2.4.1':'단사','2.4.2':'단사','2.4.3':'단사','2.4.4':'단사','2.4.5':'단사','2.4.6':'단사',
-	'2.5.1':'단사','2.5.2':'단사','2.5.3':'단사','2.5.4':'단사','2.5.5':'단사','2.5.6':'단사',
-	'2.6.1':'단사','2.6.2':'단사','2.6.3':'단사','2.6.4':'단사','2.6.5':'단사','2.6.6':'단사',
-	'2.7.1':'단사','2.7.2':'단사','2.7.3':'단사','2.7.4':'단사','2.7.5':'단사','2.7.6':'단사',
-	'2.8.1':'단사','2.8.2':'단사','2.8.3':'단사','2.8.4':'단사','2.8.5':'단사','2.8.6':'단사',
-	'2.9.1':'단사','2.9.2':'단사','2.9.3':'단사','2.9.4':'단사','2.9.5':'단사','2.9.6':'단사',
-	'3.1.1':'단사','3.1.2':'단사','3.1.3':'단사','3.1.4':'단사','3.1.5':'단사','3.1.6':'단사',
-	'3.2.1':'단사','3.2.2':'단사','3.2.3':'단사','3.2.4':'단사','3.2.5':'단사','3.2.6':'단사',
-	'3.3.1':'단사','3.3.2':'단사','3.3.3':'단사','3.3.4':'단사','3.3.5':'단사','3.3.6':'단사',
-	'3.4.1':'단사','3.4.2':'단사','3.4.3':'단사','3.4.4':'단사','3.4.5':'단사','3.4.6':'단사',
-	'3.5.1':'단사','3.5.2':'단사','3.5.3':'단사','3.5.4':'단사','3.5.5':'단사','3.5.6':'단사',
-	'3.6.1':'단사','3.6.2':'단사','3.6.3':'단사','3.6.4':'단사','3.6.5':'단사','3.6.6':'단사',
-	'3.7.1':'단사','3.7.2':'단사','3.7.3':'단사','3.7.4':'단사','3.7.5':'단사','3.7.6':'단사',
-	'3.8.1':'단사','3.8.2':'단사','3.8.3':'단사','3.8.4':'단사','3.8.5':'단사','3.8.6':'단사',
-	'3.9.1':'단사','3.9.2':'단사','3.9.3':'단사','3.9.4':'단사','3.9.5':'단사','3.9.6':'단사',
-	'4.1.1':'단사','4.1.2':'단사','4.1.3':'단사','4.1.4':'단사','4.1.5':'단사','4.1.6':'단사',
-	'4.2.1':'단사','4.2.2':'단사','4.2.3':'단사','4.2.4':'단사','4.2.5':'단사','4.2.6':'단사',
-	'4.3.1':'단사','4.3.2':'단사','4.3.3':'단사','4.3.4':'단사','4.3.5':'단사','4.3.6':'단사',
-	'4.4.1':'단사','4.4.2':'단사','4.4.3':'단사','4.4.4':'단사','4.4.5':'단사','4.4.6':'단사',
-	'4.5.1':'단사','4.5.2':'단사','4.5.3':'단사','4.5.4':'단사','4.5.5':'단사','4.5.6':'단사',
-	'4.6.1':'단사','4.6.2':'단사','4.6.3':'단사','4.6.4':'단사','4.6.5':'단사','4.6.6':'단사',
-	'4.7.1':'단사','4.7.2':'단사','4.7.3':'단사','4.7.4':'단사','4.7.5':'단사','4.7.6':'단사',
-	'4.8.1':'단사','4.8.2':'단사','4.8.3':'단사','4.8.4':'단사','4.8.5':'단사','4.8.6':'단사',
-	'4.9.1':'단사','4.9.2':'단사','4.9.3':'단사','4.9.4':'단사','4.9.5':'단사','4.9.6':'단사',
-	'5.1.1':'단사','5.1.2':'단사','5.1.3':'단사','5.1.4':'단사','5.1.5':'단사','5.1.6':'단사',
-	'5.2.1':'단사','5.2.2':'단사','5.2.3':'단사','5.2.4':'단사','5.2.5':'단사','5.2.6':'단사',
-	'5.3.1':'단사','5.3.2':'단사','5.3.3':'단사','5.3.4':'단사','5.3.5':'단사','5.3.6':'단사',
-	'5.4.1':'단사','5.4.2':'단사','5.4.3':'단사','5.4.4':'단사','5.4.5':'단사','5.4.6':'단사',
-	'5.5.1':'단사','5.5.2':'단사','5.5.3':'단사','5.5.4':'단사','5.5.5':'단사','5.5.6':'단사',
-	'5.6.1':'단사','5.6.2':'단사','5.6.3':'단사','5.6.4':'단사','5.6.5':'단사','5.6.6':'단사',
-	'5.7.1':'단사','5.7.2':'단사','5.7.3':'단사','5.7.4':'단사','5.7.5':'단사','5.7.6':'단사',
-	'5.8.1':'단사','5.8.2':'단사','5.8.3':'단사','5.8.4':'단사','5.8.5':'단사','5.8.6':'단사',
-	'5.9.1':'단사','5.9.2':'단사','5.9.3':'단사','5.9.4':'단사','5.9.5':'단사','5.9.6':'단사',
-	'6.1.1':'단사','6.1.2':'단사','6.1.3':'단사','6.1.4':'단사','6.1.5':'단사','6.1.6':'단사',
-	'6.2.1':'단사','6.2.2':'단사','6.2.3':'단사','6.2.4':'단사','6.2.5':'단사','6.2.6':'단사',
-	'6.3.1':'단사','6.3.2':'단사','6.3.3':'단사','6.3.4':'단사','6.3.5':'단사','6.3.6':'단사',
-	'6.4.1':'단사','6.4.2':'단사','6.4.3':'단사','6.4.4':'단사','6.4.5':'단사','6.4.6':'단사',
-	'6.5.1':'단사','6.5.2':'단사','6.5.3':'단사','6.5.4':'단사','6.5.5':'단사','6.5.6':'단사',
-	'6.6.1':'初九/潛龍勿用/잠용물용','6.6.2':'九二/見龍在田 利見大人/현룡재전 이견대인','6.6.3':'九三/君子 終日乾乾 夕惕若 厲 无咎/군자 종일건건 석척약 려 무구','6.6.4':'九四/或躍在淵 无咎/흑약재연 무구','6.6.5':'九五/飛龍在天 利見大人/비룡재천 이견대인','6.6.6':'上九/亢龍 有悔/항룡 유해',
-	'6.7.1':'단사','6.7.2':'단사','6.7.3':'단사','6.7.4':'단사','6.7.5':'단사','6.7.6':'단사',
-	'6.8.1':'단사','6.8.2':'단사','6.8.3':'단사','6.8.4':'단사','6.8.5':'단사','6.8.6':'단사',
-	'6.9.1':'단사','6.9.2':'단사','6.9.3':'단사','6.9.4':'단사','6.9.5':'단사','6.9.6':'단사',
-	'7.1.1':'단사','7.1.2':'단사','7.1.3':'단사','7.1.4':'단사','7.1.5':'단사','7.1.6':'단사',
-	'7.2.1':'단사','7.2.2':'단사','7.2.3':'단사','7.2.4':'단사','7.2.5':'단사','7.2.6':'단사',
-	'7.3.1':'단사','7.3.2':'단사','7.3.3':'단사','7.3.4':'단사','7.3.5':'단사','7.3.6':'단사',
-	'7.4.1':'단사','7.4.2':'단사','7.4.3':'단사','7.4.4':'단사','7.4.5':'단사','7.4.6':'단사',
-	'7.5.1':'단사','7.5.2':'단사','7.5.3':'단사','7.5.4':'단사','7.5.5':'단사','7.5.6':'단사',
-	'7.6.1':'단사','7.6.2':'단사','7.6.3':'단사','7.6.4':'단사','7.6.5':'단사','7.6.6':'단사',
-	'7.7.1':'단사','7.7.2':'단사','7.7.3':'단사','7.7.4':'단사','7.7.5':'단사','7.7.6':'단사',
-	'7.8.1':'단사','7.8.2':'단사','7.8.3':'단사','7.8.4':'단사','7.8.5':'단사','7.8.6':'단사',
-	'7.9.1':'단사','7.9.2':'단사','7.9.3':'단사','7.9.4':'단사','7.9.5':'단사','7.9.6':'단사',
-	'8.1.1':'단사','8.1.2':'단사','8.1.3':'단사','8.1.4':'단사','8.1.5':'단사','8.1.6':'단사',
-	'8.2.1':'단사','8.2.2':'단사','8.2.3':'단사','8.2.4':'단사','8.2.5':'단사','8.2.6':'단사',
-	'8.3.1':'단사','8.3.2':'단사','8.3.3':'단사','8.3.4':'단사','8.3.5':'단사','8.3.6':'단사',
-	'8.4.1':'단사','8.4.2':'단사','8.4.3':'단사','8.4.4':'단사','8.4.5':'단사','8.4.6':'단사',
-	'8.5.1':'단사','8.5.2':'단사','8.5.3':'단사','8.5.4':'단사','8.5.5':'단사','8.5.6':'단사',
-	'8.6.1':'단사','8.6.2':'단사','8.6.3':'단사','8.6.4':'단사','8.6.5':'단사','8.6.6':'단사',
-	'8.7.1':'단사','8.7.2':'단사','8.7.3':'단사','8.7.4':'단사','8.7.5':'단사','8.7.6':'단사',
-	'8.8.1':'단사','8.8.2':'단사','8.8.3':'단사','8.8.4':'단사','8.8.5':'단사','8.8.6':'단사',
-	'8.9.1':'단사','8.9.2':'단사','8.9.3':'단사','8.9.4':'단사','8.9.5':'단사','8.9.6':'단사',
-	'9.1.1':'단사','9.1.2':'단사','9.1.3':'단사','9.1.4':'단사','9.1.5':'단사','9.1.6':'단사',
-	'9.2.1':'단사','9.2.2':'단사','9.2.3':'단사','9.2.4':'단사','9.2.5':'단사','9.2.6':'단사',
-	'9.3.1':'단사','9.3.2':'단사','9.3.3':'단사','9.3.4':'단사','9.3.5':'단사','9.3.6':'단사',
-	'9.4.1':'단사','9.4.2':'단사','9.4.3':'단사','9.4.4':'단사','9.4.5':'단사','9.4.6':'단사',
-	'9.5.1':'단사','9.5.2':'단사','9.5.3':'단사','9.5.4':'단사','9.5.5':'단사','9.5.6':'단사',
-	'9.6.1':'단사','9.6.2':'단사','9.6.3':'단사','9.6.4':'단사','9.6.5':'단사','9.6.6':'단사',
-	'9.7.1':'단사','9.7.2':'단사','9.7.3':'단사','9.7.4':'단사','9.7.5':'단사','9.7.6':'단사',
-	'9.8.1':'단사','9.8.2':'단사','9.8.3':'단사','9.8.4':'단사','9.8.5':'단사','9.8.6':'단사',
-	'9.9.1':'단사','9.9.2':'단사','9.9.3':'단사','9.9.4':'단사','9.9.5':'단사','9.9.6':'단사'
-	};
 
 
 function nucha_base(n, my_base, jarisu) {
@@ -2425,20 +2275,25 @@ var g_ji64_list;
 	//'天/坎爲水/위험의 연속, 강(江) 건너 강(江)'에서 "坎爲水" 부분만 떼어내어 리턴. 
 	function get_64_name_mean(aVal) {
 		var tmp_arr_val = aVal.split("/");
-        		return [tmp_arr_val[1], tmp_arr_val[2]];   //g_juyeok_64[g_juyeok_64_key];
+		return [tmp_arr_val[1], tmp_arr_val[2]];   //g_juyeok_64[g_juyeok_64_key];
+	}
+
+	function get_384_name_mean(aVal) {
+		var tmp_arr_val = aVal.split("/");
+		return [tmp_arr_val[0], tmp_arr_val[1], tmp_arr_val[2], tmp_arr_val[3]];   //g_juyeok_64[g_juyeok_64_key];
 	}
 
 	
 	function make_64_info_from_list(aname, alist) {
-        		if (alist==null || alist.length==0) {
-            		return make_64_info(aname, null, null);
+		if (alist==null || alist.length==0) {
+			return make_64_info(aname, null, null);
 		}
 
 
-        		var up_key = `${alist[0]}${alist[1]}${alist[2]}`;
-        		var dn_key = `${alist[3]}${alist[4]}${alist[5]}`;
+		var up_key = `${alist[0]}${alist[1]}${alist[2]}`;
+		var dn_key = `${alist[3]}${alist[4]}${alist[5]}`;
 
-        		return make_64_info(aname, up_key, dn_key);
+		return make_64_info(aname, up_key, dn_key);
 	}
 
 
@@ -2476,18 +2331,18 @@ var g_ji64_list;
 
 
 	function get_ho64_list() {
-        		var ho64_list = [];
+		var ho64_list = [];
 
-        		ho64_list.push(g_base64_list[1]);
-        		ho64_list.push(g_base64_list[2]);
-        		ho64_list.push(g_base64_list[3]);
+		ho64_list.push(g_base64_list[1]);
+		ho64_list.push(g_base64_list[2]);
+		ho64_list.push(g_base64_list[3]);
 
-        		ho64_list.push(g_base64_list[2]);
-        		ho64_list.push(g_base64_list[3]);
-        		ho64_list.push(g_base64_list[4]);
+		ho64_list.push(g_base64_list[2]);
+		ho64_list.push(g_base64_list[3]);
+		ho64_list.push(g_base64_list[4]);
 
 
-        		return make_64_info_from_list("호괘", ho64_list);
+		return make_64_info_from_list("호괘", ho64_list);
 	}
 
 
@@ -2501,83 +2356,81 @@ var g_ji64_list;
     	# 본괘의 초효가 양인 경우, reverse 후 1을 뺀 후, 다시 reverse 하여 미래괘를 구할 수 있다.
     	#동효가 있으면 지괘를 보는 지? 동효가 없으면 미래괘를 보는 지? 확실치 않음
 	*/
-    	function get_mirae64_list() {
-		
+	function get_mirae64_list() {
+	
 
-        		//#this.base64_list = [6효, 5효, 4효, 3효, 2효, 1효]
-        		var tmp_circle64_list = nucha_reverse_list(g_base64_list); //#tmp_circle64_list=[1효, 2효, 3효, 4효, 5효, 6효]
+		//#this.base64_list = [6효, 5효, 4효, 3효, 2효, 1효]
+		var tmp_circle64_list = nucha_reverse_list(g_base64_list); //#tmp_circle64_list=[1효, 2효, 3효, 4효, 5효, 6효]
 
-		
 
-        		//#경계 처리
 
-        		if (g_base64_list.join("")=="111110") { // #미래괘: "111111"
-            		return make_64_info("미래", "111", "111");
+		//#경계 처리
+
+		if (g_base64_list.join("")=="111110") { // #미래괘: "111111"
+			return make_64_info("미래", "111", "111");
 		}
 
-        		if (g_base64_list.join("")=="000001") { // #미래괘: "000000"
-            		return make_64_info("미래", "000", "000");
+		if (g_base64_list.join("")=="000001") { // #미래괘: "000000"
+			return make_64_info("미래", "000", "000");
 		}
 
+
+
+
+		//==========================
+		// 경계가 아닌 경우 처리
+		// ==========================
+
+
+		var tmp_sum = 0;
 		
+		var tmp_rev_base64_list = nucha_reverse_list(g_base64_list);
 
 
-        		//==========================
-        		// 경계가 아닌 경우 처리
-        		// ==========================
 
+		tmp_sum = nuchaBase10Value(tmp_rev_base64_list, 2);
 
-        		var tmp_sum = 0;
-        		
-            	var tmp_rev_base64_list = nucha_reverse_list(g_base64_list);
-
-		
-
-            	tmp_sum = nuchaBase10Value(tmp_rev_base64_list, 2);
-
-		
+	
 
 		if (g_base64_list[5]=="0") { //1효가 음인 경우
-            		tmp_sum += 1;
+					tmp_sum += 1;
 		}
 		else if (g_base64_list[5]=="1") { //1효가 양인 경우
 			tmp_sum -= 1;
 		}
 
-		
+
+		var tmp_sum_base2_list = nucha_base(tmp_sum, 2, 6); //#10진수를 2진법으로 표기, 단 전체 자리수는 6
+		var rev_sum_base2_list = nucha_reverse_list(tmp_sum_base2_list);
 
 
-            	var tmp_sum_base2_list = nucha_base(tmp_sum, 2, 6); //#10진수를 2진법으로 표기, 단 전체 자리수는 6
-            	var rev_sum_base2_list = nucha_reverse_list(tmp_sum_base2_list);
-
-		
-            	return make_64_info_from_list("미래", rev_sum_base2_list);
+		return make_64_info_from_list("미래", rev_sum_base2_list);
 	}
 
 
 
 	//#본괘: 위에서 아래로 본다.
-    	//#도전괘: 아래에서 위로 본다.
-    	function get_dojeon64_list() {
-        		var dojeon64_list = [];
+	//#도전괘: 아래에서 위로 본다.
+	function get_dojeon64_list() {
+		var dojeon64_list = [];
 
 		for (var i=5; i>=0; i--) {
-        			dojeon64_list.push(g_base64_list[i]);
+			dojeon64_list.push(g_base64_list[i]);
 		}
 
-        		return make_64_info_from_list("도전", dojeon64_list);
+		return make_64_info_from_list("도전", dojeon64_list);
 	}
 
 	//#위에서 읽으나 아래에서 읽으나 같은 것
-    	function get_bidojeon64_list() {
+	function get_bidojeon64_list() {
 		
-        		var bidojeon64_list = [];
+		var bidojeon64_list = [];
 
-        		if ( (g_base64_list[5]==g_base64_list[0]) && (g_base64_list[4]==g_base64_list[1]) && (g_base64_list[3] == g_base64_list[2]) ) {
+		if ( (g_base64_list[5]==g_base64_list[0]) && (g_base64_list[4]==g_base64_list[1]) && (g_base64_list[3] == g_base64_list[2]) ) {
 			bidojeon64_list = g_base64_list;
 		}
 
-        		return make_64_info_from_list("비도전", bidojeon64_list);
+		return make_64_info_from_list("비도전", bidojeon64_list);
 	}
 
 	//착종괘: 상괘와 하괘를 바꾼다.
@@ -2800,7 +2653,7 @@ function get_jum64_list(aSelectedIndex) {
 }
 
 
-function sky64() {
+function fortune_telling64() {
 	clear64();
 
 	//var objJuYeokClass = new JuYeokClass();
@@ -7058,7 +6911,7 @@ function moveSaju() {
 <br>
 <form name="JuYeokForm">
 목적사: <input type="text" name="txt_jum64" value="" size="100"><br>
-<input type="button" value="주역점" onclick="sky64();">
+<input type="button" value="주역점" onclick="fortune_telling64();">
 주역점 기억 리스트: <select onchange="javascript:get_jum64_list(this.selectedIndex);" id="jum64_list" name="jum64_list"> 
 	<option value="-1">	
 </select>
@@ -7070,6 +6923,13 @@ function moveSaju() {
 <table id="tbl_bon64" border="1"><tr><td align="center"></td><td></td><td></td></tr></table>
 </td>
 </tr></table><br>
+
+<table><tr><td><h3><체용>:</h3></td></tr>
+	<tr>
+	<td>
+	<table id="tbl_cheyong" border="1"><tr><td align="center"></td><td></td><td></td><td></td></tr></table>
+	</td>
+	</tr></table><br>
 
 <table><tr><td><h3><지괘>: 변효괘</h3></td><td></td></tr>
 <tr><td>
@@ -7138,7 +6998,10 @@ function moveSaju() {
 
 <table><tr><td><h3>주역 공부</h3></td><td></td><td></td></tr>
 <tr><td>
-<select name="lstJuyeolMean64" onchange="mean64();" size="9" disabled></select>
+단사:<br>
+<select name="lstJuyeolMean64" onchange="mean64()" size="9" disabled></select><br><br><!---->
+효사:<br>
+<select name="lstJuyeolMean64_2" onchange="" size="9"></select><!--mean64();-->
 </td>
 <td>&nbsp;&nbsp;</td>
 <td>
@@ -7153,21 +7016,58 @@ function moveSaju() {
 
 
 <script>
-	var i = 0;
-	var empty_opt = new Option("" , "");
-	document.JuYeokForm.lstResult64.options[i++] = empty_opt;
+	function lstJuyeolMean64_function() {
+		var i = 0;
+		var empty_opt = new Option("" , "");
+		document.JuYeokForm.lstResult64.options[i++] = empty_opt;
 
-	for (my_key in g_juyeok_64){
-		var my_key_value = my_key + " : " + get_64_name_mean(g_juyeok_64[my_key])[0];
-		var my_opt = new Option(my_key_value , my_key);
-      		
-    		document.JuYeokForm.lstResult64.options[i] = my_opt;	
+		for (my_key in g_juyeok_64){
+			var my_key_value = my_key + " : " + get_64_name_mean(g_juyeok_64[my_key])[0];
+			var my_opt = new Option(my_key_value , my_key);
+				
+				document.JuYeokForm.lstResult64.options[i] = my_opt;	
 
-		var my_opt_mean = new Option(my_key_value + "/" + get_64_name_mean(g_juyeok_64[my_key])[1] , my_key);
-		document.JuYeokForm.lstJuyeolMean64.options[i] = my_opt_mean;
+			var my_opt_mean = new Option(my_key_value + "/" + get_64_name_mean(g_juyeok_64[my_key])[1] , my_key);
+			document.JuYeokForm.lstJuyeolMean64.options[i] = my_opt_mean;
 
-		i++;
+			i++;
+		}
 	}
+
+	function lstJuyeolMean64_2_function() {
+		
+		var i = 0;
+		var s = "";
+
+		for (my_hyosa_key in g_juyeok_hyosa) {
+			var my_key_1 = my_hyosa_key.substr(0, 1);
+			var my_key_2 = my_hyosa_key.substr(2, 1);
+			if (my_key_1 == "5" || my_key_2 == "5") continue;
+
+			var my_key = my_hyosa_key.substr(0, 3);
+
+			var my_64_name = g_juyeok_64[my_key]; 
+			var my_64_name_mean = get_64_name_mean(my_64_name)[0];
+			my_64_name_mean = my_64_name_mean.substr(0, my_64_name_mean.length - 7);
+			
+			var my_384_name = g_juyeok_hyosa[my_hyosa_key]; 
+			var my_384_name_mean = get_384_name_mean(my_384_name);
+			
+			var my_key_value = my_64_name_mean + ":::" + my_hyosa_key + " : " + my_384_name_mean[0] + " / " + my_384_name_mean[1] + "(" + my_384_name_mean[2] + ")";
+											  
+			var my_384_opt = new Option(my_key_value , my_hyosa_key);
+			//Console.log(my_384_opt);
+			 
+			document.JuYeokForm.lstJuyeolMean64_2.options[i] = my_384_opt;
+
+			i++;
+		}
+
+	}
+
+	lstJuyeolMean64_function();
+	lstJuyeolMean64_2_function();
+	
 	
 </script>
 <br>
@@ -7186,6 +7086,8 @@ function moveSaju() {
 			<select id="id_youtube_list" name="YoutubeList" onchange="showYoutubeMovie();" size=25>
 				<option></option>
 				<!-->option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/_2clW8Zxq88" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>Bahubali (영화:바후발리)</option-->
+				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/zYYuDFor5Ns" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>촛불 혁명 [CandleLight Revolution]</option>
+				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/-ZvsGmYKhcU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>Viva La Vida [상 파울로] (노래: ColdPlay)</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/gyQMaJDVydo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>롤러코스터 (노래:청하)</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/WjRUTB9cYn4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>롤러코스터 Live (노래:청하)</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/6DBE2jkJFXI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>자유 (노래:안치환)</option>
