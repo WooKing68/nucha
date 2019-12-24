@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="ko">
  <head>
   <title> 천류역학(天流易學) </title>
@@ -6891,6 +6891,9 @@ function moveSaju() {
 	
 }
 </script>
+
+
+
 <br>
 
 <hr>
@@ -6996,11 +6999,32 @@ function moveSaju() {
 </tr></table>
 
 
+<script>
+	function move_384_hyosa_list() {
+		var s = '';
+		var my_txt = document.JuYeokForm.want_to_move_hoysa.value;
+		var len = document.JuYeokForm.lstJuyeolMean64_2.options.length;
+		for (var i=0;i<len; i++) {
+			var list_val = document.JuYeokForm.lstJuyeolMean64_2.options[i].value;
+			list_val_3 = list_val.substr(0, 3);
+
+
+			if (my_txt == list_val_3) {
+				s = s + "찾았음: " + i + "\n";
+				document.JuYeokForm.lstJuyeolMean64_2.options[i].selected = true;
+				break;
+			}
+
+		}
+	}
+</script>
+
+
 <table><tr><td><h3>주역 공부</h3></td><td></td><td></td></tr>
 <tr><td>
 단사:<br>
 <select name="lstJuyeolMean64" onchange="mean64()" size="9" disabled></select><br><br><!---->
-효사:<br>
+효사: <input name="want_to_move_hoysa" type="text" onchange="move_384_hyosa_list();" /><br>
 <select name="lstJuyeolMean64_2" onchange="" size="9"></select><!--mean64();-->
 </td>
 <td>&nbsp;&nbsp;</td>
@@ -7010,7 +7034,6 @@ function moveSaju() {
 </tr></table><br>
 
 </form>
-
 
 
 
