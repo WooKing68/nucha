@@ -3,5 +3,7 @@
  youtube 자막넣기: https://www.youtube.com/watch?v=MwnWaBfbplc
  youtube 동영상에 자막넣기: 태그에 'yt:cc=on'을 추가해주면 된다.
  youtube 동영상 영상 내부에 자막을 넣으면 손해인 이유: https://www.youtube.com/watch?v=oQRA1vBvX-k  
+ 유튜브 동영상에 한국어/영어 넣기: https://www.youtube.com/watch?v=dOKMvQXY8AQ
+ 
  
  
