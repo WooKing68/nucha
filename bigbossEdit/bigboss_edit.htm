@@ -2415,26 +2415,21 @@ function WinPop(url, w, h) {
 
 
 	
-
+// readAsDataURL and createObjectURL will cache an image in the browser, 
+//then return a base64 encoded string which references the image location in cache. 
+//If browser cache is cleared, the base64 encoded string will no longer reference the image. 
+//The base64 string isn't actual image data, 
+//it's a url reference to the image, 
+//and you shouldn't save it to a database hoping to retrieve image data. 
+//I've recently made this mistake
+//
+//to avoid memory issues you should call URL.revokeObjectURL when you are done with your blob
+//
+//The following code uses object URLs, 
+//which is much more efficient than data URL for viewing large images 
+//(A data URL is a huge string containing all of the file data, whereas an object URL, 
+//is just a short string referencing the file data in-memory)
 	function fbbFileUpload(input) {
-
-		// readAsDataURL and createObjectURL will cache an image in the browser, 
-		//then return a base64 encoded string which references the image location in cache. 
-		//If browser cache is cleared, the base64 encoded string will no longer reference the image. 
-		//The base64 string isn't actual image data, 
-		//it's a url reference to the image, 
-		//and you shouldn't save it to a database hoping to retrieve image data. 
-		//I've recently made this mistake
-		//
-		//to avoid memory issues you should call URL.revokeObjectURL when you are done with your blob
-		//
-		//The following code uses object URLs, 
-		//which is much more efficient than data URL for viewing large images 
-		//(A data URL is a huge string containing all of the file data, whereas an object URL, 
-		//is just a short string referencing the file data in-memory)
-
-		
-		
 		var len = input.files.length;
         for (var i = 0; i < len; i++) {
 			/**
@@ -2450,8 +2445,8 @@ function WinPop(url, w, h) {
 			*/
 
 
-			//https://javascript.info/file
-			console.log("input.files[i].name: " + input.files[i].name + " (size: " + input.files[i].size + ")");
+			
+			//console.log("input.files[i].name: " + input.files[i].name + " (size: " + input.files[i].size + ")");
 			
 
 			let reader = new FileReader();
@@ -2469,53 +2464,29 @@ function WinPop(url, w, h) {
 				console.log(reader.error);
 			};
 			
-			
-			
-			
-
-
-			
-			//window.onload = function(){
-			// your code here........
-			//};
-			
-			//console.log(window.URL.createObjectURL(event.target.files[i]));
-			//console.log("file name: " + event.target.files.item(i).name);
-			//console.log("file size: " + event.target.files.item(i).size);
-			/**
-			img.onload = function () {
-				console.log("this.width: " + this.width);
-				//window.URL.revokeObjectURL(img.src);
-			};
-			*/
         }
 
 
 
 		//Resize Image: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
 		//Using Canvas: https://jsfiddle.net/codeandcloud/xor3L8db/
+		/**
+		var MAX_WIDTH = 1000;
+		var width = img.width;
+		var height = img.height;        
 
+		if (width > MAX_WIDTH) {
+			height = height * (MAX_WIDTH)/(width);
+			width = MAX_WIDTH;
+			
+		}
 
-				/**
-									var MAX_WIDTH = 1000;
-									var width = img.width;
-									var height = img.height;        
+		canvas.width = width;
+		canvas.height = height; 
 
-									if (width > MAX_WIDTH) {
-										height = height * (MAX_WIDTH)/(width);
-										width = MAX_WIDTH;
-										
-									}
-
-									canvas.width = width;
-									canvas.height = height; 
-
-									var ctx = canvas.getContext("2d");
-									ctx.drawImage(img, 0, 0, width, height); 
-				*/
-
-				// Load files into file reader
-				//reader.readAsDataURL(file);
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, width, height); 
+		*/
 	}
 
 
@@ -2605,30 +2576,6 @@ function WinPop(url, w, h) {
 
 
 	
-	// 이미지 불러오기
-	function handleFileSelect(event) {
-	
-		//Check File API support
-		if (window.File && window.FileList && window.FileReader) {
-	
-			var files = event.target.files; //FileList object
-
-			//JQUERY FILE UPLOAD 및 일반 업로드를 동시에 처리하는 함수.
-			fbbFileUpload(files, event);
-			
-		}
-		else {
-			console.log("Your browser does not support File API");
-		}
-	}
-
-
-
-	
-
-
-	
-	
 	//<!-- addEventListener : html5 이상에서 작동함, ie10이상에서만 작동 -->
 	
 </script>
@@ -2691,14 +2638,13 @@ function WinPop(url, w, h) {
 <!-- 전체 부분-->
 <button onclick="bodyShot()">bodyShot</button>
 <!-- 일부분 부분-->
-<button onclick="partShot()">partShot</button>
+<button onclick="partShot();">partShot</button>
 
 <div class="container" id='container'>
 <!-- 로컬에서 불러온 파일 -->
 </div>
 <!-- 결과화면을 그려줄 canvas -->
 <canvas id="canvas" width="0" height="0" style="border:1px solid #d3d3d3;"></canvas>
-
 
 
 <!--라디오 버튼 중 하나는 기본적으로 선택해 놓는 것이 좋을 수도 있다.-->
@@ -2876,10 +2822,23 @@ function WinPop(url, w, h) {
 
 		html2canvas(htmlView)   //id container 부분만 스크린샷
 		.then(function (canvas) {   //jpg 결과값
+				//https://stackoverflow.com/questions/21251751/canvas-todataurl-returns-a-file-without-extension
+				var imageDataURL = canvas.toDataURL("image/png");
 				
-				//document.body.appendChild(canvas);
-				drawImg(canvas.toDataURL('image/jpeg'));  //이미지 저장
-				saveAs(canvas.toDataURL(), 'file-name.jpg');
+
+				drawImg(imageDataURL);
+
+				//다운로드......................................................
+				//var anchor = document.createElement('a');
+				//var saveFileName = 'myFilename.png';
+				//anchor.setAttribute('download', saveFileName);
+				//anchor.setAttribute('href', image);
+				//anchor.click();
+
+				//위의 코드는 다운로드 실패(network error: chrome 브라우저의 한계)의 경우가 자꾸 발생하므로 
+				//아래 코드로 대치한다.
+				dataURIToBlob(imageDataURL, callback);
+
 				
 			}
 		).catch(function (err) {
@@ -2888,6 +2847,34 @@ function WinPop(url, w, h) {
 		);
 
 	}
+
+
+	// edited from https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob#Polyfill
+	function dataURIToBlob(dataURI, callback) {
+		var binStr = atob(dataURI.split(',')[1]),
+			len = binStr.length,
+			arr = new Uint8Array(len);
+
+		for (var i = 0; i < len; i++) {
+			arr[i] = binStr.charCodeAt(i);
+		}
+
+		callback(new Blob([arr]));
+	}
+
+	var callback = function(blob) {
+		var anchor = document.createElement('a');
+		//anchor.download = saveFileName;
+		anchor.setAttribute('download', 'myFilename.png');
+		//a.innerHTML = 'download';
+		// the string representation of the object URL will be small enough to workaround the browser's limitations
+		anchor.setAttribute('href', URL.createObjectURL(blob));
+		anchor.click();
+
+		// you must revoke the object URL, 
+		URL.revokeObjectURL(anchor.href);
+		anchor.removeAttribute('href')
+	};
 	
 
 
