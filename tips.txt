@@ -1,4 +1,16 @@
-﻿git hub 공부하기: https://www.youtube.com/watch?v=rhP5pseOJc0
+﻿
+ <git hub 저장소에 새폴더 생성하기>
+ You cannot create an empty folder and then add files to that folder, but rather creation of a folder must happen together with adding of at least a single file. On GitHub you can do it this way:
+
+1. Go to the folder inside which you want to create another folder
+2. Click on New file
+3. On the text field for the file name, first write the folder name you want to create
+4. Then type '/' This creates a folder
+5. You can add more folders similarly
+Finally, give the new file a name (for example, .gitkeep which is conventionally used to make Git track otherwise empty folders; it is not a Git feature though)
+Finally, click Commit new file.
+ 
+ git hub 공부하기: https://www.youtube.com/watch?v=rhP5pseOJc0
  javascript 활용: https://www.youtube.com/watch?v=NMHQkAS7XEc
  youtube 자막넣기: https://www.youtube.com/watch?v=MwnWaBfbplc
  youtube 동영상에 자막넣기: 태그에 'yt:cc=on'을 추가해주면 된다.
