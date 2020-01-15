@@ -1,0 +1,2975 @@
+<html>
+
+
+<!-- Google Chrome: Console.log 보려면...: [Ctrl+Shift+J] -->
+
+<!-- <base href="http://www.7952590.com/"> -->
+<!-- <base href="https://premium139.makeshop.co.kr/design/7952590/bigboss/"> -->
+<head>
+<meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<!--script src="html2canvas.min.js"></script-->
+</head>
+<body onLoad=";">
+
+
+<script language=javascript>
+
+//=======================================================================
+/**
+폼 구성 요소에 bb 속성 부여하여
+입력타입과 입력필수여부를 지정한다.
+예) bb="text,y" - text 입력 상자에 입력 필수임
+예) bb="text,n" - text 입력 상자에 입력 필수 아님
+예) bb="select,n" - select 선택 상자에 선택 필수임
+
+함수 checkInputComponent()에서 사용함.
+*/
+//=======================================================================
+
+//=======================================================================
+/**
+전역 데이터 선언부
+**/
+
+//각 컬럼 색상마다 몇번부터 몇번까지 있는 지를 알려주는 배열 정보
+//이를테면
+//첫번째 그룹은 [10]번부터 [19]번까지 구성되어 있음.
+//마지막 그룹은 [90]번부터 [96]번까지 구성되어 있음.
+var arrCheckboxes = [
+	[10, 19],
+	[20, 29],
+	[30, 39],
+	[40, 49],
+	[50, 59],
+	[60, 66],
+	[70, 76],
+	[80, 86],
+	[90, 96]
+];
+
+/**
+하나의 배열 요소에
+정확히 3개의 배열요소가 존재해야 한다.
+
+잘 모르는 단어를 링크시켜주는 정보 배열 데이터 - [검색어, 링크, 보충어] 형식으로 배열에 저장
+검색어에 공백을 허용할 것인가? 허용한다면 공백을 제거한 것도 같이 링크를 걸 것인가?
+검색어가 [베이식], [베이식 스타일]처럼 일부가 전체와 겹치는 부분이 있는 경우,
+짧은 검색어를 먼저 위치시킬 것.
+
+필요한 추가검색어 제안: 사염, 조방사, 면(cotton), 기모[起毛, napping]
+*/
+var arrLinkInfoWashingMethod = [
+		['가는 세로줄 무늬', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=d7b7faf7fbd94931af1fcc71bee7b83e&query=pinstripe', '[pinstripe]'],
+		['가는세로줄무늬', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=d7b7faf7fbd94931af1fcc71bee7b83e&query=pinstripe', '[pinstripe]'],
+		['가죽 재킷', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=leather%20jacket', '[leather jacket]'],
+		['가죽재킷', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=leather%20jacket', '[leather jacket]'],
+		['격자무늬', 'http://krdic.naver.com/small_detail.nhn?docid=1922100', '[格子]'],
+		['구제', 'http://krdic.naver.com/small_detail.nhn?docid=4314100', '[舊製]'],
+		['그래피티', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=graffiti', '[graffiti]'],
+		['극세사', 'http://krdic.naver.com/small_detail.nhn?docid=262099', '[極細絲]'],
+		['금속', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=18693329e0dd419fb6191ae020de9ff5&query=metal', '[metal]'],
+		['나이렉스', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=Nyrex', '[Nyrex]'],
+		['날염', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=bba64933609f40969d8ad74695dcb57f&query=textile+printing', '[textile printing]'],
+		['노 브랜드', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=no-brand', '[no-brand]'],
+		['노브랜드', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=no-brand', '[no-brand]'],
+		['니트', 'http://krdic.naver.com/small_detail.nhn?docid=8264000', '[knit]'],
+		['드레스 셔츠', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=aa5cbe93c25b424aa942f46a8162bfa8&query=dress+shirt', '[dress shirt]'],
+		['드레스셔츠', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=aa5cbe93c25b424aa942f46a8162bfa8&query=dress+shirt', '[dress shirt]'],
+		['똑딱단추', 'http://krdic.naver.com/small_detail.nhn?docid=11274700', '[snap]'],
+		['래글런', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=d939ef8b661e43da93d06b4b62132487&query=raglan', '[raglan]'],
+		['러닝', 'http://krdic.naver.com/small_detail.nhn?docid=11656200', '[running]'],
+		['러닝셔츠', 'http://krdic.naver.com/small_detail.nhn?docid=11656900', '[running shirt]'],
+		['럭셔리', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=luxury', '[luxury]'],
+		['레이어드', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=layered', '[layered]'],
+		['레저', 'http://endic.naver.com/popManager.nhn?m=search&query=leisure', '[leisure]'],
+		['레저', 'http://krdic.naver.com/small_detail.nhn?docid=11703900', '[leisure]'],
+		['무지', 'http://krdic.naver.com/small_detail.nhn?docid=14246500', '[無地]'],
+		['롤 업', 'http://endic.naver.com/popManager.nhn?m=search&query=roll up', '[roll up]'],
+		['롤업', 'http://endic.naver.com/popManager.nhn?m=search&query=roll up', '[roll up]'],
+		['린넨', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=linen', '[linen]'],
+		['목둘레선', 'http://krdic.naver.com/small_detail.nhn?docid=7456900', '[neckline]'],
+		['밑위 길이', 'http://krdic.naver.com/small_detail.nhn?docid=15020600', '[inseam]'],
+		['밑위길이', 'http://krdic.naver.com/small_detail.nhn?docid=15020600', '[inseam]'],
+		['바람막이', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=87d3881a54b0481c9ea990dcc2df16f8&query=WIND+BREAKER', '[windbreaker]'],
+		['배색', 'http://krdic.naver.com/small_detail.nhn?docid=16000900', '[color matching]'],
+		['버튼다운-칼라', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=b28903ad3d474fe1af00e58be4ecedc5&query=button-down+collar', '[button-down collar]'],
+		['베스파', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=Vespa', '[Vespa]'],
+		['베이식', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=bbb75c4b5916473fad6c985b16727760&query=basic', '[basic]'],
+		['베이식 스타일', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=222a8bdce1a64710a8bc916ec931e5d3&query=basic+style', '[basic style]'],
+		['베이식스타일', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=222a8bdce1a64710a8bc916ec931e5d3&query=basic+style', '[basic style]'],
+		['벨벳', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=ce2331e4889b499d9625a2699fcd1573&query=velvet', '[velvet]'],
+		['벨크로', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=Velcro', '[Velcro]'],
+		['변색', 'http://krdic.naver.com/small_detail.nhn?docid=16706100', '[變色]'],
+		['부츠컷', 'http://krdic.naver.com/small_detail.nhn?docid=318999', '[boots cut]'],
+		['비비드', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=vivid', '[vivid]'],
+		['비치웨어', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=beachwear', '[beachwear]'],
+		['빈티지', 'http://krdic.naver.com/small_detail.nhn?docid=24899#275648', '[vintage]'],
+		['사이클링', 'http://endic.naver.com/popManager.nhn?m=search&query=cycling', '[cycling]'],
+		['사파리 재킷', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=2d6f0b5bed4c4f18a97864ea143be8dd&query=safari+jacket', '[safari jacket]'],
+		['사파리재킷', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=2d6f0b5bed4c4f18a97864ea143be8dd&query=safari+jacket', '[safari jacket]'],
+		['상표', 'http://endic.naver.com/popManager.nhn?m=search&query=brand', '[brand]'],
+		['샌드 블라스트', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=45f6b2235ded4899bd51c781a7710fbc&query=sandblast', '[sand·blast]'],
+		['샌드블라스트', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=45f6b2235ded4899bd51c781a7710fbc&query=sandblast', '[sand·blast]'],
+		['소맷부리', 'http://krdic.naver.com/small_detail.nhn?docid=21833800', '[cuffs]'],
+		['솔기', 'http://krdic.naver.com/small_detail.nhn?docid=22211800', '[seam]'],
+		['솔리드', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=solid', '[solid]'],
+		['슈트 재킷', 'http://endic.naver.com/popManager.nhn?m=krenIdiom&idiomId=bb40115bfa6c4c49bf13ce4c0556bbd1&query=%EC%96%91%EB%B3%B5+%EC%83%81%EC%9D%98', '[suit jacket]'],
+		['슈트재킷', 'http://endic.naver.com/popManager.nhn?m=krenIdiom&idiomId=bb40115bfa6c4c49bf13ce4c0556bbd1&query=%EC%96%91%EB%B3%B5+%EC%83%81%EC%9D%98', '[suit jacket]'],
+		['스노보딩', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=41ed7cef5b73423b9471420532a3221c&query=snow+boarding', '[snowboarding]'],
+		['스쿠터', 'http://endic.naver.com/popManager.nhn?m=search&query=scooter', '[scooter]'],
+		['스타일리시', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=stylish', '[stylish]'],
+		['스트링', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=string', '[string]'],
+		['스티치', 'http://krdic.naver.com/small_detail.nhn?docid=23225000', '[stitch]'],
+		['스티칭', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=stitching', '[stitching]'],
+		['스판바지', 'http://krdic.naver.com/small_detail.nhn?docid=348499', '[span·dex pants]'],
+		['스팽글', 'http://krdic.naver.com/small_detail.nhn?docid=23230900', '[spangle]'],
+		['스포츠', 'http://krdic.naver.com/small_detail.nhn?docid=23238700', '[sports]'],
+		['스포티', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=sporty', '[sporty]'],
+		['슬러브', 'http://krdic.naver.com/small_detail.nhn?docid=23259500', '[slub]'],
+		['슬림 라인', 'http://endic.naver.com/popManager.nhn?m=search&query=slimline', '[slim·line]'],
+		['슬림라인', 'http://endic.naver.com/popManager.nhn?m=search&query=slimline', '[slim·line]'],
+		['슬림', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=slim', '[slim]'],
+		['시어서커', 'http://krdic.naver.com/small_detail.nhn?docid=23531800', '[seersucker]'],
+		['실켓', 'http://krdic.naver.com/small_detail.nhn?docid=24070500', '[silket]'],
+		['심플', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=simple', '[simple]'],
+		['아이템', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=item', '[item]'],
+		['아크릴', 'http://krdic.naver.com/small_detail.nhn?docid=24907800&directAnchor=s252068p161156d217366', '[acrylic]'],
+		['액티브', 'http://endic.naver.com/popManager.nhn?m=search&query=Active', '[active]'],
+		['언더 팬츠', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=underpants', '[under·pants]'],
+		['언더팬츠', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=underpants', '[under·pants]'],
+		['엠블럼', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=emblem', '[emblem]'],
+		['오버로크', 'http://krdic.naver.com/small_detail.nhn?docid=27684500', '[overlock]'],
+		['오픈 셔츠', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=9fdd451b05b94b99adb83b1f7b086e6a&query=open+shirt', '[open shirt]'],
+		['오픈셔츠', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=9fdd451b05b94b99adb83b1f7b086e6a&query=open+shirt', '[open shirt]'],
+		['옥스퍼드', 'http://krdic.naver.com/small_detail.nhn?docid=27893000', '[oxford]'],
+		['옷깃', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=8a6d4c17236f494da3f2b9cb01ee0fef&query=collar', '[collar]'],
+		['와펜', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=Wappen', '[Wappen]'],
+		['울(wool)', 'http://krdic.naver.com/small_detail.nhn?docid=28957600', ''],
+		['워싱', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=washing', '[washing]'],
+		['원 턱', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=44421d02ee7b4835bbb802b51cfd4794&query=one+tuck', '[one tuck]'],
+		['원턱', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=44421d02ee7b4835bbb802b51cfd4794&query=one+tuck', '[one tuck]'],
+		['웰트 포켓', 'http://endic.naver.com/poqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpManager.nhn?m=enkrEntry&entryId=9d67b81538c74550b736f9521bf214d4&query=welt+pocket', '[welt pocket]'],
+		['웰트포켓', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=9d67b81538c74550b736f9521bf214d4&query=welt+pocket', '[welt pocket]'],
+		['이지 웨어링', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=529eaaa76fb94b31b17df66d3aa99b22&query=easy+wearing', '[easy wearing]'],
+		['이지웨어링', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=529eaaa76fb94b31b17df66d3aa99b22&query=easy+wearing', '[easy wearing]'],
+		['인조가죽', 'http://krdic.naver.com/small_detail.nhn?docid=11676800', '[leather cloth]'],
+		['인타시어', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=intarsia', '[intarsia]'],
+		['자수', 'http://krdic.naver.com/small_detail.nhn?docid=31721900', '[embroidery]'],
+		['재킷', 'http://endic.naver.com/popManager.nhn?m=search&query=jacket', '[jacket]'],
+		['저지', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=bd46dbcc054945ceaca533d01fc09682&query=jersey', '[jersey]'],
+		['점퍼', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=3b59c86d1570478c90ea73d7ef34bc59&query=jumper', '[jumper]'],
+		['정장 조끼', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=c5199beaa06046f4800f9e9e5fb3db85&query=waistcoat', '[waist·coat]'],
+		['정장조끼', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=c5199beaa06046f4800f9e9e5fb3db85&query=waistcoat', '[waist·coat]'],
+		['줄무늬', 'http://endic.naver.com/popManager.nhn?m=search&query=stripe', '[stripe]'],
+		['지지미', 'http://krdic.naver.com/small_detail.nhn?docid=35815500', '[chijimi]'],
+		['품질', 'http://endic.naver.com/popManager.nhn?m=search&query=quality', '[quality]'],
+		['집업', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=zipup', '[zipup]'],
+		['쭉티', 'http://krdic.naver.com/small_detail.nhn?docid=414899', ''],
+		['체크무늬', 'http://krdic.naver.com/small_detail.nhn?docid=37509900', '[check]'],
+		['카고 팬츠', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=7be944f0633e4c1185eb2999b3f63c56&query=cargo', '[cargo pants]'],
+		['카고팬츠', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=7be944f0633e4c1185eb2999b3f63c56&query=cargo', '[cargo pants]'],
+		['카고 포켓', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=6cf46c71263b4a3295761c13ebb1eb23&query=cargo+pocket', '[cargo pocket]'],
+		['카고포켓', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=6cf46c71263b4a3295761c13ebb1eb23&query=cargo+pocket', '[cargo pocket]'],
+		['카디건', 'http://krdic.naver.com/small_detail.nhn?docid=38497000', '[cardigan]'],
+		['캐주얼 슈트', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=84333b59fa404834bdca9da5cfc76dd5&query=casual+suit', '[casual suit]'],
+		['캐주얼슈트', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=84333b59fa404834bdca9da5cfc76dd5&query=casual+suit', '[casual suit]'],
+		['캐주얼', 'http://krdic.naver.com/small_detail.nhn?docid=38606300', '[casual]'],
+		['캥거루 포켓', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=kangaroo%20pocket', '[kangaroo pocket]'],
+		['캥거루포켓', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=kangaroo%20pocket', '[kangaroo pocket]'],
+		['컨디션', 'http://krdic.naver.com/small_detail.nhn?docid=38629700', '[condition]'],
+		['컬러', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=ffd0eccf78224d04a9b6f44da899dcee&query=colour', '[colour]'],
+		['컬러플', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=db04d6ff016346c883d2766c5d54a3e2&query=color+ful', '[colour·ful]'],
+		['콤비', 'http://krdic.naver.com/small_detail.nhn?docid=38771200', '[combination]'],
+		['쿨론', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=Coolon', '[Coolon]'],
+		['퀄리티', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=quality', '[quality]</a>'],
+		['퀼팅', 'http://krdic.naver.com/small_detail.nhn?docid=38854000', '[quilting]'],
+		['크랙', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=crack', '[crack]'],
+		['크링클', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=crinkle', '[crinkle]'],
+		['키홀 목둘레선', 'http://krdic.naver.com/small_detail.nhn?docid=39005000', '[keyhole neckline]'],
+		['키홀목둘레선', 'http://krdic.naver.com/small_detail.nhn?docid=39005000', '[keyhole neckline]'],
+		['타이포그래피', 'http://krdic.naver.com/small_detail.nhn?docid=39080900', '[typography]'],
+		['탄성사', 'http://krdic.naver.com/small_detail.nhn?docid=39151500', '[彈性絲]'],
+		['탈색', 'http://krdic.naver.com/small_detail.nhn?docid=39198200', '[脫色]'],
+		['태닝', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=tanning ', '[tanning]'],
+		['턴업', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=turn-up', '[turn-up]'],
+		['테이핑', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=0bf295685cd444498a220dd52e8dbbea&query=%ED%85%8C%EC%9D%B4%ED%95%91', '[taping]'],
+		['투 턱', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=e33c2f47fed04a05983a0caec194d059&query=two-tuck', '[two tuck]'],
+		['투턱', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=e33c2f47fed04a05983a0caec194d059&query=two-tuck', '[two tuck]'],
+		['투톤', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=47be35ef53d64190a8659442663c6fd9&query=two-tone+color', '[two-tone]'],
+		['트렌치 코트', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=4d14c197f6dd4559a7d1851ebdca8f92&query=trench+coat', '[trench coat]'],
+		['트렌치코트', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=4d14c197f6dd4559a7d1851ebdca8f92&query=trench+coat', '[trench coat]'],
+		['파이핑', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=988e8af7910e4174a99ce4b4801d3018&query=piping', '[piping]'],
+		['패턴', 'http://krdic.naver.com/small_detail.nhn?docid=40277100', '[pattern]'],
+		['폴로셔츠', 'http://krdic.naver.com/small_detail.nhn?docid=40729500', '[polo shirts]'],
+		['폴리에스터', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=Polyester', '[polyester]'],
+		['프린트', 'http://krdic.naver.com/small_detail.nhn?docid=41039500', '[print]'],
+		['프린팅', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=printing', '[printing]'],
+		['플로키 날염', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=46ebab23a9464ccb962fb141a4cf747d&query=flocky+printing', '[flocky printing]'],
+		['플로키날염', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=46ebab23a9464ccb962fb141a4cf747d&query=flocky+printing', '[flocky printing]'],
+		['피케', 'http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=f6a1cfb2e5334b8d97d9b0e208fbfc1b&query=Pique', '[pique]'],
+		['핏', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=fit', '[fit]'],
+		['헤링본', 'http://krdic.naver.com/small_detail.nhn?docid=42279000', '[herringbone]'],
+		['MUST-HAVE', 'http://endic.naver.com/popManager.nhn?m=search&searchOption=&query=must-have', ''],
+		['OEM', 'http://krdic.naver.com/small_detail.nhn?docid=27766300&directAnchor=s278821p178421d234571', '[주문자 상표 부착 생산]']
+	];
+
+/**XL 사이즈 배열 데이터
+이를테면 전체는 [34]~[40]까지
+부분은 [34][36], [36][38], [38][40]으로 구성됨.
+*/
+var arrInches = [
+	[34, 36, 38, 40, 42],
+	[38, 40, 42, 44, 46],
+	[42, 44, 46, 48, 50],
+	[46, 48, 50, 52, 54],
+	[50, 52, 54, 56, 60],
+];
+
+/**
+하나의 배열 요소에
+한 개 이상의 가변적인 배열 요소가 있어야 한다.
+
+옷감 소재 배열 데이터
+
+맨 첫번째 데이터 [""]는 옵션 [선택]에 대응되는 배열 요소임.
+*/
+var arrClothMaterials = [
+
+[""],
+
+
+["20수 싱글 - 여름철 가장 많이 입는 두께의 반소매 티셔츠 원단을 말합니다."],
+
+["겉과 안이 구별이 안 될 정도로 거의 같으며 20수 겹이라 두께는 10수로 쭈리와 비슷하고 기모 면보다는 얇은 편이나 쭈리나 기모 면은 표면이 고르고 원단이 조금 뻣뻣한 느낌이 드는 반면에 특 양면은 원단 직조할 때 생기는 약간의 보풀 덕분에 표면이 부드럽고 감촉이 좋습니다.",
+"면 싱글 16수 원단이나 양면 30수 원단보다 두껍습니다."],
+
+["특 양면 - 겉과 안이 구별이 안 될 정도로 거의 같으며 30수 겹이라 두께는 15수로 분또(30수 겹)나 양면(30수 겹)과 두께는 같으나 분또나 양면은 표면이 고르고 매끄럽다면 특 양면은 원단 직조할 때 생기는 약간의 보풀 덕분에 표면이 부드럽고 감촉이 좋으며 분또나 양면보다는 조금 두꺼운 느낌입니다. 면 싱글 16수 원단 정도의 두께입니다."],
+
+["양면 - 원단의 두께는 면 16수 정도 되나 일반 16수는 실이 굵지만, 이 원단은 가느다란 30수의 실로 직조하여 2장을 겹쳐 만들었기에 표면이 고르고 매끄럽습니다. 표면적으로는 30수를 2장 겹쳤기 때문에 15수 정도 되나 표면이 고르고 매끄러워서 일반 16수에 비해 얇게 느껴집니다."],
+
+["분또 - 원단의 두께는 면 16수 정도 되나 일반 16수는 실이 굵지만, 이 원단은 가느다란 30수의 실로 직조하여 2장을 겹쳐 만들었기에 표면이 고르고 매끄럽습니다. ",
+"표면적으로는 30수를 2장 겹쳤기 때문에 15수 정도 되나 표면이 고르고 매끄러워서 일반 16수에 비해 얇게 느껴집니다.",
+"분또 원단은 양면원단에 폴리에스터를 섞어 양면원단보다 탄력 있고 짜임새가 견고합니다.",
+"*{폴리에스터의 비율이 피부문제가 생길 정도는 아니므로 피부가 민감하신 분들이라도 걱정하지 않으셔도 됩니다.}*"],
+
+["쭈리 - 원단의 두께는 면 싱글 16수 원단보다 두툼한 편이고 봄, 가을용으로 많이 입는 쭈리원단으로 만든 후드티 두께입니다.",
+"순면(면 100%)제품이라 쉽게 늘어지거나 보푸라기가 발생하지 않는 쭈리 원단으로 안쪽 면이 루프조직으로 수건처럼 생긴 것이 특징입니다."],
+
+["미니 쭈리 - 순면(면 100%)제품이라 쉽게 늘어지거나 보푸라기가 발생하지 않는 미니 쭈리 원단으로 안쪽 면이 루프조직으로 수건처럼 가공되어 피부에 닿는 면이 적으면서 땀을 잘 흡수하고 통풍이 잘되는 구조로 되어 있어서 일반적인 면 티셔츠보다 시원하고 감촉이 좋으며, 두께는 면 싱글 16수 정도 되나 안쪽 면이 수건처럼 가공되어 16수보다는 가볍습니다."],
+
+["면 16수 싱글 - 원단의 특징으로는 면 20수에 비해 굵은 실로 직조하여 원단의 감촉이 거칠고 톡톡하다(견고하다)는 느낌이며 싱글 20수에 비해 신축성이 떨어지는 반면 오래 입어도 쉽게 늘어나거나 해지지가 않는 특징이 있습니다."],
+
+
+[""],
+
+[""],
+
+[""],
+
+[""],
+
+["경사에 장력, 굵기나 꼬임이 다른 두 종류의 실을 배열하여 제직, 가공하면 수축하는 정도의 차이에 의해 경사 방향으로 오그라든 줄무늬가 나타난다.",
+"폴리에스터 섬유와 면 혼방 또는 기타 화학섬유를 사용하기도 하며 사염[絲染]의 줄무늬 또는 체크무늬가 많다.",
+"세탁이 편리하고 다림질할 필요가 없어 여름용 드레스, 슈트, 파자마, 아동복, 커튼 등에 사용된다."],
+
+[""],
+
+["*{실제품의 섬유의 혼용율은 제품의 라벨과 다를 수 있습니다.}*"],
+
+["여름철 가장 많이 입는 반소매 티셔츠 두께이고 가로로 고랑이 지거나 무늬가 두드러지게 짠 면직물로 대표적으로 폴로셔츠 만들 때 많이 사용하는 원단을 말합니다."],
+
+["원단 소재의 표면이 와플처럼 보이며 일반적인 실에 비해 넓은 표면적을 가졌고 원단의 구조가 모세관현상을 일어나게 하여 신속한 수분 흡수와 배출을 유도하며 순면보다 수분흡수가 뛰어나 흡습속건성의 기능 때문에 땀을 많이 흘리는 각종 스포츠와 레저에 효과적이어서 운동복이나 등산, 골프복으로 많이 이용됩니다."],
+
+[""],
+
+["코오롱에서 만든 기능성 원단인 ATB-UV+ 원단으로 기존의 기능성 원단의 특징인 흡습속건성의 기능에 은(Silver)을 첨가하여 항균기능까지 더했으며, 이 기능에 UV+(자외선차단) 기능을 첨가한 최첨단 코오롱 기능성 원단입니다.",
+"",
+"기능성 원단- 원단 소재의 표면이 와플처럼 보이며 일반적인 실에 비해 넓은 표면적을 가졌고 원단의 구조가 모세관현상을 일어나게 하여 신속한 수분 흡수와 배출을 유도하며 순면보다 수분흡수가 뛰어나고 건조가 빨리 이루어지는 흡습속건성의 기능 때문에 땀을 많이 흘리는 각종 스포츠와 레저에 효과적이어서 운동복이나 등산, 골프복으로 많이 이용됩니다."],
+
+["저지(jersey) - 요즘 운동복 소재로 많이 이용하는 폴리에스터 극세사로 땀이 흡수되게 가공하여 평상복이나 운동복으로 입기 좋은 신축성이 있는 원단으로 만들었습니다.",
+"", "",
+"소재의 특징으로는 면(cotton) 원단이 땀 흡수력은 좋으나 여러 번 세탁하면 탈색이 되는 단점이 있지만, 이 제품은 면(cotton)보다 땀 흡수력은 떨어지나 세탁 후 건조가 빠르고 여러 번 세탁해도 탈색이 잘 일어나지 않으므로 언제나 새 옷처럼 입을 수 있는 특징이 있습니다."],
+
+["원단 소재의 표면이 와플처럼 보이며 일반적인 실에 비해 넓은 표면적을 가졌고 원단의 구조가 모세관현상을 일어나게 하여 신속한 수분 흡수와 배출을 유도하며 순면보다 수분흡수가 뛰어나 흡습속건성의 기능 때문에 땀을 많이 흘리는 각종 스포츠와 레저에 효과적이어서 운동복이나 등산, 골프복으로 많이 이용됩니다."],
+
+["원단 소재의 표면이 와플처럼 보이며 일반적인 실에 비해 넓은 표면적을 가졌고 원단의 구조가 모세관현상을 일어나게 하여 신속한 수분 흡수와 배출을 유도하며 순면보다 수분흡수가 뛰어나고 건조가 빨리 이루어지는 흡습속건성의 기능 때문에 땀을 많이 흘리는 각종 스포츠와 레저에 효과적이어서 운동복이나 등산, 골프복으로 많이 이용됩니다."],
+
+["천을 이루는 섬유를 긁거나 뽑아 천의 표면에 보풀이 일게 하여 천의 감촉을 부드럽게 하거나, 천을 두껍게 보이도록 하여 태를 곱게 하며, 때로는 보온력(保溫力)을 높이기 위한 가공법이다."],
+
+["*{실제품의 섬유의 혼용율은 제품의 라벨과 다를 수 있습니다.}*"],
+
+["*{모달(Modal)- 너도 밤나무에서 만들어지는 렌징모달은 순수한 자연의 소재이며, 직물에 부드러움과 유연성을 더해줍니다.}*"],
+
+
+["나이렉스 - 폴리에스터 원단을 촘촘하게 짜서 보온력을 높이기 위해 기모 처리한 원단으로, 늦가을이나 초겨울에 입는 트레이닝복이나 점퍼의 안감으로 사용하는 소재입니다."],
+
+["나이렉스 - 폴리에스터 원단을 촘촘하게 짜서 보온력을 높이기 위해 기모 처리한 원단으로, 늦가을이나 초겨울에 입는 트레이닝복이나 점퍼의 안감으로 사용하는 소재입니다."],
+
+["쿨론 - 원단 소재가 일반 실에 비해 넓은 표면적을 가졌고 원단의 구조가 모세관현상을 일어나게 하여 신속한 수분 흡수와 배출을 유도하며 순면보다 수분흡수가 뛰어나고 건조가 빨리 이루어지는 흡습속건성의 기능과 땀 냄새를 억제하는 항균효과로 땀 냄새가 나지 않기 때문에 땀을 많이 흘리는 분이나 각종 스포츠와 레저에 효과적이어서 활동량이 많은 등산, 헬스, 사이클링 할 때 착용하면 좋으며 또한, 기능성 의류와 같이 입으면 효과가 배가 됩니다. "],
+
+];
+
+
+/**
+맨 처음 비어있는 배열 요소는
+[선택] 글자에 대응하는 빈 문자열 요소임.
+*/
+var arrWashingMethod = [
+[""],
+
+
+[""],
+
+
+["날염된 의류는 세탁할 때 뒤집어서 세탁해야 프린트가 잘 벗겨지지 않고 오래도록 입으실 수 있습니다.",
+"",
+"*{면 제품은 세탁할 때 세제를 조금만 넣고  세탁해야 변색이 잘 일어나지가 않으며 세탁 후 그늘에서 말려야 탈색이 되지 않습니다.}*"],
+
+
+["*{전사 날염은 사진과 같은 방법으로 인화하여 색감이 선명하여 보기에는 좋으나 특성상 일반적인 날염(textile printing)보다 견고함이 많이 떨어져서 여러 번 세탁하면 갈라지거나 벗겨질 우려가 있으므로 세탁할 때 반드시 뒤집어서 세탁하시기를 권해 드리며 세제는 될 수 있으면 적게 넣고 찬물로 세탁하시기를 권장합니다.}*",
+"",
+"**{삶거나 세제에 오랫동안 (30분 이상) 담가 두는 것을 금합니다.}**"],
+
+
+["날염된 의류는 세탁할 때 뒤집어서 세탁해야 프린트가 잘 벗겨지지 않고 오래도록 입으실 수 있습니다.",
+"",
+"*{면 제품은 세탁할 때 세제를 조금만 넣고  세탁해야 변색이 잘 일어나지가 않으며 세탁 후 그늘에서 말려야 탈색이 되지 않습니다.}*"],
+
+
+["날염된 의류는 세탁할 때 뒤집어서 세탁해야 프린트가 잘 벗겨지지 않고 오래도록 입으실 수 있습니다.",
+"",
+"(삶거나 세제에 오랫동안 (30분 이상) 담가 두는 것을 금합니다.)",
+"",
+"*{면 제품은 세탁할 때 세제를 조금만 넣고  세탁해야 변색이 잘 일어나지가 않으며 세탁 후 그늘에서 말려야 탈색이 되지 않습니다.}*"],
+
+
+["*{면 제품은 세탁할 때 세제를 조금만 넣고  세탁해야 변색이 잘 일어나지가 않으며 세탁 후 그늘에서 말려야 탈색이 되지 않습니다.}*",
+"",
+"",
+"청바지 제품은 흰 빨래와 같이 세탁하지 마십시오!! ",
+"(단독세탁권장- 제품 특성상 물 빠짐이 발생할 수 있습니다.)",
+"세제를 조금만 넣고  세탁해야 변색이 잘 일어나지가 않으며 세탁 후 그늘에서 말려야 탈색이 되지 않습니다."],
+
+
+["*{면 제품은 세탁할 때 세제를 조금만 넣고  세탁해야 변색이 잘 일어나지가 않으며 세탁 후 그늘에서 말려야 탈색이 되지 않습니다.}*"],
+
+
+["셔츠 등은 세탁기로 세탁할 때 단추를 다 채우고 뒤집어서 빨아주면 제품 손상도 방지할 수 있고 오래 입을 수 있습니다.",
+"*{세탁기로 세탁 후 <b>탈수가 끝나면 바로<b> 세탁물을 한 번 턴 후 건조대에 널어주시면 다리지 않아도 깔끔하게 입을 수 있습니다.}*"],
+
+
+["*{세탁 후 다리지 마십시오!}*",
+"(원단 특성상 원래 구김이 있는 원단이므로  다리실 필요가 없습니다.",
+"다리미로 다리시려거든 구겨진 부분만 스팀분사기나 스팀다리미로  스팀만 쪼여주시는 방법으로 다리시기 바랍니다.",
+"- 다리미로 직접 다리시면 제품의 변형이 오므로 직접 다리지 마십시오!)"],
+
+
+["점퍼 등은 세탁기로 세탁할 때 지퍼를 다 채우고 세탁하면 제품 손상도 방지할 수 있고 오래 입을 수 있습니다."],
+
+
+[""],
+
+
+["- 드럼세탁기가 아닌 일반세탁기로는 탈수만 가능합니다.(세탁기로 세탁, 헹굼 하시면 안됨)",
+"",
+"드럼세탁기라도 세탁을 하면 소매부분의 봉제선과 옆구리 부분의 봉제선이 뜨어지는 경우가 발생합니다.",
+"",
+"*{이 제품은 소재 특성상 물이 잘 먹지 않으므로 드럼세탁기가 아닌 일반 세탁기로 세탁을 하면 물 위에 제품이 뜰 수가 있습니다.}*",
+"제품이 물 위에 뜨게 되면 세탁과 헹굼 과정 중에 세탁통과의 마찰로 제품이 손상될 수 있습니다.",
+"그러므로 일반 세탁기로는 손세탁 후 탈수만(헹굼 하시면 안 됨) 하실 것을 권장해 드립니다."],
+
+
+["*{울(wool)이 함유된 제품을 온수세탁 하거나 세탁 후 건조기로 건조하면 수축의 우려가 있으므로 반드시 냉수세탁하시고 건조기는 사용을 금합니다.}*",
+"부득이하게 자동세탁기로 세탁할 때는 세탁망에 넣어서 하시거나 세탁망이 없을 때에는 모든 단추를 채우고 뒤집어서 세탁하시기를 권합니다."],
+
+
+[""],
+
+
+["- 오염부위를 세탁솔이나 칫솔을 이용하여 중성세제를 묻혀서 가볍게 제거 한 후 세척하시기 바랍니다.",
+"",
+"*{자세한 세탁방법 참조 ----&gt;<FONT color=#33cc00><A href='http://kin.naver.com/detail/detail.php?d1id=10&amp;dir_id=101302&amp;eid=oOFqN1j8sKDwK0qr2xRgzVLcLBxtEhqg&amp;qb=uea89sDaxM8gvLzFuQ==&amp;enc=euc-kr' target='_blank'><FONT color=#33cc00>클릭하세요</FONT></A>!</FONT></STRONG><FONT color=#33cc00>&nbsp;<BR></FONT><BR><FONT color=#ff0000>드라이클리닝금지</FONT><FONT color=#3399ff>(석유계 드라이클리닝을 하면 방수코딩원단의 표면이 떨어질 염려가 있습니다.)</FONT>"]
+
+];
+
+/**
+위의 배열 arrClothMaterials 내
+특정 배열에 대하여 배열요소 문자열 정보를 하나로 합친다.
+
+예) ["ㄱㄴㄷ", "ABC"] -> "ㄱㄴㄷ(줄바꿈기호)ABC"
+*/
+function getOneStringFromArray(sArray, aIndex) {
+	var s;
+	s = "";
+
+	var eachArray = sArray[aIndex];
+
+	for (var j=0; j<eachArray.length; j++) {
+		s = s + 	eachArray[j] + "\n";
+	}
+
+
+	return s;
+}
+
+
+
+
+/**
+옷감 소재 선택 시 처리
+*/
+function selectClothMaterial(aSelectedIndex, aText) {
+	var select_cloth_material = document.getElementById("select_cloth_material");
+	var txtarea_cloth_material = document.getElementById("txtarea_cloth_material");
+
+	txtarea_cloth_material.value = getOneStringFromArray(arrClothMaterials, aSelectedIndex);
+}
+
+
+function getBigBossException(aException) {
+	var s;
+	s = "";
+
+	for (var ex in aException) {
+		s += ex + ":" + aException[ex] + "\n";
+	}
+
+	return s;
+}
+
+
+//=====================================================================
+
+
+//테두리 컬러 넣기
+function setContentItem(obj){
+  var soruce = document.getElementsByName("itemColor");
+  var objget = document.getElementById("htmlView");
+
+  if(obj.checked == true){
+    if(objget.value!=""){
+      objget.value = "\0" //\0 : 공백, \b : 백스페이스, \n : 줄바꿈, \t : 탭, \r : 캐리지 리턴, \" : 큰 따옴표, \‘ : 작은 따옴표 , \\ : \ 역슬래쉬
+    }
+	if (obj.value == "skyblue"){
+  		objget.value = objget.value + "skyblue";
+  	}
+  	else if (obj.value == "pink"){
+  		objget.value = objget.value + "pink";
+  	}
+  	else if (obj.value == "gray"){
+//  		objget.value = objget.value + "＊ "+obj.value+"\r\n gray(그레이)";
+
+  		objget.value = objget.value + "gray";
+  	}
+  	else{
+  		objget.value = objget.value + "green";
+  	}
+  }
+}
+
+function setReplaceStr(tar1, tar2, tar3) {
+  var Reg = new RegExp(tar2, "gi");//g : 발생할 모든 pattern에 대한 전역 검색 i : 대/소문자 구분 안함 m : 여러 줄 검색. gi 2개를 붙여놓으면 패턴의 유형을 한번 만 검색하는 것이 아니라 모두 다 검색하고 대소문자를 구분하지 않겠다는 의미.
+  var target = tar1.replace(Reg, tar3);
+  return target;
+}
+
+function trim(s) {
+  return s.replace(/^\s*|\s*$/g, '');
+}
+
+
+
+
+
+function monitor(){
+	var itemColor_1 = document.getElementsByName("itemColor_1[]")
+	if(itemColor_1.checked){ //같은 name 값으로 checkbox 오브젝트를 호출할 때 itemColor_1[0].checked 이렇게 하면 됨
+		document.getElementById("htmlView").write("<script src='/design/7952590/js/monitor.js'>"+"<!-- 모니터설정 -->"+"</"+"script>");//DB에서 값을 가져와 뿌려줄 페이지를 호출 하시면 됩니다.
+	}
+}
+
+
+//체크박스 체크시 레이어 보이기/ 숨기기
+//모니터입력
+function view_check(view){
+
+if(document.imgs_form.layer_hidden.checked == true){
+document.getElementById('showlayer').style.display='block';
+}else{
+document.getElementById('showlayer').style.display='none';
+document.location.reload(); // 체크박스 해제할 때 전체 새로고침.
+}
+}
+
+//<form name=imgs_form>
+// <input type="checkbox" name="layer_hidden" onclick="view_check('showlayer')">
+//<div id="showlayer" style="display:none">
+//보이죠!!</div>
+//</form>
+
+
+// 모니터,이미지경로(텍스트박스) 활성/비활성 체크박스
+//SKYBLUE(반팔)/
+ function activity(p, id) {
+
+
+   var obj, bool, color, idx=1;
+   if(!(obj=document.getElementById(id+idx++))) return;
+
+   color=(bool=!p.checked)?obj.type=="checkbox"?"":"#E0E0E0":"";
+   do {
+     obj.disabled=bool;
+     obj.style.backgroundColor=color;
+   } while (obj=document.getElementById(id+idx++));
+ }
+
+
+// 체크박스 둘중 하나만 선택하는 방법(ID로 제어함-아이디를 다르게 설정)
+//onclick='singleSelectCBox("itemColor1");'  홑따옴표, 쌍따옴표 주의할것
+//<input type=checkbox name="c1" id="itemColor1" onclick='singleSelectCBox("monitor_check1");'>
+//<input type=checkbox name="c1" id="itemColor2" onclick='singleSelectCBox("monitor_check2");'>
+
+function singleSelectCBox(strID) {
+/**
+	var tmpList = new Array();
+	tmpList.push(document.getElementById("itemColor1"));
+	tmpList.push(document.getElementById("itemColor2"));
+	tmpList.push(document.getElementById("itemColor3"));
+	tmpList.push(document.getElementById("itemColor4"));
+	//연동 하고싶은체크 박스를 계속 추가합니다.
+	for (var i=0; i < tmpList.length; i++) {
+		if (tmpList[i].id != strID) tmpList[i].checked = false;
+	}
+*/
+}
+
+
+
+//htmlViewiew() 사용방법
+//   <INPUT TYPE="text" name="imgin" value="h_naver2.gif" />
+//   <INPUT TYPE="button" value="test" onclick="htmlViewiew()" />
+//   <center id="htmlView"></center>
+//--><script language="JavaScript" src="http://www.7952590.com/design/7952590/js/monitor.js"><!-- 모니터설정 -->
+
+
+//sender : 전체 선택/해제 체크박스(this)
+//containerID : 체크박스들을 포함하는 컨터이너 개체 아이디(테이블 ID)
+//checkboxIDMatch : 체크박스들에 공통으로 포함되는 아이디 문자열("AllCheck")
+function SelectCheckBox(sender, containerID, checkboxIDMatch) {
+
+    var checkboxContainer = document.getElementById(containerID);
+
+
+
+    var inputs = checkboxContainer.getElementsByTagName('input')
+
+    for (var i = 0; i < inputs.length; i++)
+    {
+        var item = inputs.item(i);
+
+        if (item.id.indexOf(checkboxIDMatch) > -1)
+        {
+            item.checked = sender.checked;
+        }
+    }
+}
+
+//각 번호의 전체 선택까지 해제
+//선택해제 버튼
+function SelChekBox1(sender, containerID, checkboxIDMatch) {
+
+    var checkboxContainer = document.getElementById(containerID);
+
+    var inputs = checkboxContainer.getElementsByTagName('input')
+
+    for (var i = 0; i < inputs.length; i++) {
+        var item = inputs.item(i);
+
+        if (item.id.indexOf(checkboxIDMatch) > -1)
+        {
+            item.checked = sender.checked;
+        }
+    }
+}
+
+
+// 텍스트에어리어 리셋
+//선택해제 버튼
+function reSet() {
+
+ var inTxt = document.getElementsByTagName("textarea");   // 모든 textarea 태그에 적용
+ for(var i=0; i<inTxt.length; i++)  // 몇개인지 체크
+ {
+  if(i!=0 && inTxt[i].type=="textarea")           // TYPE을 검사하여 TEXTAREA 이면
+   inTxt[i].value="";                 // 값을 비운다.
+
+ }
+}
+
+
+
+//    itemColor1 = this.itemColorT();
+//색상 테두리 아래쪽 넣기
+function itemColorB(){
+  var soruce = document.getElementsByName("itemColor");
+  var objget = document.getElementById("htmlView");
+
+  if(objget.checked == true){
+    if(obj.value!=""){
+      objget.value = "\0" //\0 : 공백, \b : 백스페이스, \n : 줄바꿈, \t : 탭, \r : 캐리지 리턴, \" : 큰 따옴표, \‘ : 작은 따옴표 , \\ : \ 역슬래쉬
+    }
+	if (obj.value == "skyblue"){
+  		objget.value = objget.value + skyblueB;
+  	}
+  	else if (obj.value == "pink"){
+  		objget.value = objget.value + pinkB;
+  	}
+  	else if (obj.value == "gray"){
+//  		objget.value = Ready_msg.value + "＊ "+obj.value+"\r\n gray(그레이)";
+
+  		objget.value = objget.value + grayB;
+  	}
+  	else{
+  		objget.value = objget.value + greenB;
+  	}
+  }
+
+}
+
+function getNotifyHeader() {
+	var s
+	s = '<table cellspacing="0" cellpadding="0" width="704" height="" border="0">' + "\n" +
+		'<tr>' + "\n" +
+		  '<td height="210" width="22">&nbsp;</td>' + "\n" +
+			'<td align="center" width="662" style="background-repeat:no-repeat;" "nowrap" background="http://premium139.makeshop.co.kr/design/7952590/images/notify_item.gif" width="662" height="210">' + "\n" +
+			'<table cellspacing="0" cellpadding="0" width="550" height="120" border="0">' + "\n" +
+			'<tr>' + "\n" +
+			  '<td style="font-size:10pt; padding-left:10px; padding-bottom:15px; color:#009900; font-weight: bold; line-height: 2.0">' ;
+
+	return s;
+}
+
+
+
+
+function getNotifyFooter() {
+	var s
+	s = '</td>' + "\n" +
+		'</tr>' + "\n" +
+		'</table>' + "\n" +
+	  '</td>' + "\n" +
+	  '<td width="10">&nbsp;</td>' + "\n" +
+	'</tr>' + "\n" +
+	'<tr>' + "\n" +
+	  '<td height="20" colspan="3">&nbsp;</td>' + "\n" +
+	'</tr>' + "\n" +
+	'</table>' ;
+
+	return s;
+}
+
+function getNotify() {
+	var s1, s2;
+	s1 = document.getElementById("notify_1").value;
+	s2 = document.getElementById("notify_2").value;
+
+	return (s1 + "\n" + "<br>" + "\n" + s2 + "\n");
+}
+
+
+
+function getMonitorString() {
+//https://premium139.makeshop.co.kr/design/7952590/images/monitor.png
+	var s
+	s ="<img src='https://premium139.makeshop.co.kr/design/7952590/images/monitor.png' />"
+
+	return s
+}
+
+
+
+
+
+//이미지 헤더
+function getHeaderAboutBorderColorString() {
+	var s
+
+	var obj
+	obj =  document.getElementById("itemColor1")
+
+	if (obj.checked) {
+		s =getHeader("skyblue");
+	}
+
+	obj =  document.getElementById("itemColor2")
+	if (obj.checked) {
+		s =getHeader("pink");
+	}
+
+	obj =  document.getElementById("itemColor3")
+	if (obj.checked) {
+		s =getHeader("gray");
+	}
+
+	obj =  document.getElementById("itemColor4")
+	if (obj.checked) {
+		s =getHeader("green");
+	}
+
+	return s
+}
+
+
+//이미지 풋터
+function getFooterAboutBorderColorString() {
+	var s
+
+	var obj
+	obj =  document.getElementById("itemColor1")
+	if (obj.checked) {
+		s =getFooter("skyblue");
+	}
+
+	obj =  document.getElementById("itemColor2")
+	if (obj.checked) {
+		s =getFooter("pink");
+	}
+
+	obj =  document.getElementById("itemColor3")
+	if (obj.checked) {
+		s =getFooter("gray");
+	}
+
+	obj =  document.getElementById("itemColor4")
+	if (obj.checked) {
+		s =getFooter("green");
+	}
+
+	return s
+}
+
+function getHeader() {
+	var s
+	s='<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">' + "\n" +
+	'<tr>' + '\n' +
+		'<td><img src=\"images/mainbg_01.jpg\" width=\"32\" height=\"32\" alt=\"\"></td>' + "\n" +
+		'<td align=\"left\" background=\"images/mainbg_up.jpg\"><img src=\"images/mainbg_02.jpg\" width=\"99\" height=\"32\"></td>' + "\n" +
+		'<td><img src=\"images/mainbg_03.jpg\" width=\"32\" height=\"32\" alt=\"\"></td>' + "\n" +
+	'</tr>' + "\n" +
+	'<tr>' + "\n" +
+		'<td valign=\"bottom\" background=\"images/mainbg_left.jpg\"><img src=\"images/mainbg_04.jpg\" width=\"32\" height=\"97\"></td>' + "\n" +
+		'<td width=\"300\" height=\"500\">';
+
+	 return s;
+}
+
+function getFooter() {
+	var s
+	s='</td>' + "\n" +
+		'<td valign=\"top\" background=\"images/mainbg_right.jpg\"><img src=\"images/mainbg_06.jpg\" width=\"32\" height=\"131\"></td>' + "\n" +
+	'</tr>' + "\n" +
+	'<tr>' + "\n" +
+		'<td><img src=\"images/mainbg_07.jpg\" width=\"32\" height=\"32\"></td>' + "\n" +
+		'<td align=\"right\" background=\"images/mainbg_dn.jpg\"><img src=\"images/mainbg_08.jpg\" width=\"133\" height=\"32\"></td>' + "\n" +
+		'<td><img src=\"images/mainbg_09.jpg\" width=\"32\" height=\"32\" alt=\"\"></td>' + "\n" +
+	'</tr>' + "\n" +
+'</table>';
+
+	return s;
+}
+
+
+/**
+상위 소스 리턴하는 함수
+*/
+function upperMsg() {
+	var out_msg = ""; //임시. 실제로는 아래에서 찾아보면 있으므로 필요없을 경우, 이 줄을 지워야 함.
+	var sNotify, sMonitor, sHeader, sFooter
+sNotify = getNotifyHeader() + "\n" + getNotify() + getNotifyFooter();
+sMonitor = ""; //getMonitorString();
+sHeader=""; //getHeader();
+sFooter=""; //getFooter();
+//sHeader=getHeaderAboutBorderColorString();
+//sFooter=getFooterAboutBorderColorString();
+
+//image header
+//<script src="http://premium139.makeshop.co.kr/design/7952590/js/item_header_pink.js">
+
+//체크박스 체크시 TD색 변화
+/**
+	var chbElement = document.imgs_form.c1;
+
+	if(chbElement.length){
+		for(var i = 0; i < chbElement.length; i++){
+			var trElement = chbElement[i].parentElement.parentElement;
+			if(chbElement[i].checked == true){
+				trElement.style.backgroundColor = "#EFF4C5";
+			}
+			else{
+				trElement.style.backgroundColor = "#FFFFFF";
+			}
+		}
+	}
+	else{
+		var trElement = chbElement.parentElement.parentElement;
+		if(chbElement.checked == true)
+			trElement.style.backgroundColor = "#EFF4C5";
+		else
+			trElement.style.backgroundColor = "#FFFFFF";
+	}
+*/
+//<input>을 <span><input></span> 감싸주면 <input> TD 만 색상변함
+//그렇지 않으면 TR전체가 색상변함
+
+
+
+
+// 이미지 경로 넣기
+/**
+	var url1 = document.getElementById("src_check1").value;//텍스트박스의 첫번째 경로(이미지서버주소) 가져옴.
+	var url2 = document.getElementById("src_check2").value;//텍스트박스의 두번째 경로(년도) 가져옴.
+	var url3 = document.getElementById("src_check3").value;//텍스트박스의 세번째 경로(월) 가져옴.
+	var imgs = document.getElementById("src_check4").value;//텍스트박스의 파일명을 가져옴.
+	var url = url1+"/"+url2+"/"+url3+"/";
+	var imgsrc = "<img src="+url+imgs; //이미지 태그를 만듭니다. 이미지경로+ / + 이미지 파일명
+*/
+
+
+// 체크할때 htmlView(텍스트에어리어)에 밸류값 출력하기
+	//var Msg = val;
+//	var Ready_msg = document.getElementById("htmlView").value;
+/*
+	var chk = document.getElementsByName("c1");
+	var out_msg = ""
+	for (i=0;i<chk.length ;i++ )
+	{
+		if (chk[i].checked == true)
+		{
+			if (out_msg == "")
+			{
+				out_msg = out_msg +  sHeader + '\n' + imgsrc + '_' + chk[i].value + '.jpg>' + '\n' + sFooter + '\n\n';
+			}
+			else{
+				out_msg = out_msg +  sHeader + '\n' +  imgsrc + '_' + chk[i].value + '.jpg>' + '\n' + sFooter + '\n\n';
+
+			}
+		}
+
+	}
+	*/
+
+
+	out_msg = document.getElementById("prevImageViewTd").innerHTML;
+	
+	sMonitor = ""; //현재 필요없기에 "" 부여.
+	out_msg = sNotify + sMonitor + '\n\n' + out_msg;
+
+
+	return out_msg;
+}
+
+
+
+//체크박스 체크시 TD색 변화와 밸류값 텍스트에어리어에 출력
+//파라미터로 넘어오는 val 값은 용도가 없는 상태임.
+//넘어오는 파라미터 값도 여러 가지 종류의 값이 넘어오므로 일정한 패턴에 따른 처리가 불가능함.
+//차라리 제거하는 것이 좋을 수도 있음.
+function msg(val){
+	document.getElementById("htmlView").value = upperMsg();
+}
+
+
+
+   var tagetElement  = "input";     //사용할 테그명
+/*    var tagetTypeName = "c1";   //태그의 name 값8?*/
+
+
+//TextArea (htmlView) 내용을 복사(Ctrl + C)해준다.
+/*
+function SelectCopy(){
+	var doc = document.body.createTextRange();
+	doc.moveToElementText(document.all["htmlView"]);
+	doc.select();
+	doc.execCommand('copy');
+	alert("복사되었습니다.\n\n원하는 곳에 붙여넣기(Ctrl+V)하세요!!\n\n"
+			+ "▒▒▒ 큰옷전문 빅보스 ▒▒▒\n\n"
+			+ "(www.7952590.com)");
+}
+*/
+
+
+function radioCheck() {
+	var obj
+	obj =  document.getElementById("itemColor2")
+
+	alert("<script src='http://premium139.makeshop.co.kr/design/7952590/js/item_header_pink.js'>")
+}
+
+function initSelectGoodsColor(aSelect, aTd) {
+	aSelect.selectedIndex = 0;
+	aTd.style.background = "#FFFFFF";
+	aTd.innerHTML = "";
+}
+
+/**
+특정 tr의 모든 td를 제거한다.
+*/
+function delTdFromTr(aTr) {
+	while (aTr.cells.length > 0) {
+		var lastTd = aTr.cells(aTr.cells.length-1);
+
+		aTr.removeChild(lastTd);
+	}
+}
+
+/*
+===색상 선택 상자 컨트롤===
+
+중요 정보에 접근하기 위한 자바스크립트 코드 예.
+value: selectGoodsColor.value
+selectedIndex: selectGoodsColor.selectedIndex
+text: selectGoodsColor[selectGoodsColor.selectedIndex].text
+*/
+
+
+function selectGoodsColor(aNo, aText, aColorCode) {
+	var dynamic_table_goods_color = document.getElementById("dynamic_table_goods_color");
+
+	var firstTr = dynamic_table_goods_color.rows[0];
+	var secondTr = dynamic_table_goods_color.rows[1];
+
+	var select_goods_color = document.getElementById("select_goods_color");
+
+	//var arr_tr_dynamic_table_goods_color = document.getElementsByName("tr_dynamic_table_goods_color"); //배열요소 2개
+
+
+
+
+	//[선택] 항목이 선택되었다면 초기화하고 바로 리턴
+	for (var i=0; i<select_goods_color.options.length; i++) {
+		if (select_goods_color.options[i].selected && select_goods_color.options[i].text==select_goods_color.options[0].text) {
+			//모두 지워 초기화
+			for (var j=0; j<select_goods_color.options.length; j++) {
+				select_goods_color.options[i].selected = false;
+			}
+
+			try
+			{
+				//delTdFromTr(firstTr);
+				//delTdFromTr(secondTr);
+
+
+				dynamic_table_goods_color.rows[0].innerHTML = "";
+				dynamic_table_goods_color.rows[1].innerHTML = "";
+
+				//arr_tr_dynamic_table_goods_color[0].innerHTML = "";
+				//arr_tr_dynamic_table_goods_color[1].innerHTML = "";
+			}
+			catch (ex)
+			{
+				
+				Console.log(getBigBossException(ex));
+			}
+
+
+			return;
+		}
+	}
+
+
+	//리턴되지 않았다면 정상 과정 처리 시작...
+
+	//선택된 항목의 색깔과 색깔 이름 저장할 배열
+	var arrSelectedColor = new Array();
+	var arrSelectedColorName = new Array();
+
+	//선택된 항목의 색깔과 색깔 이름 저장
+	for (var i=0; i<select_goods_color.options.length; i++) {
+		if (select_goods_color.options[i].selected) {
+			arrSelectedColor[arrSelectedColor.length++] =  select_goods_color.options[i].value;
+			arrSelectedColorName[arrSelectedColorName.length++] = select_goods_color.options[i].text;
+		}
+	}
+
+
+	try
+	{
+
+		//delTdFromTr(firstTr);
+		//delTdFromTr(secondTr);
+
+		//arr_tr_dynamic_table_goods_color[0].innerHTML = "";
+		//arr_tr_dynamic_table_goods_color[1].innerHTML = "";
+
+		//dynamic_table_goods_color.rows[0].innerHTML = "";
+		//dynamic_table_goods_color.rows[1].innerHTML = "";
+	}
+	catch (ex)
+	{
+
+	}
+
+
+	//선택된 것 나타내기
+	for (var i=0; i<arrSelectedColor.length; i++) {
+		var  tmpColorNameCell = dynamic_table_goods_color.rows[0].insertCell();
+		var tmpColorCell = dynamic_table_goods_color.rows[1].insertCell();
+
+		tmpColorNameCell.innerHTML = arrSelectedColorName[i];
+		tmpColorNameCell.style.fontSize = "9pt";
+
+		tmpColorCell.style.background = arrSelectedColor[i];
+		tmpColorCell.innerHTML = "&nbsp;";
+	}
+
+
+}
+
+
+
+/*
+columnNo: 색상 컬럼 번호 - 1번째 색상, 2번째 색상, ..., 9번째 색상
+*/
+function countCheckbox(columnNo) {
+
+	//이를테면 arrCheckboxes[0]은
+	//배열 [10, 19]를 가리킨다.
+	//배열 [10, 19]의 0번째 요소는 시작번호, 1번째 요소는 끝번호이다.
+	var arrCheckbox = arrCheckboxes[columnNo-1];
+
+
+	var cnt;
+	cnt = 0;
+
+	var eachCheckbox
+	for (var i=arrCheckbox[0]; i<=arrCheckbox[1]; i++) {
+		eachCheckbox = document.getElementById("AllCheck_" + i);
+		if (eachCheckbox.checked) {
+			cnt++;
+		}
+	}
+
+	var eachSum
+	eachSum = document.getElementById("sum_" + columnNo);
+	eachSum.value = cnt;
+
+	//열에 전부 체크하면...
+	//일부라도 제거하면...
+	var obj;
+	obj = document.getElementById("TD_SelectAll_" + columnNo);
+	obj.checked = (cnt == (arrCheckbox[1] - arrCheckbox[0] + 1));
+
+	countAllCheckboxs();
+}
+
+/**
+[전체해제] 버튼을 누르면
+체크박스를 모두 해제하면서
+[갯수를 0으로 초기화해야 하는데 이 기능을 담당한다.]
+*/
+function zeroSumAllCheckboxes() {
+	for (var i=1; i<=9; i++) {
+		countCheckbox(i);
+	}
+}
+
+function countAllCheckboxs() {
+
+	var cnt;
+	cnt = 0;
+
+	for (var i=1; i<=9; i++) {
+		cnt = cnt + Number(document.getElementById("sum_" + i).value);
+	}
+
+	var totalObject ;
+	totalObject = document.getElementById("sum_all");
+	totalObject.innerHTML = "<b>전체 갯수: <font color=red>"  +  cnt + "</font></b>";
+
+}
+
+
+/**
+세탁방법
+
+차후에
+이해하기 어려운 단어는 링크를 걸어주는 정보로 바꿔줘야 할 수도 있다.
+*/
+function selectWashingMethod(aSelectedIndex, aText) {
+
+	var select_washing_method = document.getElementById("select_washing_method");
+	var txtarea_washing_method = document.getElementById("txtarea_washing_method");
+	txtarea_washing_method.value = getOneStringFromArray(arrWashingMethod, aSelectedIndex);
+
+	/*
+	var arr_span_washing_method = document.getElementsByName("span_washing_method");
+	var sWashingMethod;
+	if (aSelectedIndex == 0) {
+		sWashingMethod = "";
+	} else {
+		sWashingMethod = arr_span_washing_method[aSelectedIndex].innerHTML;
+	}
+	alert(sWashingMethod);
+	*/
+}
+
+/**
+세탁방법 제목 강조
+형식: 제목<span style='color:#3366ff; font-weight: bold;'>(괄호제목)</span>
+*/
+function strikeWashingMethodTitle(aTitle) {
+	 var r = replaceAll(aTitle, "(", "<span style='color:#3366ff; font-weight: bold;'>(");
+	 r = replaceAll(r, ")", ")</span>");
+
+	 return r;
+}
+
+/**
+괄호 부분 강조
+형식: (내용) -> 색깔 있는 (내용)으로...
+*/
+function strikeString(aTitle) {
+	return strikeWashingMethodTitle(aTitle);
+}
+
+/**
+이를테면
+"날염[textile printing]" 문자열에 대해 다음과 같이 변환시켜 리턴한다.
+<a href="javascript:WinPop('http://endic.naver.com/popManager.nhn?m=enkrEntry&entryId=bba64933609f40969d8ad74695dcb57f&query=textile+printing','400','450')">날염[textile printing]</a>
+*/
+
+
+function wordToHTML(aWord) {
+
+	var totalWord;
+	totalWord = aWord;
+
+	//변환과정 거친 후...
+	for (var i=0; i<arrLinkInfoWashingMethod.length; i++) {
+		var eachArrLinkInfoWashingMethod = arrLinkInfoWashingMethod[i];
+
+		var sFindWord = eachArrLinkInfoWashingMethod[0];
+
+
+		var sLinkInfo = eachArrLinkInfoWashingMethod[1];
+
+		var sSubWord = eachArrLinkInfoWashingMethod[2];
+
+
+		var sReplaceWord = "<a href=\"javascript:WinPop('" + sLinkInfo + "','400','450')\">" + sFindWord + sSubWord + "</a>";
+
+		//찾은 문자열 맨 앞의 것만 바꾸게 됨
+		//s = s.replace(sFindWord, "<a href=\"javascript:WinPop('" + sLinkInfo + "','400','450')\">" + sFindWord + "</a>");
+
+		//원하는 문자열 찾아서 모두 바꿔 줌.
+		totalWord = replaceAll(totalWord, sFindWord, sReplaceWord);
+
+
+	}
+
+	return totalWord;
+}
+
+/**
+이해하기 힘든 단어는 링크를 시켜준다.
+*/
+function linkString(aWord) {
+	return wordToHTML(aWord);
+}
+
+/**
+textarea에 입력된 내용 중에
+별표 하나로 둘러싸인 *{내용}* 부분이나
+별표 둘로 둘러싸인 **{내용}** 부분을
+약속한 색깔로 있게 바꿔준다.
+
+별 두 개 짜리 **{내용}**를 먼저 처리한 후
+별 한 개 짜리 *{내용}*를 처리한다.
+
+<span style='color:#FF0000; font-weight: bold;'>**{별둘}**</span>
+<span style='color: #0000ff;'>*{별하나}*</span><br>
+*/
+function starToColor(sContent) {
+	var r;
+	//별 두개 처리
+	r = replaceAll(sContent, "**{", "<span style='color:#FF0000; font-weight: bold;'>");
+	r = replaceAll(r, "}**", "</span>");
+
+	//별 한개 처리
+	r = replaceAll(r, "*{", "<span style='color: #0000ff; font-weight: bold;'>* ");
+	r = replaceAll(r, "}*", "</span>");
+
+	return r;
+}
+
+/**
+*{}* 혹은 **{}**를 이용하여 표현한 부분...
+즉 색상 강조를 원하는 부분을 처리한다.
+*/
+function starString(sContent) {
+	return starToColor(sContent)
+}
+
+/**
+특정 문자열을 찾아서 원하는 문자열로 교체해주는 함수
+*/
+function replaceAll(totalWord, findWord, replaceWord){
+	//return totalWord.replace(new RegExp( findWord, 'g' ), replaceWord); //테스트 실패
+    return totalWord.split(findWord).join(replaceWord); //잘됨.
+}
+
+/**
+textarea에 입력된 줄바꿈을 HTML 줄바꿈으로 변환한다.
+*/
+function brString(aContent) {
+	return replaceAll(aContent, "\n", "<br>");
+}
+
+
+/**
+sIFrameID: 이 문서 내 IFrame의 ID
+sFindID: IFame에 연결된 문서 내의 특정 ID를 가진... 참조하고자 하는 객체
+*/
+function getObjectFromIFrame(sIFrameID, sFindID) {
+	var objFrame = document.getElementById(sIFrameID);
+	var objFrameWin = objFrame.contentWindow;
+	var objFrameDoc = objFrameWin.document;
+	var findObj = objFrameDoc.getElementById(sFindID);
+
+	return findObj;
+}
+
+
+
+function initHTML() {
+	msg("");
+
+	//alert("Hello, initHTML");
+
+	for (var i=1; i<=9; i++) {
+		countCheckbox(i);
+	}
+
+	//alert(getHeader("gray"));
+}
+
+/**
+미리보기 전에
+필수입력 컴포넌트 체크
+*/
+function checkInputComponent() {
+	var bResult;
+	bResult = true;
+
+	//...각종 컴포넌트 입력 여부 체크 시작...
+	//입력 안된 경우
+	//alert로 알려주고 return false
+
+	//1.상품명 입력 여부 체크
+
+	var formElements = document.imgs_form.elements;
+
+	for (var i=0; i<formElements.length; i++) {
+		var eachElement = formElements[i];
+	}
+
+/*
+	if (objSaveGoodsName.value == "") {
+		alert("상품명을 입력하세요.");
+		objSaveGoodsName.focus();
+		return false;
+	}
+&*/
+
+
+
+	//...각종 컴포넌트 입력 여부 체크 완료
+
+	return bResult;
+}
+
+
+/**
+각종 제목(Text 혹은 Select 컴포넌트의 값)에 여러가지 효과 주기
+
+강조를 먼저 한 후, 링크를 걸어줘야 한다.
+
+효과
+1. 괄호 내용 강조
+2. 검색어
+*/
+function strikeTitle(aTitle) {
+	return linkString(strikeString(aTitle));
+}
+
+/**
+각종 내용(TextArea의 값)에 여러가지 효과 주기
+
+검색어
+색강조: - *{}*, **{}**
+줄바꿈
+*/
+function strikeContent(aContent) {
+	return brString(starString(linkString(aContent)));
+}
+
+/**
+이중따옴표로 둘러싸인 값을 추출해낸다.
+
+예) "57"에서 57을 추출해낸다.
+*/
+function getValueFromQuotes(sQuotes) {
+	var s;
+	s = sQuotes.split('\"'); //혹은 sQuotes.split('"');
+
+	return s[1];
+}
+
+/**
+aContent 속에 들어있는 value="58"에서 58cm을 얻어낸다.
+*/
+function getValueUnit(aContent) {
+	var rResult;
+	rResult = "";
+
+	var rUnit;
+	rUnit = "";
+
+	var contentLength = aContent.length;
+	var aUnit = aContent.substring(contentLength-2, contentLength);//끝 두글자
+
+	if (aUnit == 'cm') {
+		rUnit = 'cm';
+	} else if (aUnit == 'ch') {
+		rUnit = 'inch';
+	} else { //if (aUnit == '\"') {
+		rUnit = '"'; //인치를 나타내는 간단한 기호 ["]를 리턴
+	}
+
+	var rValue;
+	rValue = "";
+
+	var arrContent = aContent.split("value=");
+
+	//alert("length: " + arrContent.length);
+
+
+
+	if (arrContent.length == 0) {
+		rValue = aContent + rUnit;
+	} else if (arrContent.length == 1) {
+		rValue = aContent + rUnit;
+	} else if (arrContent.length == 2) { //[value=]이 1개 있는 경우
+		rValue = getValueFromQuotes(arrContent[1]) + rUnit;
+	} else if (arrContent.length == 3) { //[value=]이 2개 있는 경우
+		rValue = getValueFromQuotes(arrContent[1]) + rUnit + "~" + getValueFromQuotes(arrContent[2]) + rUnit;
+	}
+
+	//alert(rValue);
+
+	return rValue;
+}
+
+/**
+*/
+function getUnit(aContent) {
+	var rUnit;
+	rUnit = "";
+
+	var contentLength = aContent.length;
+	var aUnit = aContent.substring(contentLength-2, contentLength);//끝 두글자
+
+	if (aUnit == 'cm') {
+		rUnit = 'cm';
+	} else if (aUnit == 'ch') {
+		rUnit = 'inch';
+	} else { //if (aUnit == '\"') {
+		rUnit = '"'; //인치를 나타내는 간단한 기호 ["]를 리턴
+	}
+
+
+	return rUnit;
+}
+
+
+function pHtmlViewUsingUpperSouce() {
+	try
+	{
+		var select_products = document.getElementById("select_products");
+		if (select_products.selectedIndex == 0) {
+			alert("제품을 먼저 선택하세요.");
+			select_products.focus();
+			return;
+		}
+
+
+
+		var upMsg = upperMsg();
+		var objTextAreaHtmlSourceView = document.getElementById("htmlView");
+		objTextAreaHtmlSourceView.value = ""; //upMsg;
+
+
+		pHtmlView();
+
+		var doc = document.body.createTextRange();
+		doc.moveToElementText(document.all["htmlView"]);
+		doc.select();
+		doc.execCommand('copy');
+		alert("[하위 소스]가 복사되었습니다.\n\n원하는 곳에 붙여넣기(Ctrl+V)하세요!!\n\n"
+				+ "▒▒▒ 큰옷전문 빅보스 ▒▒▒\n\n"
+				+ "(www.7952590.com)");
+
+	}
+	catch (ex)
+	{
+		alert(getBigBossException(ex));
+	}
+}
+
+
+function pHtmlViewUsingLowerSouce() {
+	var upMsg = upperMsg();
+	var objTextAreaHtmlSourceView = document.getElementById("htmlView");
+	objTextAreaHtmlSourceView.value = upMsg;
+
+	var objFrame = document.getElementById("PreviewFrame");
+	var objFrameWin = objFrame.contentWindow;
+	var objFrameDoc = objFrameWin.document;
+	objFrameDoc.getElementById("pHtmlView").innerHTML = objTextAreaHtmlSourceView.value;
+
+
+
+	var doc = document.body.createTextRange();
+	doc.moveToElementText(document.all["htmlView"]);
+	doc.select();
+	doc.execCommand('copy');
+	alert("[상위 소스]가 복사되었습니다.\n\n원하는 곳에 붙여넣기(Ctrl+V)하세요!!\n\n"
+			+ "▒▒▒ 큰옷전문 빅보스 ▒▒▒\n\n"
+			+ "(www.7952590.com)");
+}
+
+
+function pHtmlViewUsingAllSouce() {
+
+	//document.getElementById("pHtmlView").innerHTML = document.getElementById("prevImageViewTd").innerHTML;
+
+	
+	
+
+	var select_products = document.getElementById("select_products");
+	if (select_products.selectedIndex == 0) {
+		alert("제품을 먼저 선택하세요.");
+		select_products.focus();
+		return;
+	}
+
+
+	var upMsg = upperMsg();
+	var objTextAreaHtmlSourceView = document.getElementById("htmlView");
+	objTextAreaHtmlSourceView.value = upMsg;
+
+	pHtmlView();
+
+	var doc = document.body.createTextRange();
+	doc.moveToElementText(document.all["htmlView"]);
+	doc.select();
+	doc.execCommand('copy');
+	alert("[전체 소스]가 복사되었습니다.\n\n원하는 곳에 붙여넣기(Ctrl+V)하세요!!\n\n"
+			+ "▒▒▒ 큰옷전문 빅보스 ▒▒▒\n\n"
+			+ "(www.7952590.com)");
+}
+
+/**
+
+*/
+function pHtmlView() {
+	//필수입력 컴포넌트 체크
+	var bCheckInputComponent;
+	bCheckInputComponent = true;
+
+	bCheckInputComponent = checkInputComponent();
+
+	if (bCheckInputComponent == false) {
+		return;
+	}
+
+	//필수입력 컴포넌트 체크 끝났으면...
+	//다음은 기나긴 여정 시작... [ㅠ.ㅠ]
+
+
+	//====================================================================[중요: 전체 컴포넌트 임시 저장]======================================================================
+	//상품 정보 테이블 전체 컴포턴트 임시 저장 시작...
+	var objGoods = document.getElementById("divGoods");
+	var saveGoods = objGoods.innerHTML;
+	//...상품 정보 테이블  전체 컴포턴트  임시 저장 끝
+	//========================================================================================================================================================================
+
+
+	//================================================================================================상품 정보 테이블 내 각각의 컴포넌트 처리 시작
+	//...<상품명 처리 시작>...
+	//상품명 저장
+	var saveGoodsName = document.imgs_form.GoodsName.value;
+
+
+	//상품명 컴포넌트 처리
+	var tdGoodsName = document.getElementById("td_goods_name");
+	var selectProducts = document.getElementById("select_products");
+
+	tdGoodsName.innerHTML = strikeTitle(document.imgs_form.GoodsName.value) + " " + GoodsName; //selectProducts[selectProducts.selectedIndex].text;
+
+
+	//...상품명 처리 끝
+
+
+	//...<색상 선택 상자 처리 시작>...
+	var select_goods_color = document.getElementById("select_goods_color");
+
+	//선택된 항목의 색깔과 색깔 이름 저장할 배열
+	var arrSelectedColor = new Array();
+	var arrSelectedColorName = new Array();
+
+
+
+	//선택된 항목의 색깔과 색깔 이름 저장
+	for (var i=0; i<select_goods_color.options.length; i++) {
+		if (select_goods_color.options[i].selected) {
+			arrSelectedColor[arrSelectedColor.length++] =  select_goods_color.options[i].value;
+			arrSelectedColorName[arrSelectedColorName.length++] = select_goods_color.options[i].text;
+		}
+	}
+
+
+	//색상 선택 상자 있는 행 제거해서 선택상자 제거
+	var table_goods_color = document.getElementById("table_goods_color");
+	table_goods_color.deleteRow(1);
+	//...색상 선택 상자 처리 끝
+
+
+	//...<옷감 소재 컴포넌트 처리 시작>...
+	var select_cloth_material = document.getElementById("select_cloth_material");
+	var select_cloth_material_index = select_cloth_material.selectedIndex;
+	var select_cloth_material_title = select_cloth_material.value;
+
+	var txtarea_cloth_material = document.getElementById("txtarea_cloth_material");
+	var txtarea_cloth_material_content = txtarea_cloth_material.value;
+
+	//순서주의: 검색어 링크를 먼저 처리하고, 괄호를 강조해야 함.
+	var td_cloth_material = document.getElementById("td_cloth_material");
+
+
+	td_cloth_material.innerHTML = strikeTitle(select_cloth_material_title) + "<br><br>" + strikeContent(txtarea_cloth_material_content);
+	//...옷감 소재 컴포넌트 처리 끝
+
+
+
+	//...<신축성 라디오버튼 처리 시작>...
+	//선택된 신축성 기억
+
+	var rElasticity = document.imgs_form.radioElasticity;
+	var selectedElasticityIndex = 0;
+	for (var i=0; i<rElasticity.length; i++) {
+		if (rElasticity[i].checked) {
+			//tdElasticity.innerHTML = rElasticity[i].value;
+			selectedElasticityIndex = i;
+			break;
+		}
+	}
+
+	var div_elasticity = document.getElementById("div_elasticity");
+	div_elasticity.innerHTML="";
+	//신축성 라디오버튼 처리 끝.
+
+
+	//...<착용계절 선택 컴포넌트 처리 시작>...
+	var tdWearingSeason = document.getElementById("td_wearing_season_1");
+	var objWearingSeasonOption = document.getElementById("wearing_season_1");
+	var objWearingSeasonOptionIndex = objWearingSeasonOption.selectedIndex;
+	tdWearingSeason.innerHTML = objWearingSeasonOption[objWearingSeasonOption.selectedIndex].text;
+	//...착용계절 선택 컴포넌트 처리 끝
+
+
+	//...<세탁방법 컴포넌트 처리 시작>...
+	var select_washing_method = document.getElementById("select_washing_method");
+	var select_washing_method_title = select_washing_method.value;
+
+	var select_washing_method_text = select_washing_method[select_washing_method.selectedIndex].text;
+	var txtarea_washing_method = document.getElementById("txtarea_washing_method");
+	//선택된 인덱스와 textarea의 내용을 기억해야 함.
+	var save_select_washing_method_index = select_washing_method.selectedIndex;
+	var save_txtarea_washing_method_value = txtarea_washing_method.value;
+
+	var td_washing_method = document.getElementById("td_washing_method");
+	td_washing_method.innerHTML = strikeTitle(select_washing_method_title) + "<br><br>" + strikeContent(save_txtarea_washing_method_value);
+	//...세탁방법 컴포넌트 처리 끝.
+
+
+
+
+	//...<상품 설명 컴포넌트 처리 시작>...
+	var goods_desc = document.imgs_form.GoodsDesc;
+	var txtarea_goods_desc = document.imgs_form.txtarea_goods_desc;
+
+	var save_goods_desc_value = document.imgs_form.GoodsDesc.value;
+	var save_txtarea_goods_desc_value = document.imgs_form.txtarea_goods_desc.value;
+
+	var td_goods_desc = document.getElementById("td_goods_desc");
+	td_goods_desc.innerHTML = strikeTitle(save_goods_desc_value) + "<br><br>" + strikeContent(save_txtarea_goods_desc_value);
+	//...상품 설명 컴포넌트 처리 끝
+
+
+	//...<상품 특징 컴포넌트 처리 시작>...
+	var goods_character = document.imgs_form.GoodsCharacter;
+	var txtarea_goods_character = document.imgs_form.txtarea_goods_character;
+
+	var save_goods_character_value =goods_character.value;
+	var save_txtarea_goods_character_value = txtarea_goods_character.value;
+
+
+	var td_goods_character = document.getElementById("td_goods_character");
+	td_goods_character.innerHTML = strikeTitle(save_goods_character_value) + "<br><br>" + strikeContent(save_txtarea_goods_character_value);
+	//...상품 특징 컴포넌트 처리 끝
+
+
+	//...<M:미더엄, L:라지, XL:X라지 선택상자 처리 시작>........................................................................
+
+	try
+	{
+		var selectedMLXObj = document.getElementsByName("select_mlx");
+		var selectedMXLObjSize = selectedMLXObj.length;
+
+		var arr_all_select_mlx = document.getElementsByName("select_mlx");
+		var arr_all_save_select_mlx_value = new Array();
+		var arr_all_save_select_mlx_index = new Array();
+
+		var arrSelectMLXIndex = new Array();
+
+
+		for (var i=0; i<arr_all_select_mlx.length; i++) {
+			arr_all_save_select_mlx_index[arr_all_save_select_mlx_index.length++] = arr_all_select_mlx[i].selectedIndex;
+			arr_all_save_select_mlx_value[arr_all_save_select_mlx_value.length++] = arr_all_select_mlx[i].value;
+		}
+
+
+
+
+		//MLX 옵션 선택 관련 컴포넌트 처리
+		var trMLXOption, tdMLXOption, tdSelectMLX;
+		var arrTdMLXOption = document.getElementsByName("tdmlx");
+
+		//선택한 행, select 컴포넌트 대신 선택 값으로 바꾸기
+		for (var j=0; j<4; j++) {
+			arrTdMLXOption[j].innerHTML = arr_all_save_select_mlx_value[j];
+		}
+
+	}
+	catch (ex)
+	{
+		console.log(ex);
+	}
+
+
+	//...M:미더엄, L:라지, XL:X라지 선택상자 처리 끝
+
+
+
+
+
+	//...<사이즈 입력 테이블 처리 시작>...
+	var selectedXLObj = document.getElementsByName("select_xl");
+	var selectedXLObjSize = selectedXLObj.length;
+
+	//처리 전 상태의 XL - cm 컴포넌트 값 저장
+	var arr_all_tcm = document.getElementsByName("tcm");
+	var arr_all_save_tcm = new Array();
+	for (var i=0; i<arr_all_tcm.length ; i++) {
+		arr_all_save_tcm[arr_all_save_tcm.length++] = arr_all_tcm[i].value;
+	}
+
+	//tcm 컴포넌트를 텍스트 값으로 바꾸기
+	//tcm 컴포넌트가 텍스트로 대체되면서 tcm 컴포넌트의 갯수가 동적으로 점점 줄어들며 바뀐다.
+	var arr_all_xl_cm = document.getElementsByName("xl_cm");
+	for (var i=0; i<arr_all_xl_cm.length; i++) {
+		try
+		{
+			var each_xl_cm = arr_all_xl_cm[i];
+
+			each_xl_cm.innerHTML =  arr_all_save_tcm[i] + getUnit(each_xl_cm.innerHTML); //단위 얻기 - "cm";
+
+		}
+		catch (ex) {
+			//예외 발생 무시
+		}
+	}
+
+	//처리 전 상태의 XL - inch 컴포넌트 값 저장:
+	//하나의 td에 두 개의 inch를 입력하는 텍스트 상자에 적용한다.
+	var arr_all_tinch = document.getElementsByName("tinch"); //inch 입력 텍스트 컴포넌트
+	var arr_all_save_tinch = new Array();
+	for (var i=0; i<arr_all_tinch.length; i++) {
+		arr_all_save_tinch[arr_all_save_tinch.length++] = arr_all_tinch[i].value;
+	}
+
+	var arr_all_xl_inch = document.getElementsByName("xl_inch");
+	if (arr_all_tinch.length == 0) {
+		//for (var i=0; i<arr_all_xl_inch.length; i++) {
+			//each_xl_inch
+		//}
+	} else {
+		for (var i=0; i<arr_all_xl_inch.length; i++) {
+			try
+			{
+				var each_xl_inch = arr_all_xl_inch[i];
+				each_xl_inch.innerHTML = arr_all_save_tinch[2*i] + '\"' + '~' + arr_all_save_tinch[2*i + 1] + '\"';
+			}
+			catch (ex) {
+				//예외 발생 무시
+			}
+		}
+	}
+
+
+
+	var arr_all_select_xl = document.getElementsByName("select_xl");
+	var arr_all_save_select_xl_index = new Array();
+
+	var arrSelectXLIndex = new Array();
+
+
+	//나중에 리팩토링 필요할 듯...
+	if (selectedXLObjSize != 0) {//호수 선택상자가 있는 경우
+		var tblSize = document.getElementById("size_table_1");
+
+		for (var i=0; i<arr_all_select_xl.length; i++) {
+			arr_all_save_select_xl_index[arr_all_save_select_xl_index.length++] = arr_all_select_xl[i].selectedIndex;
+		}
+
+
+		//XLarge 옵션 선택 관련 컴포넌트 처리
+		var trOption, tdOption, tdSelectXL;
+		var arrTdOption = document.getElementsByName("tdxl");
+
+
+		var arrDelRow = new Array();
+		var arrSelectXL = new Array();
+		var arrSelectXLValue = new Array();
+
+		for (var i=0; i<arrTdOption.length; i++) {
+			//trOption = document.getElementById("trxl_" + i);
+			tdOption = arrTdOption[i];
+
+			tdSelectXL = selectedXLObj[i];
+
+			//복원 시 필요
+			arrSelectXLIndex[i] = tdSelectXL.selectedIndex;
+
+
+			if ( tdSelectXL.value == 0) { //선택하지 않은 행 기억, 행 자체가 사라지게 해야 함.
+				arrDelRow[arrDelRow.length++]=i;//선택 안한 행 기억
+			} else { //선택한 행 기억 //선택했다면 선택한 값으로 대치되어야 함.
+				//tdOption.innerHTML = tdSelectXL.value;
+				arrSelectXL[arrSelectXL.length++] = i; //선택된 행 기억
+				arrSelectXLValue[arrSelectXLValue.length++] = tdSelectXL.value; //선택된 값 기억
+			}
+		}
+
+
+		//선택한 행, select 컴포넌트 대신 선택 값으로 바꾸기
+		for (var i=0; i<arrSelectXL.length; i++) {
+			var aRow = arrSelectXL[i];
+			var aValue = arrSelectXLValue[i];
+			arrTdOption[aRow].innerHTML = aValue;
+		}
+
+
+		//선택안한 행 제거
+		var cnt;
+		cnt = 0;
+		for (var i=0; i<arrDelRow.length; i++) {
+			tblSize.deleteRow(arrDelRow[i] - cnt + 1);
+			cnt++;
+			//alert(arrDelRow[i]);
+		}
+	}
+
+
+	//...사이즈 입력 테이블 처리 끝
+
+
+
+
+
+
+
+	//================================================================================================상품 정보 테이블 내 각각의 컴포넌트 처리 완료
+
+
+
+
+
+	//============================================================================<<<미리 보여주기 시작>>>...=====================================================================================
+	preHtmlView();
+	//...============================================================================미리 보여주기 완료=============================================================================================
+
+
+
+
+
+
+
+	//===============================================================================[중요 - 전체 컴포넌트 보이기]========================================================================================
+	//상품 정보 테이블 전체 컴포넌트 복원 시작...
+	divGoods.innerHTML = saveGoods;
+	//...상품 정보 테이블 전체 컴포넌트  복원 끝
+	//===================================================================================================================================================================================================
+
+
+
+
+
+	//[중요 - 각각]================================================================================================상품 정보 테이블 내 각각의 컴포넌트 복원 시작
+
+	//[주의]: 중요한 컴포넌트들 참조를 다시 해야 함.
+
+	//...<상품명 복원 시작>...
+	document.imgs_form.GoodsName.value = saveGoodsName;
+	//상품명 복원 끝
+
+	//상품 정보 테이블 내 -  [상품 색상] 선택 상자 복원 시작...
+
+	//선택상자: 	select_goods_color
+	//선택된 항목의 색깔과 색깔 이름이 저장된 배열: 	arrSelectedColor ,	arrSelectedColorName
+
+	select_goods_color = document.getElementById("select_goods_color"); //재참조해야 함.
+
+	//...<선택된 항목의 색깔과 색깔 이름 복원>...
+	for (var i=0; i<select_goods_color.options.length; i++) {
+		var eachColorValue = select_goods_color.options[i].value;
+		var eachColorName = select_goods_color.options[i].text;
+
+		for (var j=0; j<arrSelectedColor.length; j++) {
+			if ((eachColorValue == arrSelectedColor[j]) && (eachColorName == arrSelectedColorName[j])) {
+				select_goods_color.options[i].selected = true;
+			}
+		}
+	}
+	//...상품 정보 테이블 내 -  색상 선택 상자 복원 끝
+
+
+
+
+
+	//...<옷감 소재 - 컴포넌트 복원 시작>...
+	//레퍼런스 재설정
+	select_cloth_material = document.getElementById("select_cloth_material");
+	txtarea_cloth_material = document.getElementById("txtarea_cloth_material");
+
+	//복원
+	select_cloth_material.selectedIndex = select_cloth_material_index;
+	txtarea_cloth_material.value = txtarea_cloth_material_content;
+	//...옷감 소재 컴포넌트 처리 끝
+
+
+
+	//...<신축성 - 라디오버튼 복원 시작>...
+	rElasticity = document.imgs_form.radioElasticity;
+	rElasticity[selectedElasticityIndex].checked = true;
+	//...신축성 - 라디오버튼 복원 끝
+
+
+
+	//...<착용 계절 선택상자 복원 시작>...
+	var objWearingSeasonOption = document.getElementById("wearing_season_1");
+	objWearingSeasonOption.selectedIndex = objWearingSeasonOptionIndex;
+	//...착용 계절 선택상자 복원 끝
+	//================================================================================================상품 정보 테이블 내 각각의 컴포넌트 복원 끝
+
+
+
+	//...<세탁방법 컴포넌트 복원 시작>...
+	//참조 재초기화
+	select_washing_method = document.getElementById("select_washing_method");
+	txtarea_washing_method = document.getElementById("txtarea_washing_method");
+	//기억된 정보 복원
+	select_washing_method.selectedIndex = save_select_washing_method_index;
+	txtarea_washing_method.value = save_txtarea_washing_method_value;
+	//...세탁방법 컴포넌트 복원 끝
+
+
+	//...<상품설명 컴포넌트 복원 시작>...
+	//참조 재설정
+	goods_desc = document.imgs_form.GoodsDesc;
+	txtarea_goods = document.imgs_form.txtarea_goods_desc;
+
+	goods_desc.value = save_goods_desc_value;
+	txtarea_goods_desc.value = save_txtarea_goods_desc_value;
+	//...상품설명 컴포넌트 복원 끝
+
+	//...<상품특징 컴포넌트 복원 시작>...
+	//참조 재설정
+	goods_character = document.imgs_form.GoodsCharacter;
+	txtarea_goods_character = document.imgs_form.txtarea_goods_character;
+
+	goods_character.value = save_goods_character_value;
+	txtarea_goods_character.value = save_txtarea_goods_character_value;
+	//...상품특징 컴포넌트 복원 끝
+
+
+	//...<XL 사이즈 복원 시작>...
+	//...<제품 실측 치수 선택상자 복원 시작>...
+	//select_xl 참조 재초기화
+	selectedXLObj = document.getElementsByName("select_xl");
+	selectedXLObjSize = selectedXLObj.length;
+
+	if (selectedXLObjSize != 0) {//호수 선택상자가 존재하는 경우
+		arr_all_select_xl = document.getElementsByName("select_xl");
+
+		for (var i=0; i<arr_all_select_xl.length; i++) {
+			arr_all_select_xl[i].selectedIndex =arr_all_save_select_xl_index[i];
+		}
+	}
+	//...제품 실측 치수 선택상자 복원 끝
+
+
+
+	//select_mlx 참조 재초기화
+	selectedMLXObj = document.getElementsByName("select_mlx");
+	selectedMLXObjSize = selectedMLXObj.length;
+
+	if (selectedMLXObjSize != 0) {//select_mlx 선택상자가 존재하는 경우
+		arr_all_select_mlx = document.getElementsByName("select_mlx");
+
+		for (var i=0; i<arr_all_select_mlx.length; i++) {
+			arr_all_select_mlx[i].selectedIndex =arr_all_save_select_mlx_index[i];
+		}
+	}
+	//...select_mlx 선택상자 복원 끝
+
+
+
+	//tcm - 참조 재설정
+	//...<tcm 복원 시작>
+	arr_all_tcm = document.getElementsByName("tcm");
+	for (var i=0; i<arr_all_tcm.length ; i++) {
+		arr_all_tcm[i].value = arr_all_save_tcm[i];
+	}
+	//...tcm 컴포넌트 복원 끝
+
+
+/*
+	//...<tinch 복원 시작>
+	arr_all_tinch = document.getElementsByName("tinch");
+	for (var i=0; i<arr_all_tinch.length ; i++) {
+		arr_all_tinch[i].value = arr_all_save_tinch[i];
+	}
+	//...<tinch 복원 끝>
+*/
+	//...XL 사이즈 복원 끝
+
+}
+
+
+
+
+//argument
+function selectWearingSeason(aNo, aValue) {
+
+	var objWearingSeasonOption = document.getElementById("wearing_season_1");
+	var sValues = objWearingSeasonOption.value;
+	var arrValues = sValues.split("/");
+
+	//12개월 색깔 초기화
+	var objWearingSeasonTable = document.getElementById("table_wearing_season_1");
+	for (var i=0; i<=11; i++) {
+		//1월이 0번째 열에 있음.
+		objWearingSeasonTable.rows[0].cells[i].style.background="white";
+	}
+
+
+	//선택한 월에 색깔 칠하기
+	if (aValue!=0) {
+		for (var i=0; i<arrValues.length; i++) {
+			var aMonth = arrValues[i];
+			//1월은 0번째 열에 있음.
+			objWearingSeasonTable.rows[0].cells[aMonth-1].style.background="#00ee00";
+		}
+	}
+}
+
+
+function preHtmlView() {
+	var objProductDesc = document.getElementById("divGoods");
+
+	var objTextAreaHtmlSourceView = document.getElementById("htmlView");
+
+
+	objTextAreaHtmlSourceView.value = sJavaScriptAboutTooltip() + "\n" + objTextAreaHtmlSourceView.value + "\n" + objProductDesc.innerHTML;
+
+	//var objHtmlView = document.getElementById("pHtmlView");
+	//objHtmlView.innerHTML = objTextAreaHtmlSourceView.value;
+
+
+	var objFrame = document.getElementById("PreviewFrame");
+
+	var objFrameWin = objFrame.contentWindow;
+
+	var objFrameDoc = objFrameWin.document;
+
+	var objHtmlView = objFrameDoc.getElementById("pHtmlView");
+
+
+	objHtmlView.innerHTML = objTextAreaHtmlSourceView.value;
+
+
+}
+
+
+function sJavaScriptAboutTooltip() {
+	var s
+
+	s =
+	"<script type='text/javascript'>" + "\n" +
+	"//툴팁 박스 설정" + "\n" +
+	"var n = (document.layers) ? 1:0;" + "\n" +
+	"var ie = (document.all) ? 1:0;" + "\n" +
+	"" + "\n" +
+	"function overTip(boxID) {" + "\n" +
+		"	var boxObj = document.getElementById(boxID);" + "\n" +
+	"	//if (ie) {" + "\n" +
+	"	boxObj.style.visibility = 'visible';" + "\n" +
+	//"	boxObj.filters.item(0).stop();" + "\n" +
+	"	//}" + "\n" +
+	"}" + "\n" +
+	"" + "\n" +
+	"function outTip(boxID) {" + "\n" +
+	"	var boxObj = document.getElementById(boxID);" + "\n" +
+	"	//if (ie) {" + "\n" +
+	//"	boxObj.style.visibility = 'visible';" + "\n" +
+	//"	boxObj.filters.item(0).transition = 23;" + "\n" +
+	//"	boxObj.filters.item(0).apply();" + "\n" +
+	"	boxObj.style.visibility = 'hidden';" + "\n" +
+	//"	boxObj.filters.item(0).play();" + "\n" +
+	"	//}" + "\n" +
+	"}" + "\n" +
+"" + "\n" +
+"	//새창열기-주소표시줄, 테두리, 스크롤바 없게 띄우기" + "\n" +
+	"function WinPop(url, w, h) {" + "\n" +
+	"	var flist = ',location=0,directories=0,resizable=0,status=0,toolbar=0,menubar=0,scrollbars=0';" + "\n" +
+	"	var popw = (screen.width - w) / 2;" + "\n" +
+	"	var poph = (screen.height - h) / 2;" + "\n" +
+	"	var popft = 'height=' + h + ',width=' + w + ',top=' + poph + ',left=' + popw + flist;" + "\n" +
+	"	window.open(url, 'window', popft);" + "\n" +
+	"}" + "\n" +
+	"<\/script>" + "\n\n";
+
+
+	return s;
+}
+
+
+
+/*
+사용함수: selectXL(), controlSelectedXL()
+
+select 컴포넌트 참조용 문법 (실제로는 사용 안하고 있음)
+this.selectedIndex,
+this[this.selectedIndex].text,
+this.value);msg(this.value
+
+바지의 경우에는 select 선택상자가 아예 없는 경우도 있다.
+*/
+
+function selectXL() {
+	try
+	{
+		var selectedXLObj = document.getElementsByName("select_xl");
+
+
+		//위쪽에서 선택한 것은 아래쪽에서 선택되지 않도록 해야 함.
+		for (var i=0; i<selectedXLObj.length; i++) {
+			var eachSelectedXLObj = selectedXLObj[i];
+			for (var j=0; j<eachSelectedXLObj.options.length; j++) {
+				var eachOption = eachSelectedXLObj.options[j];
+				if (eachOption.value != 0 && eachOption.selected) {
+					var ii = i;
+					var jj = j;
+
+					if (ii >= 1) {
+						//앞쪽 select와 현재의 select의 선택된 값을 조사
+						var preValue = selectedXLObj[ii-1].value;
+						var nowValue = selectedXLObj[ii].value;
+						if (preValue >= nowValue) {
+							//같으면 후자를 [선택]으로 되돌린다.
+							selectedXLObj[ii].selectedIndex = 0;
+						}
+					}
+				}
+			}
+		}
+
+
+		//각 select에 어떤 값이 선택되었는 지 조사하여 필요한 처리
+		for (var i=0; i<selectedXLObj.length; i++) {
+			var eachSelectedXLObj = selectedXLObj[i];
+			for (var j=0; j<eachSelectedXLObj.options.length; j++) {
+				var eachOption = eachSelectedXLObj.options[j];
+				if (eachOption.selected) {
+					var eachInch = arrInches[i];
+
+					controlSelectedXL(i, j);
+				}
+			}
+		}
+	}
+	catch (ex)
+	{
+		alert(getBigBossException(ex));
+	}
+}
+
+
+/**
+select 선택상자를 선택하면
+선택한 호수에 따른 인치(inch)를 보여준다.
+*/
+function controlSelectedXL(aRow, aCol) {
+
+	var objAllInches = document.getElementsByName("xl_inch");
+
+	var objEachInch = objAllInches[aRow];
+
+	var arrEachInch = arrInches[aRow];
+
+
+	if (aCol == 0) {
+
+		objEachInch.innerHTML = arrEachInch[0] + '\"' + '~' + arrEachInch[arrEachInch.length - 1] + '\"';
+	}
+	else {
+
+		objEachInch.innerHTML = '<font color=red><b>' + arrEachInch[aCol - 1] + '\", ' + arrEachInch[aCol] + '\"</b></font>'
+	}
+}
+
+
+/*
+아직 뚜렷하게 하는 일 없음.
+
+사용함수: selectMLX(), controlSelectedMLX()
+
+select 컴포넌트 참조용 문법 (실제로는 사용 안하고 있음)
+this.selectedIndex,
+this[this.selectedIndex].text,
+this.value);msg(this.value
+
+M: 미디엄
+L: 라지
+XL: X-라지
+*/
+
+function selectMLX() {
+	try
+	{
+		var objSelectedMLX = document.getElementsByName("select_mlx");
+
+
+		//위쪽에서 선택한 것은 아래쪽에서 선택되지 않도록 해야 함.
+		for (var i=0; i<objSelectedMLX.length; i++) {
+			var objEachSelectedMLX = objSelectedMLX[i];
+			for (var j=0; j<objEachSelectedMLX.options.length; j++) {
+				var eachOption = objEachSelectedMLX.options[j];
+				if (eachOption.value != 0 && eachOption.selected) {
+
+				}
+			}
+		}
+
+
+		//각 select에 어떤 값이 선택되었는 지 조사하여 필요한 처리
+		for (var i=0; i<objSelectedMLX.length; i++) {
+			var objEachSelectedMLX = objSelectedMLX[i];
+			for (var j=0; j<objEachSelectedMLX.options.length; j++) {
+				var eachOption = objEachSelectedMLX.options[j];
+				if (eachOption.selected) {
+					var eachInch = arrInches[i];
+
+					controlSelectedMLX(i, j);
+				}
+			}
+		}
+	}
+	catch (ex)
+	{
+		alert(getBigBossException(ex));
+	}
+}
+
+function controlSelectedMLX() {
+}
+
+
+/**신축성 처리*/
+function selectElasticity(aValue) {
+	var tableElasticity = document.getElementById("table_elasticity");
+	var tdCol;
+
+	if (aValue == "전혀 없음") {
+		tdCol = 0
+	} else if (aValue == "약간 있음") {
+		tdCol = 1
+	} else if (aValue == "있음") {
+		tdCol = 2
+	} else if (aValue == "좋은 편") {
+		tdCol = 3
+	} else if (aValue == "아주 좋음") {
+		tdCol = 4
+	}
+
+	//흰색으로 초기화
+	for (var i=0; i<=4; i++) {
+		tableElasticity.rows[0].cells[i].style.background = "white";
+	}
+
+	//선택된 것 녹색으로 처리
+	tableElasticity.rows[0].cells[tdCol].style.background = "#00ee00";
+}
+
+//-->
+
+var GoodsName;
+GoodsName = "";
+function preloadIFrame(aValue, aText) {
+	if (aValue == 0) {
+		return;
+	}
+
+
+	//"[문자열]".substring([시작위치], [종료위치]);
+	//"[문자열]".substr([시작위치], [길이]);
+
+	var arrValue = aValue.split(",");
+	var groupValue = aValue.substr(0, 3);
+
+
+
+	var BigBossHtmlABCName = arrValue[1];
+
+	//alert(groupValue);
+	//alert(BigBossHtmlName);
+
+	var select_products = document.getElementById("select_products");
+	var groupIndex;
+	var groupText; //"4,AB"에서 -> 3글자 "4,A" 추출
+	for (var i=0; i<select_products.options.length; i++) {
+		var eachSelectProducts = select_products.options[i];
+		if (groupValue == eachSelectProducts.value) {
+			groupText = eachSelectProducts.text;
+			break;
+		}
+	}
+
+
+	var preloadIFrame; // = document.getElementById("IFrameBigBossA");
+	
+
+
+	preloadIFrame = document.getElementById("IFrameBigBoss" + BigBossHtmlABCName);
+	console.log("IFrameBigBoss" + BigBossHtmlABCName);
+	console.log("preloadIFrame: " + preloadIFrame);
+
+	//var fileName = "https://premium139.makeshop.co.kr/design/7952590/bigboss/" + "BigBoss" + BigBossHtmlABCName + ".htm";
+	//alert("fileName: " + fileName);
+	//preloadIFrame.src=fileName;
+
+
+	var preloadIFrameWin = preloadIFrame.contentWindow; 
+	console.log("preloadIFrame.contentWindow: " + preloadIFrame.contentWindow.document); 
+	//console.log("preloadIFrameWin.contentWindow.document: \n");
+	//console.log(preloadIFrameWin.contentWindow.document);
+	var preloadIFrameDoc = preloadIFrame.contentDocument? preloadIFrame.contentDocument: preloadIFrame.contentWindow.document;
+	var srcDivGoods = preloadIFrameDoc.getElementById("divGoods");
+
+	var targetDivGoods = document.getElementById("divGoods");
+	targetDivGoods.innerHTML = srcDivGoods.innerHTML;
+
+	var div_goods_name = document.getElementById("span_goods_name");
+	div_goods_name.innerHTML = "&nbsp;" + groupText;
+
+	GoodsName = groupText;
+
+	//여름
+	//selectWearingSeason(1, "5/6/7/8/9");
+	//msg("5/6/7/8/9");
+
+
+}
+</script>
+
+
+<script type='text/javascript'>
+//툴팁 박스 설정
+var n = (document.layers) ? 1:0;
+var ie = (document.all) ? 1:0;
+
+function overTip(boxID) {
+	var boxObj = document.getElementById(boxID);
+	boxObj.style.visibility = "visible";
+}
+
+function outTip(boxID) {
+	var boxObj = document.getElementById(boxID);
+	boxObj.style.visibility = "hidden";
+}
+
+/*
+function showTooltip() {
+	var boxObj = document.getElementById("tip00");
+	boxObj.style.visibility = "visible";
+}
+
+function hideTooltip() {
+	var boxObj = document.getElementById("tip00");
+	boxObj.style.visibility = "hidden";
+}
+*/
+
+//새창열기-주소표시줄, 테두리, 스크롤바 없게 띄우기
+function WinPop(url, w, h) {
+	var flist = ',location=0,directories=0,resizable=0,status=0,toolbar=0,menubar=0,scrollbars=0';
+	var popw = (screen.width - w) / 2;
+	var poph = (screen.height - h) / 2;
+	var popft = 'height=' + h + ',width=' + w + ',top=' + poph + ',left=' + popw + flist;
+	window.open(url, 'window', popft);
+}
+
+</script>
+
+
+
+
+<script>
+	const space = '<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr><td height= \"10\"></td></tr></table>';
+	
+	const frameHeader ='<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\">' + '\n' +
+						'<tr>' + '\n' +
+							'<td><img src=\"images/mainbg_01.jpg\" width=\"32\" height=\"32\"></td>' + '\n' +
+							'<td align=\"left\" background=\"images/mainbg_up.jpg\"><img src=\"images/mainbg_02.jpg\" width=\"99\" height=\"32\"></td>' + '\n' +
+							'<td><img src=\"images/mainbg_03.jpg\" width=\"32\" height=\"32\"></td>' + '\n' +
+						'</tr>' + '\n' +
+						'<tr>' + '\n' +
+							'<td valign=\"bottom\" background=\"images/mainbg_left.jpg\"><img src=\"images/mainbg_04.jpg\" width=\"32\" height=\"97\"></td>' + '\n' +
+							'<td width=\"300\" height=\"300\" style=\"padding:10px 15px 15px 12px;\">';  //style 순서 : top,right,bottom,left
+
+	const frameFooter ='</td>' + '\n' +
+						'<td valign=\"top\" background=\"images/mainbg_right.jpg\"><img src=\"images/mainbg_06.jpg\" width=\"32\" height=\"131\"></td>' + '\n' +
+					'</tr>' + '\n' +
+					'<tr>' + '\n' +
+						'<td><img src=\"images/mainbg_07.jpg\" width=\"32\" height=\"32\"></td>' + '\n' +
+						'<td align=\"right\" background=\"images/mainbg_dn.jpg\"><img src=\"images/mainbg_08.jpg\" width=\"133\" height=\"32\"></td>' + '\n' +
+						'<td><img src=\"images/mainbg_09.jpg\" width=\"32\" height=\"32\"></td>' + '\n' +
+					'</tr>' + '\n' +
+				'</table>';
+
+
+
+	var g_file_data_lists = [];
+	function addFileDataToList(aFileData) {
+
+		try {
+			//g_file_data_lists.push(aFileData);
+		 }
+		 catch (e) {
+			//alert(e);
+		 }
+		
+	}
+
+
+
+
+	//이미 불러온 파일이면 true를 리턴, 그렇지 않으면 false를 리턴
+	function isExistFileData(aFileData) {
+		return false;
+
+		var my_result = false;
+		
+		try {
+			if (g_file_data_lists.length==0) {
+				return my_result;
+			}
+
+			for (var i=0;i<g_file_data_lists.length;i++) {
+				if (g_file_data_lists[i]==aFileData) {
+					my_result = true;
+					break;
+				}
+			}
+		}
+		catch (e) {
+			alert(error);
+		}
+
+		return my_result;
+	}
+
+
+	
+
+	function fbbFileUpload(input) {
+
+		// readAsDataURL and createObjectURL will cache an image in the browser, 
+		//then return a base64 encoded string which references the image location in cache. 
+		//If browser cache is cleared, the base64 encoded string will no longer reference the image. 
+		//The base64 string isn't actual image data, 
+		//it's a url reference to the image, 
+		//and you shouldn't save it to a database hoping to retrieve image data. 
+		//I've recently made this mistake
+		//
+		//to avoid memory issues you should call URL.revokeObjectURL when you are done with your blob
+		//
+		//The following code uses object URLs, 
+		//which is much more efficient than data URL for viewing large images 
+		//(A data URL is a huge string containing all of the file data, whereas an object URL, 
+		//is just a short string referencing the file data in-memory)
+
+		
+		
+		var len = input.files.length;
+        for (var i = 0; i < len; i++) {
+			/**
+			//빠른 로딩, 적은 메모리 사용/ 그러나 화면캡처 시에 문제가 발생함.
+			var img = new Image();
+			var winURL = window.URL || window.webkitURL;
+			img.src = winURL.createObjectURL(files[i]); //createObjectURL(event.target.files[i]);
+
+			var div = document.createElement("div");
+			div.innerHTML = "<img id='my_img' style='max-width:1000px' src='" + img.src + "' />"; //output.src = window.URL.createObjectURL(event.target.files[0]);
+			var objTD = document.getElementById("prevImageViewTd");
+			objTD.insertBefore(div, null);
+			*/
+
+
+			//https://javascript.info/file
+			console.log("input.files[i].name: " + input.files[i].name);
+
+			let reader = new FileReader();
+
+			reader.readAsDataURL(input.files[i]);
+
+			reader.onload = function() {
+				//console.log(reader.result);
+				var div = document.createElement("div");
+				div.innerHTML = "<img id='my_img' style='max-width:1000px' src='" + reader.result + "' />";
+				var objTD = document.getElementById("prevImageViewTd");
+				objTD.insertBefore(div, null);
+				
+			};
+
+			reader.onerror = function() {
+				console.log(reader.error);
+			};
+			
+			
+
+			
+
+			
+			
+
+
+			/**
+			var fr = new FileReader();
+			fr.onload = function () {
+				console.log("log..." + i);
+				
+				
+				var div = document.createElement("div");
+				div.innerHTML = "<img id='my_img' style='max-width:1000px' src='" + fr.result + "' />";
+				var objTD = document.getElementById("prevImageViewTd");
+				objTD.insertBefore(div, null);
+				fr.readAsDataURL(files[i]);
+			}
+			fr.readAsDataURL(files[i]);
+			*/
+			
+			
+
+
+			
+			//window.onload = function(){
+			// your code here........
+			//};
+			
+			//console.log(window.URL.createObjectURL(event.target.files[i]));
+			//console.log("file name: " + event.target.files.item(i).name);
+			//console.log("file size: " + event.target.files.item(i).size);
+			/**
+			img.onload = function () {
+				console.log("this.width: " + this.width);
+				//window.URL.revokeObjectURL(img.src);
+			};
+			*/
+        }
+
+
+
+		//Resize Image: https://hacks.mozilla.org/2011/01/how-to-develop-a-html5-image-uploader/
+		//Using Canvas: https://jsfiddle.net/codeandcloud/xor3L8db/
+
+
+				/**
+									var MAX_WIDTH = 1000;
+									var width = img.width;
+									var height = img.height;        
+
+									if (width > MAX_WIDTH) {
+										height = height * (MAX_WIDTH)/(width);
+										width = MAX_WIDTH;
+										
+									}
+
+									canvas.width = width;
+									canvas.height = height; 
+
+									var ctx = canvas.getContext("2d");
+									ctx.drawImage(img, 0, 0, width, height); 
+				*/
+
+				// Load files into file reader
+				//reader.readAsDataURL(file);
+	}
+
+
+
+
+
+	$(function () {
+	     var obj = $("#dropzone");
+	
+	     obj.on('dragenter', function (e) {
+	          e.stopPropagation();
+	          e.preventDefault();
+	          $(this).css('border', '2px solid #5272A0');
+	     });
+	     obj.on('dragleave', function (e) {
+	          e.stopPropagation();
+	          e.preventDefault();
+	          $(this).css('border', '2px dotted #8296C2');
+	     });
+	     obj.on('dragover', function (e) {
+	          e.stopPropagation();
+	          e.preventDefault();
+	     });
+	     obj.on('drop', function (e) {
+	          e.preventDefault();
+	          $(this).css('border', '2px dotted #8296C2');
+	          var files = e.originalEvent.dataTransfer.files;
+	          if(files.length < 1)
+	               return;
+			  //F_FileMultiUpload(files, obj);
+			  fbbFileUpload(files, e);
+	     });
+	});
+
+
+	// 파일 멀티 업로드
+	function F_FileMultiUpload(files, obj) {
+		if(confirm(files.length + "개의 파일을 업로드 하시겠습니까?") ) {
+			var data = new FormData();
+			for (var i = 0; i < files.length; i++) {
+			   data.append('file', files[i]);
+			}
+   
+			var url = "<서버 파일업로드 URL>";
+			$.ajax({
+			   url: url,
+			   method: 'post',
+			   data: data,
+			   dataType: 'json',
+			   processData: false,
+			   contentType: false,
+			   success: function(res) {
+				   F_FileMultiUpload_Callback(res.files);
+			   }
+			});
+		}
+   }
+   
+   // 파일 멀티 업로드 Callback
+   function F_FileMultiUpload_Callback(files) {
+		for(var i=0; i < files.length; i++)
+			console.log(files[i].file_nm + " - " + files[i].file_size);
+   }
+   
+   //<!--출처: https://bemeal2.tistory.com/83 [헝그리개발자]-->
+
+
+
+	
+	
+	
+	
+	
+	
+	// 불러온 이미지 초기화(제거)
+	function clearPrevImage() {
+		var objTD = document.getElementById("prevImageViewTd");
+		objTD.innerHTML = "";
+
+		//g_file_data_lists = null;
+		//g_file_data_lists = [];
+
+		document.getElementById('files').value = ""; //change event 강제 발생
+
+		document.getElementById("pHtmlView").innerHTML = "";
+	}
+
+
+	
+	// 이미지 불러오기
+	function handleFileSelect(event) {
+	
+		//Check File API support
+		if (window.File && window.FileList && window.FileReader) {
+	
+			var files = event.target.files; //FileList object
+
+			//JQUERY FILE UPLOAD 및 일반 업로드를 동시에 처리하는 함수.
+			fbbFileUpload(files, event);
+			
+		}
+		else {
+			console.log("Your browser does not support File API");
+		}
+	}
+
+
+
+	
+
+
+	
+	
+	//<!-- addEventListener : html5 이상에서 작동함, ie10이상에서만 작동 -->
+	
+</script>
+
+
+
+<table bgcolor= "#DFDFDF" cellspacing="0" cellpadding="0" width="700" height="" border="0">
+	<tr>
+		<td align= "middle" colspan = "3" height= "50">
+			<span style="font-size:15pt; color=#454545; font-weight: bold;">빅보스 쇼핑몰 제품 생성기</span>
+		</td>
+	</tr>
+	<tr>
+		<td align= "right" width="300" height= "50">
+			<input id="files" type="file"  multiple accept="image/*" onchange="fbbFileUpload(this);" /></td>
+		<td width="100"></td>
+		<td width=""><p id="img_file_width" ></p><p id="img_file_height" ></p>
+			<input type="button" value="이미지 초기화" onClick="clearPrevImage();"/></td>
+	</tr>
+</table>
+
+
+
+
+
+
+
+
+
+<!-- 파일을 읽어드릴 때 필요한 함수가 있는 스크립트 문장은 위의 테이블 아래에 존재해야 작동한다-->
+
+
+	<!-- <form name="uploadForm" id="uploadForm" enctype="multipart/form-data" method="post"> -->
+		<!-- <input id="files" type="file" value="이미지 미리보기" multiple accept="image/*" />&nbsp;&nbsp;
+		<input type="button" value="이미지 초기화" onClick="clearPrevImage();"/> -->
+	<!-- </form> -->
+
+	<style>
+		#dropzone
+		{
+			border:2px dotted #3292A2;
+			widows:90%;
+			width:800px;
+			height:50px;
+			color:#92AAB0;
+			text-align:center;
+			font-size:24px;
+			padding-top:12px;
+			margin-top:10px;
+		}
+	</style>
+	
+	 
+	
+	<div id="dropzone">Drag & Drop Files Here</div>
+
+
+<!--화면캡처 프로그램-->	
+<!--prevImageViewTd의 innerHTML을 가져올 것.-->
+<!-- 전체 부분-->
+<button onclick="bodyShot()">bodyShot</button>
+<!-- 일부분 부분-->
+<button onclick="partShot()">partShot</button>
+
+<div class="container" id='container'>
+<!-- 로컬에서 불러온 파일 -->
+</div>
+<!-- 결과화면을 그려줄 canvas -->
+<canvas id="canvas" width="0" height="0" style="border:1px solid #d3d3d3;"></canvas>
+
+
+
+<!--라디오 버튼 중 하나는 기본적으로 선택해 놓는 것이 좋을 수도 있다.-->
+<form name="imgs_form" >
+<table cellspacing="0" cellpadding="0" width="745" height="" border="0">
+<tr>
+  <td height="210" width="22">&nbsp;</td>
+  <td align="center" style="background-repeat:no-repeat;" "nowrap" background="http://premium139.makeshop.co.kr/design/7952590/images/notify_item.gif" width="762" height="210">
+    <table cellspacing="0" cellpadding="0" width="650" height="120" border="0">
+    <tr>
+      <td style="font-size:9pt; padding-left:10px; padding-bottom:15px; color:#009900; font-weight: bold; line-height: 2.0">
+        <textarea  id="notify_1" name="notify_1" rows="3" cols="80" onChange="msg('');">치수 선택 방법은 맨 아래 상품설명의 제품실측치수 항목의 [권장치수] 부분에 마우스를 올려보시기 바랍니다.</textarea>
+        <textarea  id="notify_2" name="notify_2" rows="3" cols="80" onChange="msg('');" style="color: #0080ff;"></textarea> 
+      </td>
+    </tr>
+    </table>
+  </td>
+  <td width="10">&nbsp;</td>
+</tr>
+<tr>
+  <td height="20" colspan="3">&nbsp;</td>
+</tr>
+</table>
+
+<!-- 불러온 이미지 보여주기 -->
+<table border= "0" id="prevImageViewTable">
+	<tr><td height="10"></td></tr>  <!-- 이미지 위쪽 여백 -->
+	<tr><td id="prevImageViewTd"></td></tr>
+	<tr><td height="10"></td></tr>  <!-- 이미지 아래쪽 여백 -->
+</table>
+
+		<br />
+
+        <select name="color_code" class="border" id="select_products"  onChange="preloadIFrame(this.value, this[this.selectedIndex].text);msg(this.value);">
+        <option value="0">작업 할 제품 종류 선택</option>
+        <option value="1,A">티셔츠</option><!--문서명 A로 끝나게 할 것-->
+        <option value="1,AA">└ 티셔츠AA</option><!--문서명 AA로 끝나게 할 것-->
+        <option value="2,B">오픈셔츠</option>
+        <option value="3,C">래글런티</option>
+        <option value="4,D">재킷</option>
+        <option value="5,E">조끼(민소매)</option>
+        <option value="6,F">정장조끼</option>
+        <option value="7,G">벨트바지</option>
+        <option value="8,H">고무밴드바지</option>
+        <option value="9,I">맞춤바지</option>
+        <option value="9,J">팬티</option>
+
+        </select>
+
+        <br />
+
+
+
+        <!--제품설명 테두리 시작-->
+        <div id="divGoods"></div>
+        <!--제품설명 테두리 끝-->
+        <br />
+
+
+
+        <table width="745"cellspacing="2" cellpadding="0" bgcolor="#CCCCCC" align="left">
+        <tr width="100%" bgcolor="#E5E5E5" height="25">
+          <td width="25%" align="center">
+
+            <input type="button" onfocus='this.blur()' onclick="pHtmlViewUsingUpperSouce();" value="상위소스 복사" style="height:20">
+            <input type="button" onfocus='this.blur()' onclick="pHtmlViewUsingLowerSouce();" value="하위소스 복사" style="height:20">
+          </td>
+          <td width="50%"  height="25" align="center"  bgcolor="#CCCCCC">
+            <span style="font-size:11pt; color=#454545; font-weight: bold;">HTML 보기</span>
+          </td>
+          <td width="25%" align="center">
+            <input type="button" onfocus='this.blur()' onclick="pHtmlViewUsingAllSouce();" value="전체소스 복사" style="height:40">
+          </td>
+        </tr>
+
+        <tr bgcolor="white">
+          <td align="center" colspan="3">
+            <textarea  id="htmlView" name="imgView" rows="10" cols="104" onfocus="document.getElementById('htmlView').style.background='#fff';"></textarea><br>
+            <!--textarea  id="htmlView" name="imgView" rows="10" cols="100" onfocus="document.getElementById('htmlView').style.background='#fff';"></textarea-->
+		</td>
+	</tr>
+	<tr bgcolor="#E5E5E5" height="25">
+		<td align="center" colspan="3">
+		  <span style="font-size:11pt; color=#454545; font-weight: bold;">[작업 내용 화면]</span>
+		</td>
+	</tr>
+	<tr bgcolor="white">
+		<td align="center" colspan="3">
+			<p id="pHtmlView" name="pHtmlView"></p>
+         <iframe src="PreHtmlView.htm" frameborder="0" width="1200" height="1000" scrolling="yes"  id="PreviewFrame"></iframe>
+		 
+		 <iframe name="IFrameA" src="BigBossA.htm" frameborder="0" width="0" height="0" id="IFrameBigBossA"></iframe>
+		 <iframe name="IFrameAA" src="BigBossAA.htm" frameborder="0" width="0" height="0" id="IFrameBigBossAA"></iframe>
+		 
+		 <iframe name="IFrameB" src="BigBossB.htm" frameborder="0" width="0" height="0" id="IFrameBigBossB"></iframe>
+
+		 <iframe name="IFrameC" src="BigBossC.htm" frameborder="0" width="0" height="0" id="IFrameBigBossC"></iframe>
+
+		 <iframe name="IFrameD" src="BigBossD.htm" frameborder="0" width="0" height="0" id="IFrameBigBossD"></iframe>
+		 <iframe name="IFrameE" src="BigBossE.htm" frameborder="0" width="0" height="0" id="IFrameBigBossE"></iframe>
+
+		 <iframe name="IFrameF" src="BigBossF.htm" frameborder="0" width="0" height="0" id="IFrameBigBossF"></iframe>
+		 <iframe name="IFrameG" src="BigBossG.htm" frameborder="0" width="0" height="0" id="IFrameBigBossG"></iframe>
+		 <iframe name="IFrameH" src="BigBossH.htm" frameborder="0" width="0" height="0" id="IFrameBigBossH"></iframe>
+		 <iframe name="IFrameI" src="BigBossI.htm" frameborder="0" width="0" height="0" id="IFrameBigBossI"></iframe>
+		 <iframe name="IFrameJ" src="BigBossJ.htm" frameborder="0" width="0" height="0" scrolling="yes" id="IFrameBigBossJ" ></iframe>
+		</td>
+	</tr>
+</table>
+
+
+</form>
+
+
+
+
+<script>
+	/** 
+	$(":button").on('click', function(e) {
+	 // html2canvas(e.target.parentElement).then(function(canvas) {
+	 // document.body.appendChild(canvas)
+	 // });
+	 // html2canvas(e.target.parentElement).then(function(canvas) {
+	 // $('body').append('<img src="' + canvas.toDataURL("image/jpeg") + '"/>');
+	 // });
+	
+	html2canvas(e.target.parentElement).then(function(canvas) {
+	if (navigator.msSaveBlob) {
+	var blob = canvas.msToBlob();
+	return navigator.msSaveBlob(blob, '파일명.jpg');
+	} else {
+	var el = document.getElementById("target");
+	el.href = canvas.toDataURL("image/jpeg");
+	el.download = '파일명.jpg';
+	el.click();
+	}
+	});
+	});
+	
+	//출처: https://sub0709.tistory.com/48 [쓸데없는 코딩하기]
+	*/
+	
+	function bodyShot() { //전체 스크린 샷하기
+		html2canvas(document.body) //document에서 body 부분을 스크린샷을 함.
+		.then(
+		function (canvas) { //canvas 결과값을 drawImg 함수를 통해서 //결과를 canvas 넘어줌. //png의 결과 값
+		drawImg(canvas.toDataURL('image/png'));
+	
+		//appendchild 부분을 주석을 풀게 되면 body
+		//document.body.appendChild(canvas);
+	
+		//특별부록 파일 저장하기 위한 부분.
+		saveAs(canvas.toDataURL(), 'file-name.png');
+		}).catch(function (err) {
+		console.log(err);
+		});
+	}
+	
+	
+	function partShot() {  //특정부분 스크린샷
+		var ifrm = document.getElementById("PreviewFrame");
+		ifrm.contentWindow.scrollTo(0, 0);
+
+		var my_win = ifrm.contentWindow; // reference to iframe's window
+		// reference to document in iframe
+		var my_doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
+		document.getElementById("canvas").width = ifrm.width;
+		document.getElementById("canvas").height = my_doc.body.scrollHeight;
+
+
+		// reference to form named 'demoForm' in iframe
+
+		var htmlView = my_doc.getElementById('pHtmlView');
+
+
+		html2canvas(htmlView)   //id container 부분만 스크린샷
+		.then(function (canvas) {   //jpg 결과값
+				
+				//document.body.appendChild(canvas);
+				drawImg(canvas.toDataURL('image/jpeg'));  //이미지 저장
+				saveAs(canvas.toDataURL(), 'file-name.jpg');
+				
+			}
+		).catch(function (err) {
+				console.log(err);
+			}
+		);
+
+	}
+	
+
+
+	
+	function drawImg(imgData) {
+		console.log(imgData);  //imgData의 결과값을 console 로그롤 보실 수 있습니다.
+		return new Promise(
+			function reslove() {  //내가 결과 값을 그릴 canvas 부분 설정
+				var canvas = document.getElementById('canvas');
+				var ctx = canvas.getContext('2d');  //canvas의 뿌려진 부분 초기화
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+	
+				var imageObj = new Image();
+				imageObj.onload = function () {
+					ctx.drawImage(imageObj, 10, 10);  //canvas img를 그리겠다.
+				};
+	
+				imageObj.src = imgData;  //그릴 image데이터를 넣어준다.
+	
+			}, function reject() { }
+		);
+	
+	}
+	
+	
+	function saveAs(uri, filename) {
+		var link = document.createElement('a');
+		document.body.appendChild(link);
+
+		if (typeof link.download === 'string') {
+			link.href = uri;
+			link.download = filename;
+			
+			link.click();
+			//document.body.removeChild(link);
+		}
+		else {
+			window.open(uri);
+		}
+	}
+	
+	
+	//출처: https://minaminaworld.tistory.com/89 [미나미 블로그]
+	
+	</script>
+
+
+
+</body>
+
+
+
+</html>
+
+
+<!--
+<script src="http://www.7952590.com/design/7952590/js/goods_border.js">상품 테두리상단</script>
+<script src="http://www.7952590.com/design/7952590/js/tooltip_t.js">툴팁_티셔츠</script>
+<script src="http://www.7952590.com/design/7952590/js/tooltip_os.js">툴팁_오픈셔츠</script>
+<script src="http://www.7952590.com/design/7952590/js/tooltip_rgnt.js">툴팁_래글런티셔츠</script>
+<script src="http://www.7952590.com/design/7952590/js/tooltip_suit.js">툴팁_트렌치/슈트자켓</script>
+<script src="http://www.7952590.com/design/7952590/js/tooltip_vest.js">툴팁_조끼</script>
+//-->
