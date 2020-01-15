@@ -2451,19 +2451,18 @@ function WinPop(url, w, h) {
 
 
 			//https://javascript.info/file
-			console.log("input.files[i].name: " + input.files[i].name);
+			console.log("input.files[i].name: " + input.files[i].name + " (size: " + input.files[i].size + ")");
+			
 
 			let reader = new FileReader();
 
 			reader.readAsDataURL(input.files[i]);
 
 			reader.onload = function() {
-				//console.log(reader.result);
 				var div = document.createElement("div");
 				div.innerHTML = "<img id='my_img' style='max-width:1000px' src='" + reader.result + "' />";
 				var objTD = document.getElementById("prevImageViewTd");
 				objTD.insertBefore(div, null);
-				
 			};
 
 			reader.onerror = function() {
@@ -2471,27 +2470,6 @@ function WinPop(url, w, h) {
 			};
 			
 			
-
-			
-
-			
-			
-
-
-			/**
-			var fr = new FileReader();
-			fr.onload = function () {
-				console.log("log..." + i);
-				
-				
-				var div = document.createElement("div");
-				div.innerHTML = "<img id='my_img' style='max-width:1000px' src='" + fr.result + "' />";
-				var objTD = document.getElementById("prevImageViewTd");
-				objTD.insertBefore(div, null);
-				fr.readAsDataURL(files[i]);
-			}
-			fr.readAsDataURL(files[i]);
-			*/
 			
 			
 
