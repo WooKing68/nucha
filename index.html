@@ -3044,7 +3044,7 @@ var g_old6_gung_list = [
 ];
 
 
-
+//육효 납갑 NEW...
 //건괘 : 자묘진 오유술
 //태괘 : 사인축 해신미
 //이괘 : 인축해 신미사
@@ -3067,6 +3067,7 @@ var g_new6_nabgab = {
 };
 
 
+//육효 궁 NEW...
 //세응 :   1,4     6,3    5,2    4,1    3,6     2,5    3,1     4,1
 //건금궁 : 건위천, 택천쾌, 뇌천대장, 지천태, 지택림, 지뢰복, 지화명이, 지수사,
 //태금궁 : 태위택, 천택리, 화택규, 산택손, 산천대축, 산화비, 산뢰이, 산풍고,
@@ -7950,6 +7951,12 @@ function moveSaju() {
 
 <h1>육효</h1>
 
+<form name="JuYeokForm">
+	목적사: <input type="text" name="txt_jum64" value="" size="100">&nbsp;&nbsp; <input type="button" value="주역점/육효점" onclick="fortune_telling64();"><br>
+	주역점 기억 리스트: <select onchange="javascript:get_jum64_list(this.selectedIndex);" id="jum64_list" name="jum64_list"> 
+		<option value="-1">	
+	</select>
+<BR><BR>
 <table border="1">
 	<tr>
 		<td align="center">OLD<br>
@@ -7995,12 +8002,7 @@ function moveSaju() {
 <h1>주역</h1>
 
 <br>
-<form name="JuYeokForm">
-목적사: <input type="text" name="txt_jum64" value="" size="100"><br>
-<input type="button" value="주역점" onclick="fortune_telling64();">
-주역점 기억 리스트: <select onchange="javascript:get_jum64_list(this.selectedIndex);" id="jum64_list" name="jum64_list"> 
-	<option value="-1">	
-</select>
+
 
 
 <table><tr><td><h3><본괘>:</h3></td></tr>
