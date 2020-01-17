@@ -214,7 +214,7 @@
 
 
  <script type="text/javascript">
- <!--
+ 
 	//천간 지지 스크립트
 	//전역변수 선언
 	var SKY_10 = new Array("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸");
@@ -605,14 +605,11 @@
 		return rrr;
 	}
 	
- //-->
+ 
  </script>
 
  <script type="text/javascript">
- <!--
-
-
-
+ 
 	//년명성
 	function getYearNineStarValue(aYear) {
 		return getNineStarValue(11 - aYear);
@@ -1380,12 +1377,12 @@ function setNineStarTable(aTableName, aBoardArray) {
 		nineStar();
 	}
 
- //-->
+ 
  </script>
 
 
 <script type="text/javascript">
-<!--
+
 	//중궁의 지지를 입력받아 그 지지와 충을 이루는 궁의 방번호를 리턴
 	//[지지 -> 궁번호 테이블]
 	//[0->4], [1,2->6], [3->2], [4,5->1], [6->5], [7,8->3], [9->7], [10,11->8]
@@ -1697,11 +1694,11 @@ function setNineStarTable(aTableName, aBoardArray) {
 	
 	
 
-//-->
+
 </script>
 
 <script type="text/javascript">
-<!--
+
 	//(양력) 생년월일시에 대응하는 구성 숫자 구하기
 	function viewYourNineStarNumber() {
 		var tmpYear = YourNineStarNumberForm.YourBirthYear.value;
@@ -1730,7 +1727,7 @@ function setNineStarTable(aTableName, aBoardArray) {
 
 		YourNineStarNumberForm.YourNineStarNumberInfo.value = msg;
 	}
-//-->
+
 </script>
 
 <script type="text/javascript">
@@ -2078,6 +2075,12 @@ function changeNextMonth() {
 -->
 <script type="text/javascript">
 
+//필요한 한자들
+//乾 兌 離 震 巽 坎 艮 坤
+//天 澤 火 雷 風 水 山 地
+//木火土金水
+//宮
+//육효 육친(여자 표준): 孫父財官兄
 var g_juyeok_0 = ["", "<img src=1.png>", "<img src=2.png>", "<img src=3.png>", "<img src=4.png>", "", "<img src=6.png>", "<img src=7.png>", "<img src=8.png>", "<img src=9.png>"];//["", "☵", "☷", "☳", "☴", "", "☰", "☱", "☶", "☲"];
 var g_juyeok_1 = ["", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 var g_juyeok_2 = ["", "감", "곤", "진", "손", "", "건", "태", "간", "리"];
@@ -2799,14 +2802,18 @@ function get_jum64_list(aSelectedIndex) {
 
 function fortune_telling64() {
 	clear64();
+	
 
 	//var objJuYeokClass = new JuYeokClass();
 	initJuYeok(); 
 
 	save_jum64_list();
 
-	show64();
-	show6hyo();
+	show64(); //주역
+
+	clear_old6hyo();
+	show_old6hyo(); //육효
+	show_new6hyo(); //육효
 }
 
 function show64() {
@@ -2849,7 +2856,7 @@ function show64() {
 		}	
 	}
 
-	document.getElementById("tbl_ji64").rows[0].cells[0].innerHTML = tmp_base64_list[1] + "<br>" + s_base64 + "<br>본괘";
+	document.getElementById("tbl_ji64").rows[0].cells[0].innerHTML = tmp_base64_list[1] + "<br>" + s_base64 + "<br><b>본괘</b>";
 
 	JuYeokForm.txt_byunhyo.value = g_byunhyo_list.join(",");
 	if (my_byunhyo_cnt >0) {
@@ -2949,6 +2956,227 @@ function show64() {
 	document.getElementById("tbl_baehap64").rows[0].cells[1].innerHTML = tmp_baehap64_list[4];
 
 	document.getElementById("tbl_do64").rows[0].cells[0].innerHTML = tmp_base64_list[1] + "<br><h1>" + tmp_base64_list[2] + "<br>" + tmp_base64_list[3] + "</h1><br>본괘"
+}
+
+
+//[year_pole_list, month_pole_list, day_pole_list, hour_pole_list]; 리턴
+function get4ju() {
+	var date = new Date();
+
+	var my_year = date.getFullYear(); 
+	var my_month = date.getMonth() + 1; // beware: January = 0; February = 1, etc.
+	var my_day = date.getDate();
+
+	var my_hour = date.getHours();
+	var my_min = date.getMinutes();
+	var my_sec = date.getSeconds();
+
+	
+	//균시차(equation of time)
+	//서울: 126.92
+	var my_area_val = 126.92;
+	var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+	var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+	var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+
+	if (my_hour>=23 && my_min>=eot_next_hour_min_list[1]) {
+		my_year = yyyy_mm_dd_from_next_day_list[0];
+		my_month = yyyy_mm_dd_from_next_day_list[1];
+		my_day = yyyy_mm_dd_from_next_day_list[2];
+	}
+
+	
+	var year_pole_list = get60GapJaYear(my_year);
+	var month_pole_list = get60GapJaMonth(my_year, my_month);
+	var day_pole_list = get60GapJaDay(my_year, my_month, my_day);
+	var hour_pole_list = get60GapJaTime(my_year, my_month, my_day, my_hour, my_min);
+
+	return [year_pole_list, month_pole_list, day_pole_list, hour_pole_list];
+}
+
+//육효 납갑...
+//건괘 : 자인진 오신술
+//태괘 : 사묘축 해유미
+//이괘 : 묘축해 유미사
+//진괘 : 자인진 오신술
+//손괘 : 축해유 미사묘
+//감괘 : 인진오 신술자
+//간괘 : 진오신 술자인
+//곤괘 : 미사묘 축해유
+//상효...초효
+//子丑寅卯 辰巳午未 申酉戌亥
+var g_old6_nabgab = {
+	6:"戌申午辰寅子", 
+	7:"未酉亥丑卯巳", 
+	9:"巳未酉亥丑卯", 
+	3:"戌申午辰寅子", 
+	4:"卯巳未酉亥丑", 
+	1:"子戌申午辰寅",
+	8:"寅子戌申午辰", 
+	2:"酉亥丑卯巳未"
+};
+
+//육효 궁...
+//세응 :   6,3    1,4     2,5     3,6     4,1    5,2    4,1     3,6 
+//1~6까지의 시작 숫자에 3을 더하여 6으로 나누면 뒤의 숫자가 나온다.
+//건금궁 : 중천건, 천풍구, 천산돈, 천지비, 풍지관, 산지박, 화지진, 화천대유
+//태금궁 : 태위택, 택수곤, 택지췌, 택산함, 수산건, 지산겸, 뢰산소과, 뢰택귀매
+//이화궁 : 이위화, 화산려, 화풍정, 화수미제, 산수몽, 풍수환, 천수송, 천화동인
+//진목궁 : 진위뢰, 뢰지예, 뢰수해, 뢰풍항, 지풍승, 수풍정, 택풍대과, 택뢰수
+//손목궁 : 손위풍, 풍천소축, 풍화가인, 풍뢰익, 천뢰무망, 화뢰서합, 산뢰이, 산풍고
+//감수궁 : 감위수, 수택절, 수뢰둔, 수화기제, 택화혁, 뢰화풍, 지화명이, 지수사
+//간토궁 : 간위산, 산화비, 산천대축, 산택손, 화택규, 천택리, 풍택중부, 풍산점
+//곤토궁 : 곤위지, 지뢰복, 지택림, 지천태, 뢰천대장, 택천쾌, 수천수, 수지비
+//"궁/(대성괘(시작숫자))/(대성괘(시작숫자))...
+var g_old6_gung_list = [
+	"乾金宮/6.6(6)/6.4(1)/6.8(2)/6.2(3)/4.2(4)/8.2(5)/9.2(4)/9.6(3)",
+	"兌金宮/7.7(6)/7.1(1)/7.2(2)/7.8(3)/1.8(4)/2.8(5)/3.8(4)/3.7(3)", 
+	"離火宮/9.9(6)/9.8(1)/9.4(2)/9.1(3)/8.1(4)/4.1(5)/6.1(4)/6.9(3)", 
+	"震木宮/3.3(6)/3.2(1)/3.1(2)/3.4(3)/2.4(4)/1.4(5)/7.4(4)/7.3(3)", 
+	"巽木宮/4.4(6)/4.6(1)/4.9(2)/4.3(3)/6.3(4)/9.3(5)/8.3(4)/8.4(3)", 
+	"坎水宮/1.1(6)/1.7(1)/1.3(2)/1.9(3)/7.9(4)/3.9(5)/2.9(4)/2.1(3)", 
+	"艮土宮/8.8(6)/8.9(1)/8.6(2)/8.7(3)/9.7(4)/6.7(5)/4.7(4)/4.8(3)", 
+	"坤土宮/2.2(6)/2.3(1)/2.7(2)/2.6(3)/3.6(4)/7.6(5)/1.6(4)/1.2(3)"
+];
+
+//문자열 조작
+//slice(start, end): end 포함 안함, 음수 인자 허용.
+//substring(start, end): slice()와 비슷. 음수 인자 허용 안함. 두번째 인자 안주면 끝까지...
+//substr(start, length): slice()와 비슷. 두 번째 인자가 문자 길이임.
+
+function clear_old6hyo() {
+	
+	document.getElementById("old6_bon").innerHTML="";
+	document.getElementById("old6_ji").innerHTML="";
+	document.getElementById("old6_year").innerHTML="";
+	document.getElementById("old6_month").innerHTML=""; 
+	document.getElementById("old6_day").innerHTML= "";
+	document.getElementById("old6_hour").innerHTML="";
+	document.getElementById("old6_gung_name").innerHTML = "";
+
+	for (var i=1; i<7; i++) {//상효부터 하효로...
+		document.getElementById("old6hyo_" + i).innerHTML = "";
+		document.getElementById("old6_nabgab_" + i).innerHTML = "";
+		document.getElementById("old6hyo_seung_" + i).innerHTML = "";
+	}
+	
+
+}
+
+function show_old6hyo() {
+	
+	//본괘//지괘
+	var tmp_base64_list = get_base64_list(); //[본괘,地水師(03.29),<img src=2.png>,<img src=1.png>,무리를 이루어 앞장서다.]
+	
+	var tmp_ji64_list = get_ji64_list(); //[지괘,雷地豫(01.20),<img src=3.png>,<img src=2.png>,미리 경계하다.]
+	//var tmp_cheyong64_list = get_cheyong64_list();
+	document.getElementById("old6_bon").innerHTML= "<font size='4' color='white'>" + tmp_base64_list[1] + "</font>";
+	document.getElementById("old6_ji").innerHTML= "<font size='4' color='white'>" + tmp_ji64_list[1] + "</font>";
+
+	
+
+	//年月日時
+	//[year_pole_list, month_pole_list, day_pole_list, hour_pole_list];
+	var my_4ju_list = get4ju();
+	var my_year_list = my_4ju_list[0];
+	var my_month_list = my_4ju_list[1];
+	var my_day_list = my_4ju_list[2];
+	var my_hour_list = my_4ju_list[3];
+	document.getElementById("old6_year").innerHTML = my_year_list[0] + my_year_list[1] + "年";
+	document.getElementById("old6_month").innerHTML = "<font size='4' color='white'>" + my_month_list[0] + my_month_list[1] + "月" + "</font>";;
+	document.getElementById("old6_day").innerHTML= "<font size='4' color='white'>" + my_day_list[0] + my_day_list[1] + "日" + "</font>";;
+	document.getElementById("old6_hour").innerHTML= my_hour_list[0] + my_hour_list[1] + "時";
+
+	//g_base64_list = []; 	//[1,0,0,1,0,0]
+	//g_byunhyo_list = [];  //[0,0,1,0,1,0]
+	//g_ji64_list = []; 	//[1,0,1,1,1,0]
+	for (var i=6; i>0; i--) {//상효부터 하효로...
+		if (g_base64_list[6-i]==0) {//0번째 효가 상효//본괘가 음효
+			if (g_byunhyo_list[6-i]==1) {//본괘 음효인데 변효라면 
+				document.getElementById("old6hyo_" + i).innerHTML="<img src='" + "umx.png" + "' />";
+			}
+			else {
+				document.getElementById("old6hyo_" + i).innerHTML="<img src='" + "um.png" + "' />";
+			}
+		}
+		else if (g_base64_list[6-i]==1) {//본괘 양효
+			if (g_byunhyo_list[6-i]==1) {//본괘 양효인데 변효라면 
+				document.getElementById("old6hyo_" + i).innerHTML="<img src='" + "yangx.png" + "' />";
+			}
+			else {
+				document.getElementById("old6hyo_" + i).innerHTML="<img src='" + "yang.png" + "' />";
+			}
+		}
+	}
+
+	//납갑
+	var up_8_key = `${g_base64_list[0]}${g_base64_list[1]}${g_base64_list[2]}`;
+	var dn_8_key = `${g_base64_list[3]}${g_base64_list[4]}${g_base64_list[5]}`;
+
+	var up_9_num = g_juyeok_5[up_8_key];//8괘를 구성수에 대응시킴
+	var dn_9_num = g_juyeok_5[dn_8_key];
+
+	var up_nabgab = g_old6_nabgab[up_9_num];
+	var dn_nabgab = g_old6_nabgab[dn_9_num];
+
+	document.getElementById("old6_nabgab_6").innerHTML="<font size='6'>" + up_nabgab.charAt(0) + "</font>";
+	document.getElementById("old6_nabgab_5").innerHTML="<font size='6'>" + up_nabgab.charAt(1) + "</font>";
+	document.getElementById("old6_nabgab_4").innerHTML="<font size='6'>" + up_nabgab.charAt(2) + "</font>";
+	document.getElementById("old6_nabgab_3").innerHTML="<font size='6'>" + dn_nabgab.charAt(3) + "</font>";
+	document.getElementById("old6_nabgab_2").innerHTML="<font size='6'>" + dn_nabgab.charAt(4) + "</font>";
+	document.getElementById("old6_nabgab_1").innerHTML="<font size='6'>" + dn_nabgab.charAt(5) + "</font>";
+	
+	
+	//소속궁//세응(世應)
+	var my_juyeok64 = `${up_9_num}.${dn_9_num}`;
+	for (var i=0;i<8;i++) {
+		//"궁/(대성괘(시작숫자))/(대성괘(시작숫자))...
+		var each_old6_gung_list_value = g_old6_gung_list[i];
+
+		var searchIndex = each_old6_gung_list_value.indexOf(my_juyeok64);
+		if (searchIndex > -1) {
+			var gung_name = each_old6_gung_list_value.substr(0, 3); alert("gung_name: " + gung_name);
+			document.getElementById("old6_gung_name").innerHTML="<font size='6' color='yellow'>" + gung_name + "</font>";
+
+				
+			var se_position_num = parseInt(each_old6_gung_list_value.substr(searchIndex + 4, 1));
+			var eung_position_num = r(se_position_num + 3, 6);
+			if (eung_position_num==0) {eung_position_num=6;}
+
+			document.getElementById("old6hyo_seung_" + se_position_num).innerHTML="<font size='6' color='red'>" + "世" + "</font>";
+			document.getElementById("old6hyo_seung_" + eung_position_num).innerHTML="<font size='6' color='red'>" + "應" + "</font>";
+
+			break;
+		}
+		
+		
+	}
+	
+
+	//십신
+	
+
+}
+
+function show_new6hyo() {
+	for (var i=6; i>0; i--) {//상효부터 하효로...
+		if (g_base64_list[6-i]==0) {//0번째 효가 상효//본괘가 음효
+			if (g_byunhyo_list[6-i]==1) {//본괘 음효인데 변효라면 
+				document.getElementById("new6hyo_" + i).innerHTML="<img src='" + "umx.png" + "' />";
+			}
+			else {
+				document.getElementById("new6hyo_" + i).innerHTML="<img src='" + "um.png" + "' />";
+			}
+		}
+		else if (g_base64_list[6-i]==1) {//본괘 양효
+			if (g_byunhyo_list[6-i]==1) {//본괘 양효인데 변효라면 
+				document.getElementById("new6hyo_" + i).innerHTML="<img src='" + "yangx.png" + "' />";
+			}
+			else {
+				document.getElementById("new6hyo_" + i).innerHTML="<img src='" + "yang.png" + "' />";
+			}
+		}
+	}
 }
 </script>
 
@@ -7099,31 +7327,32 @@ function moveSaju() {
 	<tr>
 		<td>
 		<table border="1">
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-		</table> 
-		</td>
-		<td>&nbsp;&nbsp;</td>
+			<tr><td id="old6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지</td><td id="old6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td>6열</td><td id="old6_gung_name" rowspan="2" align="center" bgcolor="#000000">7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td id="old6_year" align="center" >연</td><td id="old6_month" align="center" bgcolor="#00000"></td><td id="old6_day" align="center" colspan="2" bgcolor="#000000">일</td><td id="old6_hour" align="center">시</td><td>6열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td align="center" >5열</td align="center" ><td>6열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td id="old6_nabgab_6" align="center" >5열</td><td>6열</td><td id='old6hyo_6' align="center">7열</td><td id="old6hyo_seung_6">8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td id="old6_nabgab_5" align="center" >5열</td><td>6열</td><td id='old6hyo_5' align="center">7열</td><td id="old6hyo_seung_5">8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td id="old6_nabgab_4" align="center" >5열</td><td>6열</td><td id='old6hyo_4' align="center">7열</td><td id="old6hyo_seung_4">8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td align="center" >5열</td><td>6열</td><td></td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td id="old6_nabgab_3" align="center" >5열</td><td>6열</td><td id='old6hyo_3' align="center">7열</td><td id="old6hyo_seung_3">8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td id="old6_nabgab_2" align="center" >5열</td><td>6열</td><td id='old6hyo_2' align="center">7열</td><td id="old6hyo_seung_2">8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td id="old6_nabgab_1" align="center" >5열</td><td>6열</td><td id='old6hyo_1' align="center">7열</td><td id="old6hyo_seung_1">8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td align="center" >5열</td><td>6열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td align="center" >5열</td><td>6열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+		</table></td>
+		<td>&nbsp;&nbsp;&nbsp;</td>
 		<td>
 		<table border="1">
 			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
 			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
 			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
-			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td id='new6hyo_6'>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td id='new6hyo_5'>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td id='new6hyo_4'>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td></td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td id='new6hyo_3'>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td id='new6hyo_2'>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td id='new6hyo_1'>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
 			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
 			<tr><td>1열</td><td>2열</td><td>3열</td><td>4열</td><td>5열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
 		</table>
@@ -7132,7 +7361,7 @@ function moveSaju() {
 </table>
 
 <script language="javascript">
-	
+	document.getElementById('yukhyo_1').innerHTML="<img src='" + "yukhyo_um.png'" + " />";
 </script>
 
 
