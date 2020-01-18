@@ -2186,16 +2186,24 @@ var g_ji64_list;
 
 	//a_key: "3.4" or "3.4.5"
 	function get_juyeok_64_name(a_key) {
+		try {
 			var name64 = "";
 
 			if (a_key.substr(0, 1) != "0" || a_key.substr(0, 1) != "5") {
 				var my_key = a_key.substr(0, 3);
 				var tmp_val = g_juyeok_64[my_key];
+				
+				//console.log("my_key: " + my_key + ", g_juyeok_64[my_key]: " + g_juyeok_64[my_key])
 				var tmp_arr_val = tmp_val.split("/");
 				name64 = tmp_arr_val[1];   //g_juyeok_64[g_juyeok_64_key];
 			}
+		} catch (e) {
 
-		return name64;
+		} finally {
+			return name64;
+		}
+
+		
 	}
 
 	function initJuYeok() {
@@ -2920,15 +2928,20 @@ function show64() {
 		document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = che_info;
 		document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = yong_info;
 	} else {
-		
-		var tmp_che_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[0]);
-		var tmp_yong_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[1]);
+		try {
+			var tmp_che_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[0]);
+			var tmp_yong_hyosa_info = get_juyeok_384_hyosa(tmp_cheyong64_list[1]);
 
-		che_info = tmp_che_hyosa_info[0] + "<br><br>" + tmp_che_hyosa_info[1] + "<br>" + tmp_che_hyosa_info[2] + "<br><br>" + tmp_che_hyosa_info[3];
-		yong_info = tmp_yong_hyosa_info[0] + "<br><br>" + tmp_yong_hyosa_info[1] + "<br>" + tmp_yong_hyosa_info[2] + "<br><br>" + tmp_yong_hyosa_info[3];
-		
-		document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = che_info;
-		document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = yong_info;
+			che_info = tmp_che_hyosa_info[0] + "<br><br>" + tmp_che_hyosa_info[1] + "<br>" + tmp_che_hyosa_info[2] + "<br><br>" + tmp_che_hyosa_info[3];
+			yong_info = tmp_yong_hyosa_info[0] + "<br><br>" + tmp_yong_hyosa_info[1] + "<br>" + tmp_yong_hyosa_info[2] + "<br><br>" + tmp_yong_hyosa_info[3];
+			
+			document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = che_info;
+			document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = yong_info;
+		} 
+		catch (e) {
+			document.getElementById("tbl_cheyong64").rows[1].cells[1].innerHTML = "";
+			document.getElementById("tbl_cheyong64").rows[1].cells[3].innerHTML = "";
+		}
 	}
 	
 	
@@ -3375,7 +3388,7 @@ function show_old6hyo() {
 		}
 
 		//지괘 납갑에 대한 충'파' 처리...
-		console.log("g_byunhyo_list: " + g_byunhyo_list);
+		//console.log("g_byunhyo_list: " + g_byunhyo_list);
 		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
 			var ji_nabgab_jiji = my_ji_nabgab.charAt(6-i);//지괘 납갑(지지)
 			var ji_nabgab_jiji_index = std_12jiji.indexOf(ji_nabgab_jiji);;//지괘 납갑(지지) 인덱스
@@ -3680,7 +3693,7 @@ function show_new6hyo() {
 		}
 
 		//지괘 납갑에 대한 충'파' 처리...
-		console.log("g_byunhyo_list: " + g_byunhyo_list);
+		//console.log("g_byunhyo_list: " + g_byunhyo_list);
 		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
 			var ji_nabgab_jiji = my_ji_nabgab.charAt(6-i);//지괘 납갑(지지)
 			var ji_nabgab_jiji_index = std_12jiji.indexOf(ji_nabgab_jiji);;//지괘 납갑(지지) 인덱스
@@ -3878,9 +3891,7 @@ function get_new6_chung_hap_hon(base64_9_num) {
 	}
 	else if ( "6.2/2.6/9.8/3.9/3.2/1.8/8.1/9.7/7.9".indexOf(base64_9_num) > -1 ) {
 		//육합괘: 천지비, 지천태, 화산려, 산화비, 뢰지예, 지뢰복, 수산건, 산수몽, 화택규, 택화혁
-        
 		my_chung_hap_hon = "육합괘";
-		
 	}
 	else if ( "2.9/8.3/1.6/4.7/3.8/9.2/7.4/6.1".indexOf(base64_9_num) > -1 ) {
 		//유혼괘: 지화명이, 산뢰이, 수천수, 풍택중부, 뇌산소과, 화지진, 택풍대과, 천수송
