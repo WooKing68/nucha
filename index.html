@@ -3143,6 +3143,12 @@ function clear_old6hyo() {
 		document.getElementById("old6_bok_chungpa_" + i).innerHTML="";
 		
 	}
+
+
+	document.getElementById("old6_ge_sin").innerHTML = "";
+	document.getElementById("old6_gong_mang").innerHTML = "";
+	document.getElementById("old6_chung_hap_hon").innerHTML = "";
+	document.getElementById("old6_bokum_banum").innerHTML = "";
 }
 
 
@@ -3183,6 +3189,11 @@ function clear_new6hyo() {
 		document.getElementById("new6_bok_chungpa_" + i).innerHTML="";
 		
 	}
+
+	document.getElementById("new6_ge_sin").innerHTML = "";
+	document.getElementById("new6_gong_mang").innerHTML = "";
+	document.getElementById("new6_chung_hap_hon").innerHTML = "";
+	document.getElementById("new6_bokum_banum").innerHTML = "";
 }
 
 
@@ -8117,8 +8128,8 @@ function moveSaju() {
 	<tr>
 		<td align="center">OLD<br>
 		<table border="1">
-			<tr><td id="old6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지</td><td id="old6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td>6열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td id="old6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
-			<tr><td></td><td></td><td></td><td></td><td id="old6_year" align="center"></td><td id="old6_month" align="center" bgcolor="#00000">6열</td><td>7열</td><td  id="old6_day" align="center" bgcolor="#000000">일</td><td id="old6_hour" align="center">시</td><td></td><td></td><td></td><td>13열</td><!--td>14열</td--></tr>
+			<tr><td id="old6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지</td><td id="old6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td></td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td id="old6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
+			<tr><td></td><td></td><td></td><td></td><td id="old6_year" align="center"></td><td id="old6_month" align="center" bgcolor="#00000">6열</td><td></td><td  id="old6_day" align="center" bgcolor="#000000">일</td><td id="old6_hour" align="center">시</td><td></td><td></td><td></td><td>13열</td><!--td>14열</td--></tr>
 			<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 			<tr><td id="old6_ji_10sin_6" align="center">1열</td><td id="old6_ji_nabgab_6" align="center">2열</td><td id="old6_ji_chungpa_6">3열</td><td id="old6_10sin_6" align="center">4열</td><td id="old6_nabgab_6" align="center" >5열</td><td id="old6_chungpa_6">6열</td><td id='old6hyo_6' align="center">7열</td><td id="old6hyo_seung_6">8열</td><td>9열</td><td id="old6_boksin_char_6" align="center">10열</td><td id="old6_bok_10sin_6" align="center">11열</td><td id="old6_bok_nabgab_6" align="center">12열</td><td id="old6_bok_chungpa_6">13열</td><td id="old6_6su_6" align="center">14열</td></tr>
 			<tr><td id="old6_ji_10sin_5" align="center">1열</td><td id="old6_ji_nabgab_5" align="center">2열</td><td id="old6_ji_chungpa_5">3열</td><td id="old6_10sin_5" align="center">4열</td><td id="old6_nabgab_5" align="center" >5열</td><td id="old6_chungpa_5">6열</td><td id='old6hyo_5' align="center">7열</td><td id="old6hyo_seung_5">8열</td><td>9열</td><td id="old6_boksin_char_5" align="center">10열</td><td id="old6_bok_10sin_5" align="center">11열</td><td id="old6_bok_nabgab_5" align="center">12열</td><td id="old6_bok_chungpa_5">13열</td><td id="old6_6su_5" align="center">14열</td></tr>
@@ -8128,13 +8139,13 @@ function moveSaju() {
 			<tr><td id="old6_ji_10sin_2" align="center">1열</td><td id="old6_ji_nabgab_2" align="center">2열</td><td id="old6_ji_chungpa_2">3열</td><td id="old6_10sin_2" align="center">4열</td><td id="old6_nabgab_2" align="center" >5열</td><td  id="old6_chungpa_2">6열</td><td id='old6hyo_2' align="center">7열</td><td id="old6hyo_seung_2">8열</td><td>9열</td><td id="old6_boksin_char_2" align="center">10열</td><td id="old6_bok_10sin_2" align="center">11열</td><td id="old6_bok_nabgab_2" align="center">12열</td><td id="old6_bok_chungpa_2">13열</td><td id="old6_6su_2" align="center">14열</td></tr>
 			<tr><td id="old6_ji_10sin_1" align="center">1열</td><td id="old6_ji_nabgab_1" align="center">2열</td><td id="old6_ji_chungpa_1">3열</td><td id="old6_10sin_1" align="center">4열</td><td id="old6_nabgab_1" align="center" >5열</td><td  id="old6_chungpa_1">6열</td><td id='old6hyo_1' align="center">7열</td><td id="old6hyo_seung_1">8열</td><td>9열</td><td id="old6_boksin_char_1" align="center">10열</td><td id="old6_bok_10sin_1" align="center">11열</td><td id="old6_bok_nabgab_1" align="center">12열</td><td id="old6_bok_chungpa_1">13열</td><td id="old6_6su_1" align="center">14열</td></tr>
 			<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-			<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="old6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">공망</font></td><td id="old6_gong_mang" align="center"></td><td id="old6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="old6_bokum_banum"></td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+			<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="old6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="old6_gong_mang" align="center"></td><td id="old6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="old6_bokum_banum"></td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
 		</table></td>
 		<td>&nbsp;&nbsp;&nbsp;</td>
 		<td align="center">NEW - ORIGINAL<br>
 			<table border="1">
-				<tr><td id="new6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지</td><td id="new6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td>6열</td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td id="new6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
-				<tr><td></td><td></td><td></td><td></td><td id="new6_year" align="center"></td><td id="new6_month" align="center" bgcolor="#00000">6열</td><td>7열</td><td  id="new6_day" align="center" bgcolor="#000000">일</td><td id="new6_hour" align="center">시</td><td></td><td></td><td></td><td>13열</td><!--td>14열</td--></tr>
+				<tr><td id="new6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지</td><td id="new6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td></td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td id="new6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
+				<tr><td></td><td></td><td></td><td></td><td id="new6_year" align="center"></td><td id="new6_month" align="center" bgcolor="#00000"></td><td></td><td  id="new6_day" align="center" bgcolor="#000000">일</td><td id="new6_hour" align="center">시</td><td></td><td></td><td></td><td>13열</td><!--td>14열</td--></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 				<tr><td id="new6_ji_10sin_6" align="center">1열</td><td id="new6_ji_nabgab_6" align="center">2열</td><td id="new6_ji_chungpa_6">3열</td><td id="new6_10sin_6" align="center">4열</td><td id="new6_nabgab_6" align="center" >5열</td><td id="new6_chungpa_6">6열</td><td id='new6hyo_6' align="center">7열</td><td id="new6hyo_seung_6">8열</td><td>9열</td><td id="new6_boksin_char_6" align="center">10열</td><td id="new6_bok_10sin_6" align="center">11열</td><td id="new6_bok_nabgab_6" align="center">12열</td><td id="new6_bok_chungpa_6">13열</td><td id="new6_6su_6" align="center">14열</td></tr>
 				<tr><td id="new6_ji_10sin_5" align="center">1열</td><td id="new6_ji_nabgab_5" align="center">2열</td><td id="new6_ji_chungpa_5">3열</td><td id="new6_10sin_5" align="center">4열</td><td id="new6_nabgab_5" align="center" >5열</td><td id="new6_chungpa_5">6열</td><td id='new6hyo_5' align="center">7열</td><td id="new6hyo_seung_5">8열</td><td>9열</td><td id="new6_boksin_char_5" align="center">10열</td><td id="new6_bok_10sin_5" align="center">11열</td><td id="new6_bok_nabgab_5" align="center">12열</td><td id="new6_bok_chungpa_5">13열</td><td id="new6_6su_5" align="center">14열</td></tr>
@@ -8144,7 +8155,7 @@ function moveSaju() {
 				<tr><td id="new6_ji_10sin_2" align="center">1열</td><td id="new6_ji_nabgab_2" align="center">2열</td><td id="new6_ji_chungpa_2">3열</td><td id="new6_10sin_2" align="center">4열</td><td id="new6_nabgab_2" align="center" >5열</td><td  id="new6_chungpa_2">6열</td><td id='new6hyo_2' align="center">7열</td><td id="new6hyo_seung_2">8열</td><td>9열</td><td id="new6_boksin_char_2" align="center">10열</td><td id="new6_bok_10sin_2" align="center">11열</td><td id="new6_bok_nabgab_2" align="center">12열</td><td id="new6_bok_chungpa_2">13열</td><td id="new6_6su_2" align="center">14열</td></tr>
 				<tr><td id="new6_ji_10sin_1" align="center">1열</td><td id="new6_ji_nabgab_1" align="center">2열</td><td id="new6_ji_chungpa_1">3열</td><td id="new6_10sin_1" align="center">4열</td><td id="new6_nabgab_1" align="center" >5열</td><td  id="new6_chungpa_1">6열</td><td id='new6hyo_1' align="center">7열</td><td id="new6hyo_seung_1">8열</td><td>9열</td><td id="new6_boksin_char_1" align="center">10열</td><td id="new6_bok_10sin_1" align="center">11열</td><td id="new6_bok_nabgab_1" align="center">12열</td><td id="new6_bok_chungpa_1">13열</td><td id="new6_6su_1" align="center">14열</td></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="new6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">공망</font></td><td id="new6_gong_mang" align="center"></td><td id="new6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="new6_bokum_banum"></td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="new6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="new6_gong_mang" align="center"></td><td id="new6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="new6_bokum_banum"></td><td>7열</td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
 			</table></td>
 	</tr>
 </table>
