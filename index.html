@@ -1,7 +1,7 @@
 ﻿﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="ko">
  <head>
-  <title> 천류역학(天流易學) </title>
+	<title> 천류역학(天流易學) </title>
   <meta charset="UTF-8">
   <meta name="Generator" content="Visual Studio Code">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
 
   <SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 .navbar {
     overflow: hidden;
@@ -101,7 +101,7 @@
   <script type="text/javascript">
 	//떠다니는 메뉴 참조 - http://kirinyaga.tistory.com/21
 	var stmnLEFT = 10; // 오른쪽 여백 
-	var stmnGAP1 = 0; // 위쪽 여백 
+	var stmnGAP1 = 100; // 위쪽 여백 
 	var stmnGAP2 = 30; // 스크롤시 브라우저 위쪽과 떨어지는 거리 
 	var stmnBASE = 30; // 스크롤 시작위치 
 	var stmnActivateSpeed = 35; //스크롤을 인식하는 딜레이 (숫자가 클수록 느리게 인식)
@@ -1857,6 +1857,8 @@ function setNineStarTable(aTableName, aBoardArray) {
 
  <body id="NSN" onload="InitializeDynamicMenu();showTime();">
 
+	
+
 <div class="navbar" id="navbar">
   <a href="#home">동양철학의 메카</a>
   <a href="#news">뉴스</a>
@@ -1870,6 +1872,16 @@ function setNineStarTable(aTableName, aBoardArray) {
       <a href="#">Link 3</a>
     </div>
   </div> 
+</div>
+<br><br><br><br>
+<div id="STATICMENU">
+	<br><br><br>
+	음력을 양력으로 변환<br>
+	년:<br>
+	월:<br>
+	일:<br>
+	시:<br>
+	준비 중...
 </div>
 
 
@@ -1896,11 +1908,6 @@ function myFunction() {
 </script>
 
 
-
-
-
-	<div id="STATICMENU"><!--떠다니는 메뉴--></div>
-		
 	
 
 <!--
