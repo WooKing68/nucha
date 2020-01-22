@@ -3285,7 +3285,7 @@ function show_old6hyo() {
 
 	
 
-	//年月日時
+	//年月日時...사주
 	//[year_pole_list, month_pole_list, day_pole_list, hour_pole_list];
 	//var my_4ju_list = get4ju();
 	//var my_year_list = my_4ju_list[0];
@@ -3302,6 +3302,7 @@ function show_old6hyo() {
 	document.getElementById("old6_day").innerHTML= "<font size='4' color='white'>" + my_day_list[0] + my_day_list[1] + "日" + "</font>";;
 	document.getElementById("old6_hour").innerHTML= my_hour_list[0] + my_hour_list[1] + "時";
 
+	//본괘...
 	//g_base64_list = []; 	//[1,0,0,1,0,0]
 	//g_byunhyo_list = [];  //[0,0,1,0,1,0]
 	//g_ji64_list = []; 	//[1,0,1,1,1,0]
@@ -3474,11 +3475,11 @@ function show_old6hyo() {
 		//본괘 납갑에 대한 충'파' 처리...
 		//1.월지와 충
 		if ( (deltamonth_nabgab_jiji_index != 0) && (r(deltamonth_nabgab_jiji_index, 6) == 0) ) {
-			document.getElementById("old6_chungpa_" + i).innerHTML="<font color='blue'>" + "<b>파</b>" + "</font>";
+			document.getElementById("old6_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>파</b>" + "</font>";
 		}
 		//2.일지와 충
 		if ( (deltaday_nabgab_jiji_index != 0) && (r(deltaday_nabgab_jiji_index, 6) == 0) ) {
-			document.getElementById("old6_chungpa_" + i).innerHTML="<font color='red'>" + "<b>파</b>" + "</font>";
+			document.getElementById("old6_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>파</b>" + "</font>";
 		}
 
 		//지괘 납갑에 대한 충'파' 처리...
@@ -3492,16 +3493,56 @@ function show_old6hyo() {
 			
 			//1.월지와 충
 			if ( (deltamonth_ji_nabgab_jiji_index != 0) && (r(deltamonth_ji_nabgab_jiji_index, 6) == 0) ) {
-				document.getElementById("old6_ji_chungpa_" + i).innerHTML="<font color='blue'>" + "<b>파</b>" + "</font>";
+				document.getElementById("old6_ji_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>파</b>" + "</font>";
 			}
 			//2.지지와 충
 			if ( (deltaday_ji_nabgab_jiji_index != 0) && (r(deltaday_ji_nabgab_jiji_index, 6) == 0) ) {
-				document.getElementById("old6_ji_chungpa_" + i).innerHTML="<font color='red'>" + "<b>파</b>" + "</font>";
+				document.getElementById("old6_ji_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>파</b>" + "</font>";
 			}
 
 		}
 
 	}
+
+	//육합...
+	for (var i=6;i>0;i--) {
+		var nabgab_jiji = my_nabgab.charAt(6-i);//본괘 납갑(지지)
+
+		var my_month_6hap = get_12jiji_6hap(month_jiji, nabgab_jiji, "합"); //월지와 육합?
+		var my_day_6hap = get_12jiji_6hap(day_jiji, nabgab_jiji, "합"); //일지와 육합?
+
+		
+		//본괘 납갑에 대한 '육합' 처리...
+		//1.월지와 합
+		if ( my_month_6hap=="합" ) {
+			document.getElementById("old6_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>합</b>" + "</font>";
+		}
+		//2.일지와 합
+		if ( my_day_6hap=="합" ) {
+			document.getElementById("old6_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>합</b>" + "</font>";
+		}
+
+		//지괘 납갑에 대한 '육합' 처리...
+		//console.log("g_byunhyo_list: " + g_byunhyo_list);
+		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
+			var ji_nabgab_jiji = my_ji_nabgab.charAt(6-i);//지괘 납갑(지지)
+
+			var my_ji_month_6hap = get_12jiji_6hap(month_jiji, ji_nabgab_jiji, "합"); //월지와 육합?
+			var my_ji_day_6hap = get_12jiji_6hap(day_jiji, ji_nabgab_jiji, "합"); //일지와 육합?
+			
+			//1.월지와 합
+			if ( my_ji_month_6hap=="합" ) {
+				document.getElementById("old6_ji_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>합</b>" + "</font>";
+			}
+			//2.지지와 합
+			if ( my_ji_day_6hap=="합" ) {
+				document.getElementById("old6_ji_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>합</b>" + "</font>";
+			}
+
+		}
+
+	}
+
 
 	//12운성: 충파 나타낸 후 .......
 	//인목, 묘목: '수' 시작인 '해수'가 장생
@@ -3523,20 +3564,24 @@ function show_old6hyo() {
 	//my_nabgab: 본괘 납갑, string
 	//my_ji_nabgab: 지괘 납갑 string
 	
+	var s_br = "<br>";
+	var s_ji_br = "<br>";
 	for (var i=6;i>0;i--) {
 		//본괘 납갑 처리
 		var my_each_nabgab = my_nabgab.charAt(6 - i);
 		var my_12_unseong_month_jiji = get_12_unseong(my_each_nabgab, month_jiji);
 		var my_12_unseong_day_jiji = get_12_unseong(my_each_nabgab, day_jiji);
 
-		
 
 		if ("생록왕사묘절".indexOf(my_12_unseong_month_jiji) > -1) {
+			
 			document.getElementById("old6_chungpa_" + i).innerHTML += "<br><font color='blue'>" + my_12_unseong_month_jiji + "</font>";
+			s_br = "";
 		}
 		
 		if ("생록왕사묘절".indexOf(my_12_unseong_day_jiji) > -1) {
-			document.getElementById("old6_chungpa_" + i).innerHTML += "<br><font color='red'>" + my_12_unseong_day_jiji + "</font>";
+			
+			document.getElementById("old6_chungpa_" + i).innerHTML += s_br + "<font color='red'>" + my_12_unseong_day_jiji + "</font>";
 		}
 		
 		//지괘 납갑 처리...
@@ -3548,10 +3593,11 @@ function show_old6hyo() {
 		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
 			if ("생록왕사묘절".indexOf(my_ji_12_unseong_month_jiji) > -1) {
 				document.getElementById("old6_ji_chungpa_" + i).innerHTML += "<br><font color='blue'>" + my_ji_12_unseong_month_jiji + "</font>";
+				s_ji_br = "";
 			}
 			
 			if ("생록왕사묘절".indexOf(my_ji_12_unseong_day_jiji) > -1) {
-				document.getElementById("old6_ji_chungpa_" + i).innerHTML += "<br><font color='red'>" + my_ji_12_unseong_day_jiji + "</font>";
+				document.getElementById("old6_ji_chungpa_" + i).innerHTML += s_ji_br + "<font color='red'>" + my_ji_12_unseong_day_jiji + "</font>";
 			}
 		}
 	}
@@ -3903,11 +3949,11 @@ function show_new6hyo() {
 		//본괘 납갑에 대한 충'파' 처리...
 		//1.월지와 충
 		if ( (deltamonth_nabgab_jiji_index != 0) && (r(deltamonth_nabgab_jiji_index, 6) == 0) ) {
-			document.getElementById("new6_chungpa_" + i).innerHTML="<font color='blue'>" + "<b>파</b>" + "</font>";
+			document.getElementById("new6_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>파</b>" + "</font>";
 		}
 		//2.일지와 충
 		if ( (deltaday_nabgab_jiji_index != 0) && (r(deltaday_nabgab_jiji_index, 6) == 0) ) {
-			document.getElementById("new6_chungpa_" + i).innerHTML="<font color='red'>" + "<b>파</b>" + "</font>";
+			document.getElementById("new6_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>파</b>" + "</font>";
 		}
 
 		//지괘 납갑에 대한 충'파' 처리...
@@ -3921,11 +3967,51 @@ function show_new6hyo() {
 			
 			//1.월지와 충
 			if ( (deltamonth_ji_nabgab_jiji_index != 0) && (r(deltamonth_ji_nabgab_jiji_index, 6) == 0) ) {
-				document.getElementById("new6_ji_chungpa_" + i).innerHTML="<font color='blue'>" + "<b>파</b>" + "</font>";
+				document.getElementById("new6_ji_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>파</b>" + "</font>";
 			}
 			//2.지지와 충
 			if ( (deltaday_ji_nabgab_jiji_index != 0) && (r(deltaday_ji_nabgab_jiji_index, 6) == 0) ) {
-				document.getElementById("new6_ji_chungpa_" + i).innerHTML="<font color='red'>" + "<b>파</b>" + "</font>";
+				document.getElementById("new6_ji_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>파</b>" + "</font>";
+			}
+
+		}
+
+	}
+
+
+	//육합...
+	for (var i=6;i>0;i--) {
+		var nabgab_jiji = my_nabgab.charAt(6-i);//본괘 납갑(지지)
+
+		var my_month_6hap = get_12jiji_6hap(month_jiji, nabgab_jiji, "합"); //월지와 육합?
+		var my_day_6hap = get_12jiji_6hap(day_jiji, nabgab_jiji, "합"); //일지와 육합?
+
+		
+		//본괘 납갑에 대한 '육합' 처리...
+		//1.월지와 합
+		if ( my_month_6hap=="합" ) {
+			document.getElementById("new6_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>합</b>" + "</font>";
+		}
+		//2.일지와 합
+		if ( my_day_6hap=="합" ) {
+			document.getElementById("new6_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>합</b>" + "</font>";
+		}
+
+		//지괘 납갑에 대한 '육합' 처리...
+		//console.log("g_byunhyo_list: " + g_byunhyo_list);
+		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
+			var ji_nabgab_jiji = my_ji_nabgab.charAt(6-i);//지괘 납갑(지지)
+
+			var my_ji_month_6hap = get_12jiji_6hap(month_jiji, ji_nabgab_jiji, "합"); //월지와 육합?
+			var my_ji_day_6hap = get_12jiji_6hap(day_jiji, ji_nabgab_jiji, "합"); //일지와 육합?
+			
+			//1.월지와 합
+			if ( my_ji_month_6hap=="합" ) {
+				document.getElementById("new6_ji_chungpa_" + i).innerHTML += "<font color='blue'>" + "<b>합</b>" + "</font>";
+			}
+			//2.지지와 합
+			if ( my_ji_day_6hap=="합" ) {
+				document.getElementById("new6_ji_chungpa_" + i).innerHTML += "<font color='red'>" + "<b>합</b>" + "</font>";
 			}
 
 		}
@@ -3951,21 +4037,23 @@ function show_new6hyo() {
 	//day_jiji: 일지 한 글자
 	//my_nabgab: 본괘 납갑, string
 	//my_ji_nabgab: 지괘 납갑 string
-	
+
+	var s_br = "<br>";
+	var s_ji_br = "<br>";
 	for (var i=6;i>0;i--) {
 		//본괘 납갑 처리
 		var my_each_nabgab = my_nabgab.charAt(6 - i);
 		var my_12_unseong_month_jiji = get_12_unseong(my_each_nabgab, month_jiji);
 		var my_12_unseong_day_jiji = get_12_unseong(my_each_nabgab, day_jiji);
 
-		
 
 		if ("생록왕사묘절".indexOf(my_12_unseong_month_jiji) > -1) {
 			document.getElementById("new6_chungpa_" + i).innerHTML += "<br><font color='blue'>" + my_12_unseong_month_jiji + "</font>";
+			s_br = "";
 		}
 		
 		if ("생록왕사묘절".indexOf(my_12_unseong_day_jiji) > -1) {
-			document.getElementById("new6_chungpa_" + i).innerHTML += "<br><font color='red'>" + my_12_unseong_day_jiji + "</font>";
+			document.getElementById("new6_chungpa_" + i).innerHTML += s_br + "<font color='red'>" + my_12_unseong_day_jiji + "</font>";
 		}
 		
 		//지괘 납갑 처리...
@@ -3977,10 +4065,11 @@ function show_new6hyo() {
 		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
 			if ("생록왕사묘절".indexOf(my_ji_12_unseong_month_jiji) > -1) {
 				document.getElementById("new6_ji_chungpa_" + i).innerHTML += "<br><font color='blue'>" + my_ji_12_unseong_month_jiji + "</font>";
+				s_ji_br = "";
 			}
 			
 			if ("생록왕사묘절".indexOf(my_ji_12_unseong_day_jiji) > -1) {
-				document.getElementById("new6_ji_chungpa_" + i).innerHTML += "<br><font color='red'>" + my_ji_12_unseong_day_jiji + "</font>";
+				document.getElementById("new6_ji_chungpa_" + i).innerHTML += s_ji_br + "<font color='red'>" + my_ji_12_unseong_day_jiji + "</font>";
 			}
 		}
 	}
@@ -4342,7 +4431,7 @@ function get_12jiji_chungpa(first_jiji, second_jiji, chungpa) {
 
 //육합이면 "합"을 리턴, 아니면 ""를 리턴
 //寅亥(인해)합 辰酉(진유)합 午未(오미)합 子丑(자축)합 卯戌(묘술)합 巳申(사신)합 
-//hap6=="합" 이냐고 물어온다.
+//hap6=="합" 즉 [육합]이냐고 물어온다.
 function get_12jiji_6hap(first_jiji, second_jiji, hap6) {
 
 	var hap6_result = "";
