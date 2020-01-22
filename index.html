@@ -3672,13 +3672,40 @@ function show_old6hyo() {
 			document.getElementById("old6_bok_nabgab_" + i).innerHTML="<font size='6' color='black'>" + nabgab_jiji_each_char + "</font>";
 			
 			if (bok_chungpa_by_month_jiji != "") {
-				document.getElementById("old6_bok_chungpa_" + i).innerHTML="<font color='blue'>" + bok_chungpa_by_month_jiji + "</font>";
+				document.getElementById("old6_bok_chungpa_" + i).innerHTML += "<font color='blue'><b>" + bok_chungpa_by_month_jiji + "</b></font>";
 			}
 
 			if (bok_chungpa_by_day_jiji != "") {
-				document.getElementById("old6_bok_chungpa_" + i).innerHTML="<font color='red'>" + bok_chungpa_by_day_jiji + "</font>";
+				document.getElementById("old6_bok_chungpa_" + i).innerHTML += "<font color='red'><b>" + bok_chungpa_by_day_jiji + "</b></font>";
+			}
+
+			//육합...
+			var my_month_6hap = get_12jiji_6hap(month_jiji, nabgab_jiji_each_char, "합"); //월지와 육합?
+			var my_day_6hap = get_12jiji_6hap(day_jiji, nabgab_jiji_each_char, "합"); //일지와 육합?
+			if (my_month_6hap=="합") {
+				document.getElementById("old6_bok_chungpa_" + i).innerHTML += "<font color='blue'><b>합</b></font>";
+			}
+
+			if (my_day_6hap=="합") {
+				document.getElementById("old6_bok_chungpa_" + i).innerHTML += "<font color='red'><b>합</b></font>";
+			}
+
+
+			//12운성...
+			var my_br = "<br>";
+			var my_boksin_12_unseong_month_jiji = get_12_unseong(nabgab_jiji_each_char, month_jiji);
+			var my_boksin_12_unseong_day_jiji = get_12_unseong(nabgab_jiji_each_char, day_jiji);
+			
+			if ("생록왕사묘절".indexOf(my_boksin_12_unseong_month_jiji) > -1) {
+				document.getElementById("old6_bok_chungpa_" + i).innerHTML += my_br + "<font color='blue'>" + my_boksin_12_unseong_month_jiji + "</font>";
+				my_br = "";
+			}
+
+			if ("생록왕사묘절".indexOf(my_boksin_12_unseong_day_jiji) > -1) {
+				document.getElementById("old6_bok_chungpa_" + i).innerHTML += my_br + "<font color='red'>" + my_boksin_12_unseong_day_jiji + "</font>";
 			}
 		}
+		
 	}
 
 	//괘신: [세] 위치와 그 위치의 비신(납갑(지지))이 필요하다.
@@ -4144,13 +4171,40 @@ function show_new6hyo() {
 			document.getElementById("new6_bok_nabgab_" + i).innerHTML="<font size='6' color='black'>" + nabgab_jiji_each_char + "</font>";
 			
 			if (bok_chungpa_by_month_jiji != "") {
-				document.getElementById("new6_bok_chungpa_" + i).innerHTML="<font color='blue'>" + bok_chungpa_by_month_jiji + "</font>";
+				document.getElementById("new6_bok_chungpa_" + i).innerHTML += "<font color='blue'>" + bok_chungpa_by_month_jiji + "</font>";
 			}
 
 			if (bok_chungpa_by_day_jiji != "") {
-				document.getElementById("new6_bok_chungpa_" + i).innerHTML="<font color='red'>" + bok_chungpa_by_day_jiji + "</font>";
+				document.getElementById("new6_bok_chungpa_" + i).innerHTML += "<font color='red'>" + bok_chungpa_by_day_jiji + "</font>";
+			}
+
+			//육합...
+			var my_month_6hap = get_12jiji_6hap(month_jiji, nabgab_jiji_each_char, "합"); //월지와 육합?
+			var my_day_6hap = get_12jiji_6hap(day_jiji, nabgab_jiji_each_char, "합"); //일지와 육합?
+			if (my_month_6hap=="합") {
+				document.getElementById("new6_bok_chungpa_" + i).innerHTML += "<font color='blue'><b>합</b></font>";
+			}
+
+			if (my_day_6hap=="합") {
+				document.getElementById("new6_bok_chungpa_" + i).innerHTML += "<font color='red'><b>합</b></font>";
+			}
+
+
+			//12운성...
+			var my_br = "<br>";
+			var my_boksin_12_unseong_month_jiji = get_12_unseong(nabgab_jiji_each_char, month_jiji);
+			var my_boksin_12_unseong_day_jiji = get_12_unseong(nabgab_jiji_each_char, day_jiji);
+			
+			if ("생록왕사묘절".indexOf(my_boksin_12_unseong_month_jiji) > -1) {
+				document.getElementById("new6_bok_chungpa_" + i).innerHTML += my_br + "<font color='blue'>" + my_boksin_12_unseong_month_jiji + "</font>";
+				my_br = "";
+			}
+
+			if ("생록왕사묘절".indexOf(my_boksin_12_unseong_day_jiji) > -1) {
+				document.getElementById("new6_bok_chungpa_" + i).innerHTML += my_br + "<font color='red'>" + my_boksin_12_unseong_day_jiji + "</font>";
 			}
 		}
+		
 	}
 
 	//괘신: [세] 위치와 그 위치의 비신(납갑(지지))이 필요하다.
