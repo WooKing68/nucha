@@ -4575,8 +4575,8 @@ var g_kunhwa_list = ["丙", "丁", "巳", "午"];
 var g_sanghwa_list = ["未", "戌"];
 var g_bodytype8_dict = {"태음1":"목>화>토>수>금", "태음2":"목>수>화>토>금", "소양1":"토>금>화>목>수", "소양2":"토>화>목>금>수", "태양1":"금>수>토>화>목", "태양2":"금>토>화>수>목", "소음1":"수>목>화>금>토", "소음2":"수>금>목>화>토"};
 
-
-var g_my_body_saju_list = null; //[일지, 일간, 월지, 월간, 연지, 연간];
+//g_my_body_saju_list의 초기화: function getBodySaju(a_target_num) 내에서... 
+var g_my_body_saju_list = null; //[일지, 일간, 월지, 월간, 연지, 연간]; //체질 판별 에너지 중요도 순서?
 var g_body_all_idx_list = null; //[kunhwa_idx, sanghwa_idx, mok_idx, to_idx, kum_idx, su_idx]
 var g_my_body8 = null;
 var g_NONE = 100;
@@ -4589,7 +4589,7 @@ function set_kunhwa_sanghwa_mok_to_kum_su_idxlist() {
 	var kum_idx = g_NONE;
 	var su_idx = g_NONE;
 
-	//sanghwa_idx
+	//sanghwa_idx: 상화
 	for (var i=0; i<6; i++) {
 		if (g_my_body_saju_list[i] == "未" ||  g_my_body_saju_list[i] == "戌") {
 			sanghwa_idx = i;
@@ -4597,7 +4597,7 @@ function set_kunhwa_sanghwa_mok_to_kum_su_idxlist() {
 		}
 	}
 
-	//kunhwa_idx
+	//kunhwa_idx: 군화
 	for (var i=0; i<6; i++) {
 		if (g_my_body_saju_list[i] == "丙" ||  g_my_body_saju_list[i] == "丁" || g_my_body_saju_list[i] == "巳" || g_my_body_saju_list[i] == "午") {
 			kunhwa_idx = i;
@@ -4605,7 +4605,7 @@ function set_kunhwa_sanghwa_mok_to_kum_su_idxlist() {
 		}
 	}
 
-	//mok_idx
+	//mok_idx: 목
 	for (var i=0; i<6; i++) {
 		if (g_my_body_saju_list[i] == "甲" ||  g_my_body_saju_list[i] == "乙" || g_my_body_saju_list[i] == "寅" || g_my_body_saju_list[i] == "卯") {
 			mok_idx = i;
@@ -4613,7 +4613,7 @@ function set_kunhwa_sanghwa_mok_to_kum_su_idxlist() {
 		}
 	}
 
-	//to_idx
+	//to_idx: 토
 	for (var i=0; i<6; i++) {
 		if (g_my_body_saju_list[i] == "戊" ||  g_my_body_saju_list[i] == "己" || g_my_body_saju_list[i] == "丑" || g_my_body_saju_list[i] == "辰") {
 			to_idx = i;
@@ -4621,7 +4621,7 @@ function set_kunhwa_sanghwa_mok_to_kum_su_idxlist() {
 		}
 	}
 
-	//kum_idx: "庚", "辛" "申", "酉"
+	//kum_idx: 금 "庚", "辛" "申", "酉"
 	for (var i=0; i<6; i++) {
 		if (g_my_body_saju_list[i] == "庚" ||  g_my_body_saju_list[i] == "辛" || g_my_body_saju_list[i] == "申" || g_my_body_saju_list[i] == "酉") {
 			kum_idx = i;
@@ -5144,6 +5144,8 @@ The <b>greatest error:</b><br>
 </td>
 </tr>
 </table>
+
+
 
 <br>
 <hr>
@@ -8507,11 +8509,221 @@ function moveSaju() {
 <hr>
 <hr>
 
+<script>
+	function analysis4ju2juyeok() {
+		var target_body_JuyeokSaju_form = document.getElementById("BodyJuyeokSajuForm");
+
+		var idx_area = target_body_JuyeokSaju_form.bodyJuyeokSajuSelect.selectedIndex;
+		
+		var idx_year1 = target_body_JuyeokSaju_form.bodyJuyeokSajuYear1Select.selectedIndex;
+		var idx_year2 = target_body_JuyeokSaju_form.bodyJuyeokSajuYear2Select.selectedIndex;
+		var idx_year3 = target_body_JuyeokSaju_form.bodyJuyeokSajuYear3Select.selectedIndex;
+
+		var idx_month = target_body_JuyeokSaju_form.bodyJuyeokSajuMonthSelect.selectedIndex;
+		var idx_day = target_body_JuyeokSaju_form.bodyJuyeokSajuDaySelect.selectedIndex;
+		var idx_hour = target_body_JuyeokSaju_form.bodyJuyeokSajuHourSelect.selectedIndex;
+		var idx_min = target_body_JuyeokSaju_form.bodyJuyeokSajuMinSelect.selectedIndex;
+		
+
+		if (idx_area<=0) {
+			target_body_JuyeokSaju_form.bodyJuyeokSajuAreaSelect.selectedIndex = 1; //서울지역
+			idx_area = 1;
+		}
+
+		//if (target_body_JuyeokSaju_form.bodyJuyeokSajuYear.value.trim()=="") {return;}
+		if (idx_year1==0 || idx_year2==0 || idx_year3==0) {return;}
+		if (idx_month==0) {return;}
+		if (idx_day==0) {return;}
+		
+
+
+		var my_year = eval(target_body_JuyeokSaju_form.bodyJuyeokSajuYear1Select.options[idx_year1].value + target_body_JuyeokSaju_form.bodyJuyeokSajuYear2Select.options[idx_year2].value + target_body_JuyeokSaju_form.bodyJuyeokSajuYear3Select.options[idx_year3].value);
+
+		var my_month = eval(target_body_JuyeokSaju_form.bodyJuyeokSajuMonthSelect.options[idx_month].value);
+		var my_day = eval(target_body_JuyeokSaju_form.bodyJuyeokSajuDaySelect.options[idx_day].value);
+		var my_hour = eval(target_body_JuyeokSaju_form.bodyJuyeokSajuHourSelect.options[idx_hour].value);
+		var my_min = eval(target_body_JuyeokSaju_form.bodyJuyeokSajuMinSelect.options[idx_min].value);
+
+
+
+		var my_area_val = eval(target_body_JuyeokSaju_form.bodyJuyeokSajuAreaSelect.options[idx_area].value);
+
+		var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+
+
+		var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+
+		var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+
+		target_body_JuyeokSaju_form.bodyJuyeokSajuEOT.value = eot_next_hour_min_list[0] + ":" + eot_next_hour_min_list[1]; 
+
+
+		if (my_hour>=23 && my_min>=eot_next_hour_min_list[1]) {
+			my_year = yyyy_mm_dd_from_next_day_list[0];
+			my_month = yyyy_mm_dd_from_next_day_list[1];
+			my_day = yyyy_mm_dd_from_next_day_list[2];
+		}
+
+		
+		var year_pole_list = get60GapJaYear(my_year);
+		var month_pole_list = get60GapJaMonth(my_year, my_month);
+		var day_pole_list = get60GapJaDay(my_year, my_month, my_day);
+		var time_pole_list = get60GapJaTime(my_year, my_month, my_day, my_hour, my_min);
+
+		console.log(`연주: ${year_pole_list[0]}${year_pole_list[1]}`);
+		console.log(`월주: ${month_pole_list[0]}${month_pole_list[1]}`);
+		console.log(`일주: ${day_pole_list[0]}${day_pole_list[1]}`);
+		console.log(`시주: ${time_pole_list[0]}${time_pole_list[1]}`);
+
+		g_yyyy_mm_dd_hh["year"] = `${year_pole_list[0]}${year_pole_list[1]}`;
+		g_yyyy_mm_dd_hh["month"] = `${month_pole_list[0]}${month_pole_list[1]}`;
+		g_yyyy_mm_dd_hh["day"] = `${day_pole_list[0]}${day_pole_list[1]}`;
+		g_yyyy_mm_dd_hh["hour"] = `${time_pole_list[0]}${time_pole_list[1]}`;
+
+		//수목화는 음___(상화)토금은 양
+		//상화: 미술(파)
+
+		//일지: 6효
+		//월지: 5효
+		//연지: 4효
+		//일간: 3효
+		//월간: 2효
+		//연간: 초효
+
+		//변효: 밤11:30~새벽03:30(1효)
+
+		//var g_base64_list;
+		//var g_byunhyo_list;
+		//var g_ji64_list;
+
+		//일지: 상효
+		g_base64_list = ["0", "0", "0", "0", "0", "0"];
+		if ("亥子寅卯巳午".indexOf(day_pole_list[1])>-1) {
+			g_base64_list[0] = "0";
+		} else {
+			g_base64_list[0] = "1";
+		}
+
+		//월지: 5효
+		if ("亥子寅卯巳午".indexOf(month_pole_list[1])>-1) {
+			g_base64_list[1] = "0";
+		} else {
+			g_base64_list[1] = "1";
+		}
+
+		//연지: 4효
+		if ("亥子寅卯巳午".indexOf(year_pole_list[1])>-1) {
+			g_base64_list[2] = "0";
+		} else {
+			g_base64_list[2] = "1";
+		}
+
+		//일간: 3효
+		if ("壬癸甲乙丙丁".indexOf(day_pole_list[0])>-1) {
+			g_base64_list[3] = "0";
+		} else {
+			g_base64_list[3] = "1";
+		}
+
+		//월간: 2효
+		if ("壬癸甲乙丙丁".indexOf(month_pole_list[0])>-1) {
+			g_base64_list[4] = "0";
+		} else {
+			g_base64_list[4] = "1";
+		}
+
+		//연간: 2효
+		if ("壬癸甲乙丙丁".indexOf(year_pole_list[0])>-1) {
+			g_base64_list[5] = "0";
+		} else {
+			g_base64_list[5] = "1";
+		}
+
+		//변효
+		g_byunhyo_list = ["0", "0", "0", "0", "0", "0"];
+		//밤11:30~새벽03:30(1효)
+		if ("子丑".indexOf(time_pole_list[1])>-1) {
+			g_byunhyo_list = ["0", "0", "0", "0", "0", "1"];
+		}
+		else if ("寅卯".indexOf(time_pole_list[1])>-1) {
+			g_byunhyo_list = ["0", "0", "0", "0", "1", "0"];
+		}
+		else if ("辰巳".indexOf(time_pole_list[1])>-1) {
+			g_byunhyo_list = ["0", "0", "0", "1", "0", "0"];
+		}
+		else if ("午未".indexOf(time_pole_list[1])>-1) {
+			g_byunhyo_list = ["0", "0", "1", "0", "0", "0"];
+		}
+		else if ("申酉".indexOf(time_pole_list[1])>-1) {
+			g_byunhyo_list = ["0", "1", "0", "0", "0", "0"];
+		}
+		else if ("戌亥".indexOf(time_pole_list[1])>-1) {
+			g_byunhyo_list = ["1", "0", "0", "0", "0", "0"];
+		} 
+
+
+		//변효
+		g_ji64_list = [];
+		for (var i=0;i<6;i++) {
+			if (g_byunhyo_list[i]=="1" && g_base64_list[i]=="0") {
+				g_ji64_list.push("1");
+			}
+			else if (g_byunhyo_list[i]=="1" && g_base64_list[i]=="1") {
+				g_ji64_list.push("0");
+			}
+			else if (g_byunhyo_list[i]=="0") {
+				g_ji64_list.push(g_base64_list[i]);
+			}
+
+		}
+
+
+		show64();
+		show_old6hyo();
+		show_new6hyo();
+
+
+
+
+		//[일지, 일간, 월지, 월간, 연지, 연간]
+		//g_my_body_JuyeokSaju_list = [day_pole_list[1], day_pole_list[0], month_pole_list[1], month_pole_list[0], year_pole_list[1], year_pole_list[0]];
+
+	}
+
+</script>
+
 <h1>명리 사주</h1>
 <table id="tbl_saju" border=1>
       <tr><td><h2>시주</h2></td><td><h2>일주</h2></td><td><h2>월주</h2></td><td><h2>연주</h2></td></tr>
       <tr><td align=center><br><br><br><br><br><br></td><td align=center></td><td align=center></td><td align=center></td></tr>
     </table><br>
+
+
+	양력:<br>
+	<form name="BodyJuyeokSajuForm_1" id="BodyJuyeokSajuForm">
+		<select id="bodyJuyeokSajuYear1Select" name="bodyJuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="bodyJuyeokSajuYear2Select" name="bodyJuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="bodyJuyeokSajuYear3Select" name="bodyJuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
+		<select id="bodyJuyeokSajuMonthSelect" name="bodyJuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
+		<select id="bodyJuyeokSajuDaySelect" name="bodyJuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일<br>
+		<select id="bodyJuyeokSajuHourSelect" name="bodyJuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
+		<select id="bodyJuyeokSajuMinSelect" name="bodyJuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
+		<select id="bodyJuyeokSajuSelect" name="bodyJuyeokSajuAreaSelect"> 
+					<option value="">
+					<option value="126.92">서울
+					<option value="128.89">강릉
+					<option value="126.92">광주
+					<option value="128.63">대구
+					<option value="127.41">대전
+					<option value="129.10">부산
+					<option value="130.89">울릉도
+					<option value="127.14">전주
+					<option value="126.50">제주
+					<option value="128.69">창원
+					<option value="128.48">청주
+					<option value="127.72">춘천
+				</select>지역<br>
+		담날 남중시각: &nbsp;<input type="text" name="bodyJuyeokSajuEOT" size="2" disabled>&nbsp;&nbsp;&nbsp;<input type="button" value="사주 → 주역" onclick="analysis4ju2juyeok();" />
+	</form>
+	
 
 <hr>
 <hr>
