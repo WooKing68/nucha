@@ -2174,6 +2174,11 @@ function nucha_random(a, b) {
 	return q( (b+1-a) * Math.random() + a, 1);
 }
 
+//주사위를 던져 홀수이면 1, 짝수이면 0을 리턴한다.
+function get_umyang_from_dice() {
+	var my_dice_num = nucha_random(1, 6);
+	return r(my_dice_num, 2);
+}
 
 
 var g_base64_list;
@@ -2240,9 +2245,9 @@ var g_yyyy_mm_dd_hh = {"year":null, "month":null, "day":null, "hour":null};
 
 		//하괘
 		for (var i=0;i<3;i++) {
-			var rnum_1 = nucha_random(0, 1);
-			var rnum_2 = nucha_random(0, 1);
-			var rnum_3 = nucha_random(0, 1);
+			var rnum_1 = get_umyang_from_dice(); //0 혹은 1
+			var rnum_2 = get_umyang_from_dice();
+			var rnum_3 = get_umyang_from_dice();
 
 			var snum = rnum_1 + rnum_2 + rnum_3;
 
@@ -2268,9 +2273,9 @@ var g_yyyy_mm_dd_hh = {"year":null, "month":null, "day":null, "hour":null};
 
         //상괘
 		for (var i=0;i<3;i++) {
-			var rnum_1 = nucha_random(0, 1);
-			var rnum_2 = nucha_random(0, 1);
-			var rnum_3 = nucha_random(0, 1);
+			var rnum_1 = get_umyang_from_dice(); //nucha_random(0, 1);
+			var rnum_2 = get_umyang_from_dice(); //nucha_random(0, 1);
+			var rnum_3 = get_umyang_from_dice(); //nucha_random(0, 1);
 
 			var snum = rnum_1 + rnum_2 + rnum_3;
 
@@ -9178,7 +9183,7 @@ function moveSaju() {
 				<br>
 				본괘: <input type="text" id="text_eduJuyeokSaju8bon" value="000111"></input> &nbsp;&nbsp;
 				변효: <input type="text" id="text_eduJuyeokSaju8byeonhyo" value="100010"></input> &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-				<input type="button" value="교육용 육효점/주역점" onclick="analysisEdu4ju2juyeok();" />
+				<input type="button" value="육효점/주역점 (교육용)" onclick="analysisEdu4ju2juyeok();" />
 			</form>
 		</td>
 	</tr>
@@ -9195,7 +9200,7 @@ function moveSaju() {
 <h1>육효</h1>
 
 <form name="JuYeokForm">
-	목적사: <input type="text" name="txt_jum64" value="" size="100">&nbsp;&nbsp; <input type="button" value="육효점/주역점" onclick="fortune_telling64();"><br>
+	목적사: <input type="text" name="txt_jum64" value="" size="100">&nbsp;&nbsp; <input type="button" value="육효점/주역점 (실전용)" onclick="fortune_telling64();"><br>
 	주역점/육효점 기억 리스트: <select onchange="javascript:get_jum64_list(this.selectedIndex);" id="jum64_list" name="jum64_list"> 
 		<option value="-1">	
 	</select>
