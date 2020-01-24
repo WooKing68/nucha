@@ -1,7 +1,7 @@
 ﻿﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="ko">
  <head>
-	<title> 천류역학(天流易學) </title>
+	<title> 육효 </title>
   <meta charset="UTF-8">
   <meta name="Generator" content="Visual Studio Code">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1867,9 +1867,9 @@ function setNineStarTable(aTableName, aBoardArray) {
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="#">Link 1</a>
-      <a href="#">Link 2</a>
-      <a href="#">Link 3</a>
+      <a href="#menu_saju8body">체질사주</a>
+      <a href="#menu_6hyo">육효주역</a>
+      <a href="#">...</a>
     </div>
   </div> 
 </div>
@@ -1881,7 +1881,11 @@ function setNineStarTable(aTableName, aBoardArray) {
 	월:<br>
 	일:<br>
 	시:<br>
-	준비 중...
+	준비 중...<br><br>
+	
+	<a href="#menu_saju8body"><b>체질사주</b></a><br>
+	<a href="#menu_name8body"><b>체질작명</b></a><br>
+	<a href="#menu_6hyo"><b>육효주역</b></a><br>
 </div>
 
 
@@ -3332,6 +3336,13 @@ function show_old6hyo() {
 		}
 	}
 
+
+	//공망...
+	//my_day_list[0] + my_day_list[1]
+	var my_gong_mang = get_gong_mang(my_day_list[0], my_day_list[1]);
+	document.getElementById("old6_gong_mang").innerHTML = "<font size='4'><b>" + my_gong_mang + "</b></font>";
+
+
 	//본괘 납갑(nabgab): my_nabgab
 	var up_8_key = `${g_base64_list[0]}${g_base64_list[1]}${g_base64_list[2]}`;
 	var dn_8_key = `${g_base64_list[3]}${g_base64_list[4]}${g_base64_list[5]}`;
@@ -3345,7 +3356,14 @@ function show_old6hyo() {
 	var my_nabgab = `${up_nabgab.charAt(0)}${up_nabgab.charAt(1)}${up_nabgab.charAt(2)}${dn_nabgab.charAt(3)}${dn_nabgab.charAt(4)}${dn_nabgab.charAt(5)}`;
 
 	for (var i=6;i>0;i--) {
-		document.getElementById("old6_nabgab_" + i).innerHTML="<font size='6'>" + my_nabgab.charAt(6-i) + "</font>";
+		var my_each_nabgab = my_nabgab.charAt(6-i);
+		if (my_gong_mang.indexOf(my_each_nabgab)>-1) {
+			document.getElementById("old6_nabgab_" + i).innerHTML="<font size='6' color='red'>" + my_nabgab.charAt(6-i) + "</font>";
+		}
+		else {
+			document.getElementById("old6_nabgab_" + i).innerHTML="<font size='6'>" + my_nabgab.charAt(6-i) + "</font>";
+		}
+		
 	}
 
 	
@@ -3362,7 +3380,15 @@ function show_old6hyo() {
 	var my_ji_nabgab = `${ji_up_nabgab.charAt(0)}${ji_up_nabgab.charAt(1)}${ji_up_nabgab.charAt(2)}${ji_dn_nabgab.charAt(3)}${ji_dn_nabgab.charAt(4)}${ji_dn_nabgab.charAt(5)}`;
 	for (var i=6;i>0;i--) {
 		if (g_byunhyo_list[6-i]==1) { //변효 위치라면
-			document.getElementById("old6_ji_nabgab_" + i).innerHTML="<font size='6'>" + my_ji_nabgab.charAt(6-i) + "</font>";
+			var my_each_ji_nabgab = my_ji_nabgab.charAt(6-i);
+			if (my_gong_mang.indexOf(my_each_ji_nabgab)>-1) {
+				document.getElementById("old6_ji_nabgab_" + i).innerHTML="<font size='6' color='red'>" + my_each_ji_nabgab + "</font>";
+			}
+			else {
+				document.getElementById("old6_ji_nabgab_" + i).innerHTML="<font size='6'>" + my_each_ji_nabgab + "</font>";
+			}
+
+			
 		}
 	}
 	
@@ -3669,7 +3695,15 @@ function show_old6hyo() {
 		if (old6_10sin.indexOf(bok10sin_each_char) == -1) {
 			document.getElementById("old6_boksin_char_" + i).innerHTML="<font size='6' color='black'>" + "伏" + "</font>";
 			document.getElementById("old6_bok_10sin_" + i).innerHTML="<font size='6' color='purple'>" + bok10sin_each_char + "</font>";
-			document.getElementById("old6_bok_nabgab_" + i).innerHTML="<font size='6' color='black'>" + nabgab_jiji_each_char + "</font>";
+			
+			if (my_gong_mang.indexOf(nabgab_jiji_each_char)>-1) {
+				document.getElementById("old6_bok_nabgab_" + i).innerHTML="<font size='6' color='red'>" + nabgab_jiji_each_char + "</font>";
+			}
+			else {
+				document.getElementById("old6_bok_nabgab_" + i).innerHTML="<font size='6' color='black'>" + nabgab_jiji_each_char + "</font>";
+			}
+			
+			
 			
 			if (bok_chungpa_by_month_jiji != "") {
 				document.getElementById("old6_bok_chungpa_" + i).innerHTML += "<font color='blue'><b>" + bok_chungpa_by_month_jiji + "</b></font>";
@@ -3723,11 +3757,7 @@ function show_old6hyo() {
 
 	document.getElementById("old6_ge_sin").innerHTML = "<font size='4'><b>" + my_ge_sin + "</b></font>";
 
-	//공망...
-	//my_day_list[0] + my_day_list[1]
-	var my_gong_mang = get_gong_mang(my_day_list[0], my_day_list[1]);
-	document.getElementById("old6_gong_mang").innerHTML = "<font size='4'><b>" + my_gong_mang + "</b></font>";
-
+	
 	//{육충괘,육합괘,유혼괘, 귀혼괘} 중 하나에 해당된다면 표시...
 	//사용 가능 데이타
 	//base64_9_num
@@ -3831,6 +3861,13 @@ function show_new6hyo() {
 		}
 	}
 
+
+	//공망...
+	//my_day_list[0] + my_day_list[1]
+	var my_gong_mang = get_gong_mang(my_day_list[0], my_day_list[1]);
+	document.getElementById("new6_gong_mang").innerHTML = "<font size='4'><b>" + my_gong_mang + "</b></font>";
+
+
 	//본괘 납갑(nabgab): my_nabgab
 	var up_8_key = `${g_base64_list[0]}${g_base64_list[1]}${g_base64_list[2]}`;
 	var dn_8_key = `${g_base64_list[3]}${g_base64_list[4]}${g_base64_list[5]}`;
@@ -3844,7 +3881,13 @@ function show_new6hyo() {
 	var my_nabgab = `${up_nabgab.charAt(0)}${up_nabgab.charAt(1)}${up_nabgab.charAt(2)}${dn_nabgab.charAt(3)}${dn_nabgab.charAt(4)}${dn_nabgab.charAt(5)}`;
 
 	for (var i=6;i>0;i--) {
-		document.getElementById("new6_nabgab_" + i).innerHTML="<font size='6'>" + my_nabgab.charAt(6-i) + "</font>";
+		var my_each_nabgab = my_nabgab.charAt(6-i);
+		if (my_gong_mang.indexOf(my_each_nabgab)>-1) {
+			document.getElementById("new6_nabgab_" + i).innerHTML="<font size='6' color='red'>" + my_each_nabgab + "</font>";
+		}
+		else {
+			document.getElementById("new6_nabgab_" + i).innerHTML="<font size='6'>" + my_each_nabgab + "</font>";
+		}
 	}
 
 	
@@ -3860,8 +3903,15 @@ function show_new6hyo() {
 	var ji_dn_nabgab = g_new6_nabgab[ji_dn_9_num];
 	var my_ji_nabgab = `${ji_up_nabgab.charAt(0)}${ji_up_nabgab.charAt(1)}${ji_up_nabgab.charAt(2)}${ji_dn_nabgab.charAt(3)}${ji_dn_nabgab.charAt(4)}${ji_dn_nabgab.charAt(5)}`;
 	for (var i=6;i>0;i--) {
+		var my_each_ji_nabgab = my_ji_nabgab.charAt(6-i)
 		if (g_byunhyo_list[6-i]==1) { //변효 위치라면
-			document.getElementById("new6_ji_nabgab_" + i).innerHTML="<font size='6'>" + my_ji_nabgab.charAt(6-i) + "</font>";
+			if (my_gong_mang.indexOf(my_each_ji_nabgab)>-1) {
+				document.getElementById("new6_ji_nabgab_" + i).innerHTML="<font size='6' color='red'>" + my_each_ji_nabgab + "</font>";
+			}
+			else {
+				document.getElementById("new6_ji_nabgab_" + i).innerHTML="<font size='6'>" + my_each_ji_nabgab + "</font>";
+			}
+			
 		}
 	}
 	
@@ -4168,7 +4218,16 @@ function show_new6hyo() {
 		if (new6_10sin.indexOf(bok10sin_each_char) == -1) {
 			document.getElementById("new6_boksin_char_" + i).innerHTML="<font size='6' color='black'>" + "伏" + "</font>";
 			document.getElementById("new6_bok_10sin_" + i).innerHTML="<font size='6' color='purple'>" + bok10sin_each_char + "</font>";
-			document.getElementById("new6_bok_nabgab_" + i).innerHTML="<font size='6' color='black'>" + nabgab_jiji_each_char + "</font>";
+			
+			
+			if (my_gong_mang.indexOf(nabgab_jiji_each_char)>-1) {
+				document.getElementById("new6_bok_nabgab_" + i).innerHTML="<font size='6' color='red'>" + nabgab_jiji_each_char + "</font>";
+			}
+			else {
+				document.getElementById("new6_bok_nabgab_" + i).innerHTML="<font size='6' color='black'>" + nabgab_jiji_each_char + "</font>";
+			}
+			
+			
 			
 			if (bok_chungpa_by_month_jiji != "") {
 				document.getElementById("new6_bok_chungpa_" + i).innerHTML += "<font color='blue'>" + bok_chungpa_by_month_jiji + "</font>";
@@ -4222,11 +4281,7 @@ function show_new6hyo() {
 
 	document.getElementById("new6_ge_sin").innerHTML = "<font size='4'><b>" + my_ge_sin + "</b></font>";
 
-	//공망...
-	//my_day_list[0] + my_day_list[1]
-	var my_gong_mang = get_gong_mang(my_day_list[0], my_day_list[1]);
-	document.getElementById("new6_gong_mang").innerHTML = "<font size='4'><b>" + my_gong_mang + "</b></font>";
-
+	
 	//{육충괘,육합괘,유혼괘, 귀혼괘} 중 하나에 해당된다면 표시...
 	//사용 가능 데이타
 	//base64_9_num
@@ -5205,7 +5260,7 @@ The <b>greatest error:</b><br>
 </td>
 </tr>
 </table>
-
+<h1 id="menu_saju8body"></h1>
 <br>
 <br>
 
@@ -5298,7 +5353,7 @@ The <b>greatest error:</b><br>
 </tr>
 </table>
 
-
+<h1 id="menu_name8body"></h1>
 
 <br>
 <hr>
@@ -8857,6 +8912,7 @@ function moveSaju() {
 	
 	</script>
 
+<h1 id="menu_6hyo"></h1>
 
 	양력:<br>
 	<form name="BodyJuyeokSajuForm_1" id="BodyJuyeokSajuForm">
@@ -8883,6 +8939,7 @@ function moveSaju() {
 		담날 남중시각: &nbsp;<input type="text" name="bodyJuyeokSajuEOT" size="2" disabled>&nbsp;&nbsp;&nbsp;<input type="button" value="사주 → 주역" onclick="analysis4ju2juyeok();" />
 	</form>
 	
+		
 
 <hr>
 <hr>
@@ -8891,7 +8948,7 @@ function moveSaju() {
 <h1>육효</h1>
 
 <form name="JuYeokForm">
-	목적사: <input type="text" name="txt_jum64" value="" size="100">&nbsp;&nbsp; <input type="button" value="주역점/육효점" onclick="fortune_telling64();"><br>
+	목적사: <input type="text" name="txt_jum64" value="" size="100">&nbsp;&nbsp; <input type="button" value="육효점/주역점" onclick="fortune_telling64();"><br>
 	주역점/육효점 기억 리스트: <select onchange="javascript:get_jum64_list(this.selectedIndex);" id="jum64_list" name="jum64_list"> 
 		<option value="-1">	
 	</select>
@@ -8900,8 +8957,8 @@ function moveSaju() {
 	<tr>
 		<td align="center">OLD<br>
 			<table border="1">
-				<tr><td>본괘</td><td id="old6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지괘</td><td id="old6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td id="old6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
-				<tr><td></td><td></td><td></td><td></td><td id="old6_year" align="center"></td><td id="old6_month" align="center" bgcolor="#00000">6열</td><td></td><td  id="old6_day" align="center" bgcolor="#000000">일</td><td id="old6_hour" align="center">시</td><td></td><td></td><td></td><td>13열</td><!--td>14열</td--></tr>
+				<tr><td>본괘</td><td id="old6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지괘</td><td id="old6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td id="old6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
+				<tr><td></td><td></td><td></td><td></td><td id="old6_year" align="center"></td><td id="old6_month" align="center" bgcolor="#000FF">6열</td><td></td><td  id="old6_day" align="center" bgcolor="#FF0000">일</td><td id="old6_hour" align="center">시</td><td></td><td></td><td></td><td></td><!--td>14열</td--></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 				<tr><td id="old6_ji_10sin_6" align="center">1열</td><td id="old6_ji_nabgab_6" align="center">2열</td><td id="old6_ji_chungpa_6">3열</td><td id="old6_10sin_6" align="center">4열</td><td id="old6_nabgab_6" align="center" >5열</td><td id="old6_chungpa_6">6열</td><td id='old6hyo_6' align="center">7열</td><td id="old6hyo_seung_6">8열</td><td id="old6_sinmyeong_6">9열</td><td id="old6_boksin_char_6" align="center">10열</td><td id="old6_bok_10sin_6" align="center">11열</td><td id="old6_bok_nabgab_6" align="center">12열</td><td id="old6_bok_chungpa_6">13열</td><td id="old6_6su_6" align="center">14열</td></tr>
 				<tr><td id="old6_ji_10sin_5" align="center">1열</td><td id="old6_ji_nabgab_5" align="center">2열</td><td id="old6_ji_chungpa_5">3열</td><td id="old6_10sin_5" align="center">4열</td><td id="old6_nabgab_5" align="center" >5열</td><td id="old6_chungpa_5">6열</td><td id='old6hyo_5' align="center">7열</td><td id="old6hyo_seung_5">8열</td><td id="old6_sinmyeong_5">9열</td><td id="old6_boksin_char_5" align="center">10열</td><td id="old6_bok_10sin_5" align="center">11열</td><td id="old6_bok_nabgab_5" align="center">12열</td><td id="old6_bok_chungpa_5">13열</td><td id="old6_6su_5" align="center">14열</td></tr>
@@ -8911,14 +8968,14 @@ function moveSaju() {
 				<tr><td id="old6_ji_10sin_2" align="center">1열</td><td id="old6_ji_nabgab_2" align="center">2열</td><td id="old6_ji_chungpa_2">3열</td><td id="old6_10sin_2" align="center">4열</td><td id="old6_nabgab_2" align="center" >5열</td><td  id="old6_chungpa_2">6열</td><td id='old6hyo_2' align="center">7열</td><td id="old6hyo_seung_2">8열</td><td id="old6_sinmyeong_2">9열</td><td id="old6_boksin_char_2" align="center">10열</td><td id="old6_bok_10sin_2" align="center">11열</td><td id="old6_bok_nabgab_2" align="center">12열</td><td id="old6_bok_chungpa_2">13열</td><td id="old6_6su_2" align="center">14열</td></tr>
 				<tr><td id="old6_ji_10sin_1" align="center">1열</td><td id="old6_ji_nabgab_1" align="center">2열</td><td id="old6_ji_chungpa_1">3열</td><td id="old6_10sin_1" align="center">4열</td><td id="old6_nabgab_1" align="center" >5열</td><td  id="old6_chungpa_1">6열</td><td id='old6hyo_1' align="center">7열</td><td id="old6hyo_seung_1">8열</td><td id="old6_sinmyeong_1">9열</td><td id="old6_boksin_char_1" align="center">10열</td><td id="old6_bok_10sin_1" align="center">11열</td><td id="old6_bok_nabgab_1" align="center">12열</td><td id="old6_bok_chungpa_1">13열</td><td id="old6_6su_1" align="center">14열</td></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="old6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="old6_gong_mang" align="center"></td><td id="old6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="old6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="old6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="old6_gong_mang" align="center"></td><td id="old6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="old6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 			</table>
 		</td>
 		<td>&nbsp;&nbsp;&nbsp;</td>
 		<td align="center">NEW - ORIGINAL<br>
 			<table border="1">
-				<tr><td>본괘</td><td id="new6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지괘</td><td id="new6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td id="new6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
-				<tr><td></td><td></td><td></td><td></td><td id="new6_year" align="center"></td><td id="new6_month" align="center" bgcolor="#00000">6열</td><td></td><td  id="new6_day" align="center" bgcolor="#000000">일</td><td id="new6_hour" align="center">시</td><td></td><td></td><td></td><td>13열</td><!--td>14열</td--></tr>
+				<tr><td>본괘</td><td id="new6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지괘</td><td id="new6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td id="new6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
+				<tr><td></td><td></td><td></td><td></td><td id="new6_year" align="center"></td><td id="new6_month" align="center" bgcolor="#000FF">6열</td><td></td><td  id="new6_day" align="center" bgcolor="#FF0000">일</td><td id="new6_hour" align="center">시</td><td></td><td></td><td></td><td></td><!--td>14열</td--></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 				<tr><td id="new6_ji_10sin_6" align="center">1열</td><td id="new6_ji_nabgab_6" align="center">2열</td><td id="new6_ji_chungpa_6">3열</td><td id="new6_10sin_6" align="center">4열</td><td id="new6_nabgab_6" align="center" >5열</td><td id="new6_chungpa_6">6열</td><td id='new6hyo_6' align="center">7열</td><td id="new6hyo_seung_6">8열</td><td id="new6_sinmyeong_6">9열</td><td id="new6_boksin_char_6" align="center">10열</td><td id="new6_bok_10sin_6" align="center">11열</td><td id="new6_bok_nabgab_6" align="center">12열</td><td id="new6_bok_chungpa_6">13열</td><td id="new6_6su_6" align="center">14열</td></tr>
 				<tr><td id="new6_ji_10sin_5" align="center">1열</td><td id="new6_ji_nabgab_5" align="center">2열</td><td id="new6_ji_chungpa_5">3열</td><td id="new6_10sin_5" align="center">4열</td><td id="new6_nabgab_5" align="center" >5열</td><td id="new6_chungpa_5">6열</td><td id='new6hyo_5' align="center">7열</td><td id="new6hyo_seung_5">8열</td><td id="new6_sinmyeong_5">9열</td><td id="new6_boksin_char_5" align="center">10열</td><td id="new6_bok_10sin_5" align="center">11열</td><td id="new6_bok_nabgab_5" align="center">12열</td><td id="new6_bok_chungpa_5">13열</td><td id="new6_6su_5" align="center">14열</td></tr>
@@ -8928,7 +8985,7 @@ function moveSaju() {
 				<tr><td id="new6_ji_10sin_2" align="center">1열</td><td id="new6_ji_nabgab_2" align="center">2열</td><td id="new6_ji_chungpa_2">3열</td><td id="new6_10sin_2" align="center">4열</td><td id="new6_nabgab_2" align="center" >5열</td><td  id="new6_chungpa_2">6열</td><td id='new6hyo_2' align="center">7열</td><td id="new6hyo_seung_2">8열</td><td id="new6_sinmyeong_2">9열</td><td id="new6_boksin_char_2" align="center">10열</td><td id="new6_bok_10sin_2" align="center">11열</td><td id="new6_bok_nabgab_2" align="center">12열</td><td id="new6_bok_chungpa_2">13열</td><td id="new6_6su_2" align="center">14열</td></tr>
 				<tr><td id="new6_ji_10sin_1" align="center">1열</td><td id="new6_ji_nabgab_1" align="center">2열</td><td id="new6_ji_chungpa_1">3열</td><td id="new6_10sin_1" align="center">4열</td><td id="new6_nabgab_1" align="center" >5열</td><td  id="new6_chungpa_1">6열</td><td id='new6hyo_1' align="center">7열</td><td id="new6hyo_seung_1">8열</td><td id="new6_sinmyeong_1">9열</td><td id="new6_boksin_char_1" align="center">10열</td><td id="new6_bok_10sin_1" align="center">11열</td><td id="new6_bok_nabgab_1" align="center">12열</td><td id="new6_bok_chungpa_1">13열</td><td id="new6_6su_1" align="center">14열</td></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="new6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="new6_gong_mang" align="center"></td><td id="new6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="new6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td>8열</td><td>9열</td><td>10열</td><td>11열</td><td>12열</td><td>13열</td><td>14열</td></tr>
+				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="new6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="new6_gong_mang" align="center"></td><td id="new6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="new6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 			</table>
 		</td>
 	</tr>
