@@ -3161,15 +3161,44 @@ var g_6hyo_12jiji = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "�
 var g_6hyo_12jiji_5haeng = {
 	"子":"水", "丑":"土", "寅":"木", "卯":"木", "辰":"土", "巳":"火", "午":"火", "未":"土", "申":"金", "酉":"金", "戌":"土", "亥":"水"};
 
-//절태양장(생) 목관건제 쇄병사묘
-//12지지 관련 12운성의 (장)생지 위치
-var g_6hyo_12unseong_saengji = {
+
+//사주 12운성...
+//[토]는 [화]와 같은 (장)생지
+var g_4ju_12unseong_saengji = {
 	"寅":"亥", "卯":"亥", 
 	"巳":"寅", "午":"寅", 
 	"申":"巳", "酉":"巳",
-	"戌":"申", "亥":"申",
-	"辰":"寅", "戌":"寅", "丑":"寅", "未":"寅" 
+	"亥":"申", "子":"申",
+	"丑":"寅", "辰":"寅",  
+	"未":"寅", "戌":"寅"
 };
+
+//육효 12운성...
+//절태양장(생) 목관건제 쇄병사묘
+//12지지 관련 12운성의 (장)생지 위치
+//[토]는 [수]와 같은 (장)생지
+var g_old6hyo_12unseong_saengji = {
+	"寅":"亥", "卯":"亥", 
+	"巳":"寅", "午":"寅", 
+	"申":"巳", "酉":"巳",
+	"亥":"申", "子":"申",
+	"丑":"申", "辰":"申",
+	"未":"申", "戌":"申"
+};
+
+//new 육효 12운성...
+//6효에서 [토:축진]은 [수]와 같은 (장)생지
+//[미술]은 상화이므로 [미술]은 [화]와 같은 (장)생지
+var g_new6hyo_12unseong_saengji = {
+	"寅":"亥", "卯":"亥", 
+	"巳":"寅", "午":"寅", 
+	"申":"巳", "酉":"巳",
+	"亥":"申", "子":"申",
+	"辰":"申", "丑":"申",  
+	"未":"寅", "戌":"寅"
+};
+
+
 
 //절, 태, 양, 장생, 목욕, 관대, 건록, 제왕, 쇠, 병, 사, 묘
 var g_6hyo_12unseong = ["절", "태", "양", "생", "욕", "대", "록", "왕", "쇠", "병", "사", "묘"];
@@ -3590,7 +3619,7 @@ function show_old6hyo() {
 	//납갑(지지)이 일지에 대해 12운성은? 빨강색
 
 	//(생록왕) 사묘절: 6가지 경우만 포국 시 나타내준다.
-	//var my_12_unseong = get_12_unseong(my_jiji, what_jiji);
+	//var my_12_unseong = get_old6hyo_12_unseong(my_jiji, what_jiji);
 	//구해 놓은 값들 
 	//month_jiji: 월지 한 글자
 	//day_jiji: 일지 한 글자
@@ -3602,8 +3631,8 @@ function show_old6hyo() {
 	for (var i=6;i>0;i--) {
 		//본괘 납갑 처리
 		var my_each_nabgab = my_nabgab.charAt(6 - i);
-		var my_12_unseong_month_jiji = get_12_unseong(my_each_nabgab, month_jiji);
-		var my_12_unseong_day_jiji = get_12_unseong(my_each_nabgab, day_jiji);
+		var my_12_unseong_month_jiji = get_old6hyo_12_unseong(my_each_nabgab, month_jiji);
+		var my_12_unseong_day_jiji = get_old6hyo_12_unseong(my_each_nabgab, day_jiji);
 
 
 		if ("생록왕사묘절".indexOf(my_12_unseong_month_jiji) > -1) {
@@ -3619,8 +3648,8 @@ function show_old6hyo() {
 		
 		//지괘 납갑 처리...
 		var my_each_ji_nabgab = my_ji_nabgab.charAt(6 - i);
-		var my_ji_12_unseong_month_jiji = get_12_unseong(my_each_ji_nabgab, month_jiji);
-		var my_ji_12_unseong_day_jiji = get_12_unseong(my_each_ji_nabgab, day_jiji);
+		var my_ji_12_unseong_month_jiji = get_old6hyo_12_unseong(my_each_ji_nabgab, month_jiji);
+		var my_ji_12_unseong_day_jiji = get_old6hyo_12_unseong(my_each_ji_nabgab, day_jiji);
 
 		
 		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
@@ -3727,8 +3756,8 @@ function show_old6hyo() {
 
 			//12운성...
 			var my_br = "<br>";
-			var my_boksin_12_unseong_month_jiji = get_12_unseong(nabgab_jiji_each_char, month_jiji);
-			var my_boksin_12_unseong_day_jiji = get_12_unseong(nabgab_jiji_each_char, day_jiji);
+			var my_boksin_12_unseong_month_jiji = get_old6hyo_12_unseong(nabgab_jiji_each_char, month_jiji);
+			var my_boksin_12_unseong_day_jiji = get_old6hyo_12_unseong(nabgab_jiji_each_char, day_jiji);
 			
 			if ("생록왕사묘절".indexOf(my_boksin_12_unseong_month_jiji) > -1) {
 				document.getElementById("old6_bok_chungpa_" + i).innerHTML += my_br + "<font color='blue'>" + my_boksin_12_unseong_month_jiji + "</font>";
@@ -4115,7 +4144,7 @@ function show_new6hyo() {
 	//납갑(지지)이 일지에 대해 12운성은? 빨강색
 
 	//(생록왕) 사묘절: 6가지 경우만 포국 시 나타내준다.
-	//var my_12_unseong = get_12_unseong(my_jiji, what_jiji);
+	//var my_12_unseong = get_new6hyo_12_unseong(my_jiji, what_jiji);
 	//구해 놓은 값들 
 	//month_jiji: 월지 한 글자
 	//day_jiji: 일지 한 글자
@@ -4127,8 +4156,8 @@ function show_new6hyo() {
 	for (var i=6;i>0;i--) {
 		//본괘 납갑 처리
 		var my_each_nabgab = my_nabgab.charAt(6 - i);
-		var my_12_unseong_month_jiji = get_12_unseong(my_each_nabgab, month_jiji);
-		var my_12_unseong_day_jiji = get_12_unseong(my_each_nabgab, day_jiji);
+		var my_12_unseong_month_jiji = get_new6hyo_12_unseong(my_each_nabgab, month_jiji);
+		var my_12_unseong_day_jiji = get_new6hyo_12_unseong(my_each_nabgab, day_jiji);
 
 
 		if ("생록왕사묘절".indexOf(my_12_unseong_month_jiji) > -1) {
@@ -4142,8 +4171,8 @@ function show_new6hyo() {
 		
 		//지괘 납갑 처리...
 		var my_each_ji_nabgab = my_ji_nabgab.charAt(6 - i);
-		var my_ji_12_unseong_month_jiji = get_12_unseong(my_each_ji_nabgab, month_jiji);
-		var my_ji_12_unseong_day_jiji = get_12_unseong(my_each_ji_nabgab, day_jiji);
+		var my_ji_12_unseong_month_jiji = get_new6hyo_12_unseong(my_each_ji_nabgab, month_jiji);
+		var my_ji_12_unseong_day_jiji = get_new6hyo_12_unseong(my_each_ji_nabgab, day_jiji);
 
 		
 		if (g_byunhyo_list[6-i]==1) {//변효에 해당된다면...
@@ -4251,8 +4280,8 @@ function show_new6hyo() {
 
 			//12운성...
 			var my_br = "<br>";
-			var my_boksin_12_unseong_month_jiji = get_12_unseong(nabgab_jiji_each_char, month_jiji);
-			var my_boksin_12_unseong_day_jiji = get_12_unseong(nabgab_jiji_each_char, day_jiji);
+			var my_boksin_12_unseong_month_jiji = get_new6hyo_12_unseong(nabgab_jiji_each_char, month_jiji);
+			var my_boksin_12_unseong_day_jiji = get_new6hyo_12_unseong(nabgab_jiji_each_char, day_jiji);
 			
 			if ("생록왕사묘절".indexOf(my_boksin_12_unseong_month_jiji) > -1) {
 				document.getElementById("new6_bok_chungpa_" + i).innerHTML += my_br + "<font color='blue'>" + my_boksin_12_unseong_month_jiji + "</font>";
@@ -4342,9 +4371,9 @@ function show_new6hyo() {
 //'장목관건제쇠'
 //즉 "해" 기준에서 "축"의 12운성은 "쇠"이다.
 //우선 my_jiji의 '생지'를 찾아낸 후, 거기(장생)에서부터 시작해 what_jiji까지 십이운성을 계산해 리턴한다.
-function get_12_unseong(my_jiji, what_jiji) {
+function get_old6hyo_12_unseong(my_jiji, what_jiji) {
 	//my_jiji의 '생지'와 그 위치를 찾는다.
-	var my_saeng_jiji = g_6hyo_12unseong_saengji[my_jiji];
+	var my_saeng_jiji = g_old6hyo_12unseong_saengji[my_jiji];
 
 	var my_saeng_jiji_index = -1;
 	//my_saeng_jiji_index="子丑寅卯辰巳午未申酉戌亥".indexOf(my_saeng_jiji);
@@ -4377,6 +4406,45 @@ function get_12_unseong(my_jiji, what_jiji) {
 
 	return my_12_unseong;
 }
+
+function get_new6hyo_12_unseong(my_jiji, what_jiji) {
+	//my_jiji의 '생지'와 그 위치를 찾는다.
+	var my_saeng_jiji = g_new6hyo_12unseong_saengji[my_jiji];
+
+	var my_saeng_jiji_index = -1;
+	//my_saeng_jiji_index="子丑寅卯辰巳午未申酉戌亥".indexOf(my_saeng_jiji);
+	for (var i=0;i<12;i++) {
+		if (g_6hyo_12jiji[i]==my_saeng_jiji) {
+			my_saeng_jiji_index = i;
+			break;
+		}
+	}
+
+
+	//what_jiji의 위치를 찾는다.
+	var what_jiji_index = -1;
+	for (var i=0;i<12;i++) {
+		if (g_6hyo_12jiji[i]==what_jiji) {
+			what_jiji_index = i;
+			break;
+		}
+	}
+
+	var delta_jiji_index = r(what_jiji_index - my_saeng_jiji_index , 12);
+
+	//12운성에서 '(장)생'의 위치
+	var saeng_position_from_12_unseong = 3;
+
+	//12운성: '(장)생'에서 delta_jiji_index 번째 12운성은?
+	var my_12_unseong_posiotion = r(saeng_position_from_12_unseong + delta_jiji_index, 12);
+	var my_12_unseong = g_6hyo_12unseong[my_12_unseong_posiotion];
+
+
+	return my_12_unseong;
+}
+
+
+
 
 
 
@@ -8790,10 +8858,10 @@ function moveSaju() {
 			var day_pole_list = get60GapJaDay(my_year, my_month, my_day);
 			var time_pole_list = get60GapJaTime(my_year, my_month, my_day, my_hour, my_min);
 	
-			console.log(`연주: ${year_pole_list[0]}${year_pole_list[1]}`);
-			console.log(`월주: ${month_pole_list[0]}${month_pole_list[1]}`);
-			console.log(`일주: ${day_pole_list[0]}${day_pole_list[1]}`);
-			console.log(`시주: ${time_pole_list[0]}${time_pole_list[1]}`);
+			//console.log(`연주: ${year_pole_list[0]}${year_pole_list[1]}`);
+			//console.log(`월주: ${month_pole_list[0]}${month_pole_list[1]}`);
+			//console.log(`일주: ${day_pole_list[0]}${day_pole_list[1]}`);
+			//console.log(`시주: ${time_pole_list[0]}${time_pole_list[1]}`);
 	
 			g_yyyy_mm_dd_hh["year"] = `${year_pole_list[0]}${year_pole_list[1]}`;
 			g_yyyy_mm_dd_hh["month"] = `${month_pole_list[0]}${month_pole_list[1]}`;
@@ -8909,41 +8977,220 @@ function moveSaju() {
 			//g_my_body_JuyeokSaju_list = [day_pole_list[1], day_pole_list[0], month_pole_list[1], month_pole_list[0], year_pole_list[1], year_pole_list[0]];
 	
 		}
+
+
+		function analysisEdu4ju2juyeok() {
+			var target_edu_JuyeokSaju_form = document.getElementById("EduJuyeokSajuForm");
+	
+			var idx_area = target_edu_JuyeokSaju_form.eduJuyeokSajuSelect.selectedIndex;
+			
+			var idx_year1 = target_edu_JuyeokSaju_form.eduJuyeokSajuYear1Select.selectedIndex;
+			var idx_year2 = target_edu_JuyeokSaju_form.eduJuyeokSajuYear2Select.selectedIndex;
+			var idx_year3 = target_edu_JuyeokSaju_form.eduJuyeokSajuYear3Select.selectedIndex;
+	
+			var idx_month = target_edu_JuyeokSaju_form.eduJuyeokSajuMonthSelect.selectedIndex;
+			var idx_day = target_edu_JuyeokSaju_form.eduJuyeokSajuDaySelect.selectedIndex;
+			var idx_hour = target_edu_JuyeokSaju_form.eduJuyeokSajuHourSelect.selectedIndex;
+			var idx_min = target_edu_JuyeokSaju_form.eduJuyeokSajuMinSelect.selectedIndex;
+			
+	
+			if (idx_area<=0) {
+				target_edu_JuyeokSaju_form.eduJuyeokSajuAreaSelect.selectedIndex = 1; //서울지역
+				idx_area = 1;
+			}
+	
+			//if (target_edu_JuyeokSaju_form.eduJuyeokSajuYear.value.trim()=="") {return;}
+			if (idx_year1==0 || idx_year2==0 || idx_year3==0) {return;}
+			if (idx_month==0) {return;}
+			if (idx_day==0) {return;}
+			
+	
+	
+			var my_year = eval(target_edu_JuyeokSaju_form.eduJuyeokSajuYear1Select.options[idx_year1].value + target_edu_JuyeokSaju_form.eduJuyeokSajuYear2Select.options[idx_year2].value + target_edu_JuyeokSaju_form.eduJuyeokSajuYear3Select.options[idx_year3].value);
+	
+			var my_month = eval(target_edu_JuyeokSaju_form.eduJuyeokSajuMonthSelect.options[idx_month].value);
+			var my_day = eval(target_edu_JuyeokSaju_form.eduJuyeokSajuDaySelect.options[idx_day].value);
+			var my_hour = eval(target_edu_JuyeokSaju_form.eduJuyeokSajuHourSelect.options[idx_hour].value);
+			var my_min = eval(target_edu_JuyeokSaju_form.eduJuyeokSajuMinSelect.options[idx_min].value);
+	
+	
+	
+			var my_area_val = eval(target_edu_JuyeokSaju_form.eduJuyeokSajuAreaSelect.options[idx_area].value);
+	
+			var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+	
+	
+			var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+	
+			var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+	
+			target_edu_JuyeokSaju_form.eduJuyeokSajuEOT.value = eot_next_hour_min_list[0] + ":" + eot_next_hour_min_list[1]; 
+	
+	
+			if (my_hour>=23 && my_min>=eot_next_hour_min_list[1]) {
+				my_year = yyyy_mm_dd_from_next_day_list[0];
+				my_month = yyyy_mm_dd_from_next_day_list[1];
+				my_day = yyyy_mm_dd_from_next_day_list[2];
+			}
+	
+			
+			var year_pole_list = get60GapJaYear(my_year);
+			var month_pole_list = get60GapJaMonth(my_year, my_month);
+			var day_pole_list = get60GapJaDay(my_year, my_month, my_day);
+			var time_pole_list = get60GapJaTime(my_year, my_month, my_day, my_hour, my_min);
+	
+			console.log(`연주: ${year_pole_list[0]}${year_pole_list[1]}`);
+			console.log(`월주: ${month_pole_list[0]}${month_pole_list[1]}`);
+			console.log(`일주: ${day_pole_list[0]}${day_pole_list[1]}`);
+			console.log(`시주: ${time_pole_list[0]}${time_pole_list[1]}`);
+	
+			g_yyyy_mm_dd_hh["year"] = `${year_pole_list[0]}${year_pole_list[1]}`;
+			g_yyyy_mm_dd_hh["month"] = `${month_pole_list[0]}${month_pole_list[1]}`;
+			g_yyyy_mm_dd_hh["day"] = `${day_pole_list[0]}${day_pole_list[1]}`;
+			g_yyyy_mm_dd_hh["hour"] = `${time_pole_list[0]}${time_pole_list[1]}`;
+	
+			//수목화는 음___(상화)토금은 양
+			//상화: 미술(파)
+	
+			//일지: 6효
+			//월지: 5효
+			//연지: 4효
+			//일간: 3효
+			//월간: 2효
+			//연간: 초효
+	
+			//변효: 밤11:30~새벽03:30(1효)
+	
+			//var g_base64_list;
+			//var g_byunhyo_list;
+			//var g_ji64_list;
+	
+			//본괘 육효...
+			var my_bon_text = document.getElementById("text_eduJuyeokSaju8bon").value; 
+			g_base64_list = [
+				my_bon_text.charAt(0), 
+				my_bon_text.charAt(1), 
+				my_bon_text.charAt(2), 
+				my_bon_text.charAt(3),
+				my_bon_text.charAt(4), 
+				my_bon_text.charAt(5)
+			];
+
+			//변효...
+			var my_byeonhyo_text = document.getElementById("text_eduJuyeokSaju8byeonhyo").value;
+			g_byunhyo_list = [
+				my_byeonhyo_text.charAt(0), 
+				my_byeonhyo_text.charAt(1), 
+				my_byeonhyo_text.charAt(2), 
+				my_byeonhyo_text.charAt(3),
+				my_byeonhyo_text.charAt(4), 
+				my_byeonhyo_text.charAt(5)
+
+			];
+
+			//지괘
+			g_ji64_list = [];
+			for (var i=0;i<6;i++) {
+				if (g_byunhyo_list[i]=="1" && g_base64_list[i]=="0") {
+					g_ji64_list.push("1");
+				}
+				else if (g_byunhyo_list[i]=="1" && g_base64_list[i]=="1") {
+					g_ji64_list.push("0");
+				}
+				else if (g_byunhyo_list[i]=="0") {
+					g_ji64_list.push(g_base64_list[i]);
+				}
+	
+			}
+	
+	
+			show64();
+			show_old6hyo();
+			show_new6hyo();
+	
+	
+	
+	
+			//[일지, 일간, 월지, 월간, 연지, 연간]
+			//g_my_body_JuyeokSaju_list = [day_pole_list[1], day_pole_list[0], month_pole_list[1], month_pole_list[0], year_pole_list[1], year_pole_list[0]];
+	
+		}
 	
 	</script>
 
 <h1 id="menu_6hyo"></h1>
 
-	양력:<br>
-	<form name="BodyJuyeokSajuForm_1" id="BodyJuyeokSajuForm">
-		<select id="bodyJuyeokSajuYear1Select" name="bodyJuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="bodyJuyeokSajuYear2Select" name="bodyJuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="bodyJuyeokSajuYear3Select" name="bodyJuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
-		<select id="bodyJuyeokSajuMonthSelect" name="bodyJuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
-		<select id="bodyJuyeokSajuDaySelect" name="bodyJuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일<br>
-		<select id="bodyJuyeokSajuHourSelect" name="bodyJuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
-		<select id="bodyJuyeokSajuMinSelect" name="bodyJuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
-		<select id="bodyJuyeokSajuSelect" name="bodyJuyeokSajuAreaSelect"> 
-					<option value="">
-					<option value="126.92">서울
-					<option value="128.89">강릉
-					<option value="126.92">광주
-					<option value="128.63">대구
-					<option value="127.41">대전
-					<option value="129.10">부산
-					<option value="130.89">울릉도
-					<option value="127.14">전주
-					<option value="126.50">제주
-					<option value="128.69">창원
-					<option value="128.48">청주
-					<option value="127.72">춘천
-				</select>지역<br>
-		담날 남중시각: &nbsp;<input type="text" name="bodyJuyeokSajuEOT" size="2" disabled>&nbsp;&nbsp;&nbsp;<input type="button" value="사주 → 주역" onclick="analysis4ju2juyeok();" />
-	</form>
+<table>
+	<tr>
+		<td>
+			양력:<br>
+			<form name="BodyJuyeokSajuForm" id="BodyJuyeokSajuForm">
+				<select id="bodyJuyeokSajuYear1Select" name="bodyJuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="bodyJuyeokSajuYear2Select" name="bodyJuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="bodyJuyeokSajuYear3Select" name="bodyJuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
+				<select id="bodyJuyeokSajuMonthSelect" name="bodyJuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
+				<select id="bodyJuyeokSajuDaySelect" name="bodyJuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일<br>
+				<select id="bodyJuyeokSajuHourSelect" name="bodyJuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
+				<select id="bodyJuyeokSajuMinSelect" name="bodyJuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
+				<select id="bodyJuyeokSajuSelect" name="bodyJuyeokSajuAreaSelect"> 
+							<option value="">
+							<option value="126.92">서울
+							<option value="128.89">강릉
+							<option value="126.92">광주
+							<option value="128.63">대구
+							<option value="127.41">대전
+							<option value="129.10">부산
+							<option value="130.89">울릉도
+							<option value="127.14">전주
+							<option value="126.50">제주
+							<option value="128.69">창원
+							<option value="128.48">청주
+							<option value="127.72">춘천
+						</select>지역<br>
+				담날 남중시각: &nbsp;<input type="text" name="bodyJuyeokSajuEOT" size="2" disabled>&nbsp;&nbsp;&nbsp;<input type="button" value="사주 → 주역" onclick="analysis4ju2juyeok();" />
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			양력:
+			<form name="EduJuyeokSajuForm" id="EduJuyeokSajuForm">
+				<select id="eduJuyeokSajuYear1Select" name="eduJuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="eduJuyeokSajuYear2Select" name="eduJuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="eduJuyeokSajuYear3Select" name="eduJuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
+				<select id="eduJuyeokSajuMonthSelect" name="eduJuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
+				<select id="eduJuyeokSajuDaySelect" name="eduJuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일 &nbsp;&nbsp;
+				<br>
+				<select id="eduJuyeokSajuHourSelect" name="eduJuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
+				<select id="eduJuyeokSajuMinSelect" name="eduJuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
+				<select id="eduJuyeokSajuSelect" name="eduJuyeokSajuAreaSelect"> 
+							<option value="">
+							<option value="126.92">서울
+							<option value="128.89">강릉
+							<option value="126.92">광주
+							<option value="128.63">대구
+							<option value="127.41">대전
+							<option value="129.10">부산
+							<option value="130.89">울릉도
+							<option value="127.14">전주
+							<option value="126.50">제주
+							<option value="128.69">창원
+							<option value="128.48">청주
+							<option value="127.72">춘천
+						</select>지역 &nbsp;&nbsp;
+				담날 남중시각: &nbsp;<input type="text" name="eduJuyeokSajuEOT" size="2" disabled>
+				<br>
+				본괘: <input type="text" id="text_eduJuyeokSaju8bon" value="000111"></input> &nbsp;&nbsp;
+				변효: <input type="text" id="text_eduJuyeokSaju8byeonhyo" value="100010"></input> &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+				<input type="button" value="교육용 육효점/주역점" onclick="analysisEdu4ju2juyeok();" />
+			</form>
+		</td>
+	</tr>
+</table>
 	
-		
+	
+	
 
 <hr>
 <hr>
 <hr>
+
 
 <h1>육효</h1>
 
