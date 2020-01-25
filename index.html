@@ -10,6 +10,7 @@
   <meta name="Description" content="구성, 주역, 사주, 체질">
 
   <SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
+  <SCRIPT LANGUAGE="JavaScript" SRC="LunarToSolar.js"></SCRIPT>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -1874,15 +1875,110 @@ function setNineStarTable(aTableName, aBoardArray) {
   </div> 
 </div>
 <br><br><br><br>
+
+<script>
+	function changeLunarToSolar() {
+		var target_lunar2solar_form = document.getElementById("LunarToSolarForm");
+	
+		var idx_area = target_lunar2solar_form.LunarToSolarSelect.selectedIndex;
+		
+		var idx_year1 = target_lunar2solar_form.LunarToSolarYear1Select.selectedIndex;
+		var idx_year2 = target_lunar2solar_form.LunarToSolarYear2Select.selectedIndex;
+		var idx_year3 = target_lunar2solar_form.LunarToSolarYear3Select.selectedIndex;
+
+		var idx_month = target_lunar2solar_form.LunarToSolarMonthSelect.selectedIndex;
+		var idx_day = target_lunar2solar_form.LunarToSolarDaySelect.selectedIndex;
+		var idx_hour = target_lunar2solar_form.LunarToSolarHourSelect.selectedIndex;
+		var idx_min = target_lunar2solar_form.LunarToSolarMinSelect.selectedIndex;
+		
+
+		if (idx_area<=0) {
+			target_lunar2solar_form.LunarToSolarAreaSelect.selectedIndex = 1; //서울지역
+			idx_area = 1;
+		}
+
+		//if (target_lunar2solar_form.LunarToSolarYear.value.trim()=="") {return;}
+		if (idx_year1==0 || idx_year2==0 || idx_year3==0) {return;}
+		if (idx_month==0) {return;}
+		if (idx_day==0) {return;}
+		
+
+
+		var my_year = eval(target_lunar2solar_form.LunarToSolarYear1Select.options[idx_year1].value + target_lunar2solar_form.LunarToSolarYear2Select.options[idx_year2].value + target_lunar2solar_form.LunarToSolarYear3Select.options[idx_year3].value);
+
+		var my_month = eval(target_lunar2solar_form.LunarToSolarMonthSelect.options[idx_month].value);
+		var my_day = eval(target_lunar2solar_form.LunarToSolarDaySelect.options[idx_day].value);
+		var my_hour = eval(target_lunar2solar_form.LunarToSolarHourSelect.options[idx_hour].value);
+		var my_min = eval(target_lunar2solar_form.LunarToSolarMinSelect.options[idx_min].value);
+
+
+
+		var my_area_val = eval(target_lunar2solar_form.LunarToSolarAreaSelect.options[idx_area].value);
+		var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+		var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+		var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+		//target_lunar2solar_form.LunarToSolarEOT.value = eot_next_hour_min_list[0] + ":" + eot_next_hour_min_list[1]; 
+
+
+		if (my_hour>=23 && my_min>=eot_next_hour_min_list[1]) {
+			my_year = yyyy_mm_dd_from_next_day_list[0];
+			my_month = yyyy_mm_dd_from_next_day_list[1];
+			my_day = yyyy_mm_dd_from_next_day_list[2];
+		}
+
+		//숫자를 문자열로 전환
+		my_year += "";
+		my_month += "";
+		my_day += "";
+		
+		if (my_month.length==1) { my_month = "0" + my_month; }
+		if (my_day.length==1) { my_day = "0" + my_day; }
+
+		var mySolarDate = getLunarToSolar(my_year + my_month + my_day);
+
+		//2020.01.01
+		target_lunar2solar_form.TextMySolar.value = mySolarDate;
+
+		//var my_solar_year_num = val(mySolarDate.substr(0, 4));
+		//var my_solar_month_num = val(mySolarDate.substr(5, 2));
+		//var my_solar_day_num = val(mySolarDate.substr(8, 2));
+
+	}
+</script>
+
 <div id="STATICMENU">
 	<br><br><br>
-	음력을 양력으로 변환<br>
-	년:<br>
-	월:<br>
-	일:<br>
-	시:<br>
-	준비 중...<br><br>
-	
+	음력: (연도: 1900 ~ 2043)<br>
+	<form name="LunarToSolarForm" id="LunarToSolarForm">
+		<select id="LunarToSolarYear1Select" name="LunarToSolarYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="LunarToSolarYear2Select" name="LunarToSolarYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="LunarToSolarYear3Select" name="LunarToSolarYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
+		<select id="LunarToSolarMonthSelect" name="LunarToSolarMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
+		<select id="LunarToSolarDaySelect" name="LunarToSolarDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일 &nbsp;&nbsp;
+		<br>
+		<select id="LunarToSolarHourSelect" name="LunarToSolarHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
+		<select id="LunarToSolarMinSelect" name="LunarToSolarMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
+		<select id="LunarToSolarSelect" name="LunarToSolarAreaSelect"> 
+					<option value="">
+					<option value="126.92">서울
+					<option value="128.89">강릉
+					<option value="126.92">광주
+					<option value="128.63">대구
+					<option value="127.41">대전
+					<option value="129.10">부산
+					<option value="130.89">울릉도
+					<option value="127.14">전주
+					<option value="126.50">제주
+					<option value="128.69">창원
+					<option value="128.48">청주
+					<option value="127.72">춘천
+				</select>지역 &nbsp;&nbsp;<br>
+		<!--담날 남중시각: &nbsp;<input type="text" name="LunarToSolarEOT" size="2" disabled>-->
+		<br>
+		<input type="button" value="음력 → 양력" onclick="changeLunarToSolar();" /> &nbsp;
+		<input type="text" name="TextMySolar" value="2020.01.01" size="10" />
+	</form>
+	<br>
+	<hr>
+	<br>
 	<a href="#menu_saju8body"><b>체질사주</b></a><br>
 	<a href="#menu_name8body"><b>체질작명</b></a><br>
 	<a href="#menu_6hyo"><b>육효주역</b></a><br>
@@ -9046,10 +9142,10 @@ function moveSaju() {
 			var day_pole_list = get60GapJaDay(my_year, my_month, my_day);
 			var time_pole_list = get60GapJaTime(my_year, my_month, my_day, my_hour, my_min);
 	
-			console.log(`연주: ${year_pole_list[0]}${year_pole_list[1]}`);
-			console.log(`월주: ${month_pole_list[0]}${month_pole_list[1]}`);
-			console.log(`일주: ${day_pole_list[0]}${day_pole_list[1]}`);
-			console.log(`시주: ${time_pole_list[0]}${time_pole_list[1]}`);
+			//console.log(`연주: ${year_pole_list[0]}${year_pole_list[1]}`);
+			//console.log(`월주: ${month_pole_list[0]}${month_pole_list[1]}`);
+			//console.log(`일주: ${day_pole_list[0]}${day_pole_list[1]}`);
+			//console.log(`시주: ${time_pole_list[0]}${time_pole_list[1]}`);
 	
 			g_yyyy_mm_dd_hh["year"] = `${year_pole_list[0]}${year_pole_list[1]}`;
 			g_yyyy_mm_dd_hh["month"] = `${month_pole_list[0]}${month_pole_list[1]}`;
