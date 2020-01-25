@@ -9287,7 +9287,38 @@ function moveSaju() {
 	</tr>
 </table>
 	
+<script>
+	//문서에 접근한 연월일시로 초기화 세팅
+	function setYYYYMMDD4EduForm() {
+		var today = new Date();
+		var yyyy = "" + today.getFullYear();
+		var mm = "" + (today.getMonth() + 1);
+		var dd = "" + today.getDate();
+		var hour = today.getHours();
+		var min = today.getMinutes();
+
+		if (yyyy.substr(0, 2)=="19") {
+			document.getElementById("eduJuyeokSajuYear1Select").selectedIndex = 1;
+		}
+		else if (yyyy.substr(0, 2)=="20") {
+			document.getElementById("eduJuyeokSajuYear1Select").selectedIndex = 2;
+		}
+		document.getElementById("eduJuyeokSajuYear2Select").selectedIndex = eval(yyyy.substr(2, 1)) + 1;
+		document.getElementById("eduJuyeokSajuYear3Select").selectedIndex = eval(yyyy.substr(3, 1)) + 1;
+
+
+		document.getElementById("eduJuyeokSajuMonthSelect").selectedIndex = eval(mm);
+		document.getElementById("eduJuyeokSajuDaySelect").selectedIndex = eval(dd);
+
+		document.getElementById("eduJuyeokSajuHourSelect").selectedIndex = eval(hour);
+		document.getElementById("eduJuyeokSajuMinSelect").selectedIndex = eval(min);
+
+		
+	}
+
+	setYYYYMMDD4EduForm();
 	
+</script>	
 	
 
 <hr>
