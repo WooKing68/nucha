@@ -5360,12 +5360,23 @@ function quick_body_saju_right_move() {
 <tr><td><h1>박찬우 -그레고리력</h1></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h1>남중시각</h1></td></tr>
 <tr><td valign="top">
 <form name="newCalendarForm">
-    <input type="button" value="◀" onclick="changePrevYear();getNewCalender();"><input type="button" name="newCalYear" value="" onclick="changeYear();getNewCalender();"><input type="button" value="▶" onclick="changeNextYear();getNewCalender();"> 
-    <input type="text" name="txtTime" value="" size="7" style="text-align:center;" disabled>
-    <input type="button" value="◁" onclick="changePrevMonth();getNewCalender();"><input type="button" name="newCalMonth" value="" onclick="changeMonth();getNewCalender();"><input type="button" value="▷" onclick="changeNextMonth();getNewCalender();">   
+	
+    
+	
+	   
 
     <table id="newCal" border="1"> 
-    <tr><td colspan="7" id="newCalToday">&nbsp;</td></tr>
+	<tr><td colspan="8" align="center">
+		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalender();">
+		<input type="button" value="◁" onclick="changePrevMonth();getNewCalender();">
+		
+		<input type="button" name="newCalYear" value="" onclick="changeYear();getNewCalender();">년&nbsp;
+		<input type="button" name="newCalMonth" value="" onclick="changeMonth();getNewCalender();">월
+		<input type="button" value="▷" onclick="changeNextMonth();getNewCalender();">
+		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalender();"> 
+		</td>
+	</tr>
+    <tr><td colspan="8" id="newCalToday">&nbsp;<input type="text" name="txtTime" value="" size="7" style="text-align:center;" disabled></td></tr>
     <tr><td align="center">일</td><td align="center">월</td><td align="center">화</td><td align="center">수</td><td align="center">목</td><td align="center">금</td><td align="center">토</td></tr>
     <tr><td id="newCalTd_1">1</td><td id="newCalTd_2">2</td><td id="newCalTd_3">3</td><td id="newCalTd_4">4</td><td id="newCalTd_5">5</td><td id="newCalTd_6">6</td><td id="newCalTd_7">7</td></tr>
     <tr><td id="newCalTd_8">1</td><td id="newCalTd_9">2</td><td id="newCalTd_10">3</td><td id="newCalTd_11">4</td><td id="newCalTd_12">5</td><td id="newCalTd_13">6</td><td id="newCalTd_14">7</td></tr>
@@ -9312,6 +9323,10 @@ function moveSaju() {
 
 		document.getElementById("eduJuyeokSajuHourSelect").selectedIndex = eval(hour);
 		document.getElementById("eduJuyeokSajuMinSelect").selectedIndex = eval(min);
+
+		//지역
+		document.getElementById("eduJuyeokSajuSelect").selectedIndex = 1;
+		
 
 		
 	}
