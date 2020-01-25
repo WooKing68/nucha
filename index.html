@@ -2174,11 +2174,13 @@ function nucha_random(a, b) {
 	return q( (b+1-a) * Math.random() + a, 1);
 }
 
-//주사위를 던져 홀수이면 1, 짝수이면 0을 리턴한다.
+//주사위를 던져 짝수이면 0, 홀수이면 1을 리턴한다.
 function get_umyang_from_dice() {
-	var my_dice_num = nucha_random(1, 6);
-	return r(my_dice_num, 2);
+	var my_dice_num = nucha_random(1, 6);  // 1~6 까지의 숫자 중 하나
+	return r(my_dice_num, 2); //0 혹은 1
 }
+
+
 
 
 var g_base64_list;
@@ -4492,7 +4494,7 @@ function get_gong_mang(day_sky_gan, day_jiji) {
 function get_old6_chung_hap_hon(base64_9_num) {
 	var my_chung_hap_hon = "";
 	
-	if ( "3.6/6.3".indexOf(base64_9_num) > -1 ) {
+	if ( "1.1/2.2/3.3/4.4/6.6/7.7/8.8/9.9/3.6/6.3".indexOf(base64_9_num) > -1 ) {
 		//육충괘: 뇌천대장, 천뢰무망: (1효, 4효), (2효, 5효), (3효, 6효)가 충
 		my_chung_hap_hon = "육충괘";
 	}
@@ -4519,7 +4521,7 @@ function get_old6_chung_hap_hon(base64_9_num) {
 function get_new6_chung_hap_hon(base64_9_num) {
 	var my_chung_hap_hon = "";
 	
-	if ( "3.6/6.3".indexOf(base64_9_num) > -1 ) {
+	if ( "1.1/2.2/3.3/4.4/6.6/7.7/8.8/9.9/3.6/6.3".indexOf(base64_9_num) > -1 ) {
 		//육충괘: 뇌천대장, 천뢰무망: (1효, 4효), (2효, 5효), (3효, 6효)가 충
 		my_chung_hap_hon = "육충괘";
 	}
