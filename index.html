@@ -2085,7 +2085,7 @@ function setNewCalToday() {
 
     var idxWeek = r(getNuchaNumber(yyyy, mm, dd), 7);
 
-    document.getElementById("newCalToday").innerHTML = "<font style='font:12'><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + yyyy + "년 " + mm + "월 " + dd + "일 " + ARR_DAY_OF_WEEK[idxWeek] + "요일" + "</i></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    document.getElementById("newCalToday").innerHTML = "<font style='font:12'>" + yyyy + "년 " + mm + "월 " + dd + "일 " + ARR_DAY_OF_WEEK[idxWeek] + "요일" + "</font>";
 }
 
 
@@ -2167,7 +2167,7 @@ function changeNextMonth() {
         var myMM = myTime.getMinutes();
         var mySS = myTime.getSeconds();
 
-        newCalendarForm.txtTime.value = myHH + ":" + myMM + ":" + mySS;
+        newCalendarForm.txtTime.value = myHH + "시 " + myMM + "분 " + mySS + "초"; 
 
         setNewCalToday();
         window.setTimeout("showTime()", 1000);
@@ -5366,6 +5366,8 @@ function quick_body_saju_right_move() {
 	   
 
     <table id="newCal" border="1"> 
+	<tr><td colspan="8" align="center">현재시간:&nbsp;<input type="text" name="txtTime" value="" size="10" style="text-align:center;" disabled></td></tr>
+	<tr><td colspan="8" id="newCalToday" align="center"></td></tr>
 	<tr><td colspan="8" align="center">
 		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalender();">
 		<input type="button" value="◁" onclick="changePrevMonth();getNewCalender();">
@@ -5376,8 +5378,8 @@ function quick_body_saju_right_move() {
 		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalender();"> 
 		</td>
 	</tr>
-    <tr><td colspan="8" id="newCalToday">&nbsp;<input type="text" name="txtTime" value="" size="7" style="text-align:center;" disabled></td></tr>
-    <tr><td align="center">일</td><td align="center">월</td><td align="center">화</td><td align="center">수</td><td align="center">목</td><td align="center">금</td><td align="center">토</td></tr>
+	
+	<tr><td align="center"><font color="red"><b>일</b></font></td><td align="center">월</td><td align="center">화</td><td align="center">수</td><td align="center">목</td><td align="center">금</td><td align="center"><font color="blue"><b>토</b></font></td></tr>
     <tr><td id="newCalTd_1">1</td><td id="newCalTd_2">2</td><td id="newCalTd_3">3</td><td id="newCalTd_4">4</td><td id="newCalTd_5">5</td><td id="newCalTd_6">6</td><td id="newCalTd_7">7</td></tr>
     <tr><td id="newCalTd_8">1</td><td id="newCalTd_9">2</td><td id="newCalTd_10">3</td><td id="newCalTd_11">4</td><td id="newCalTd_12">5</td><td id="newCalTd_13">6</td><td id="newCalTd_14">7</td></tr>
     <tr><td id="newCalTd_15">1</td><td id="newCalTd_16">2</td><td id="newCalTd_17">3</td><td id="newCalTd_18">4</td><td id="newCalTd_19">5</td><td id="newCalTd_20">6</td><td id="newCalTd_21">7</td></tr>
