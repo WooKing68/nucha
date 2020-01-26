@@ -2898,7 +2898,7 @@ function save_jum64_list() {
 
 	var idxResult64 = document.JuYeokForm.lstResult64.selectedIndex;
 
-	var txt_jum64 = date_time + document.JuYeokForm.txt_jum64.value;
+	var txt_jum64 = document.JuYeokForm.txt_jum64.value;
 	var jum64_list_len = document.JuYeokForm.jum64_list.length;
 	
 	var list_result64_selected_index = document.JuYeokForm.lstResult64.selectedIndex;
@@ -2906,14 +2906,19 @@ function save_jum64_list() {
 	
 	
 	//보여지는 것을 value라고 하자. 원래는 <option value=''>이지만...
-	var jum64_list_key = get_base64_list()[1] + " / " + txt_jum64;
-	var jum64_list_val = s_base64_list + "/" + s_byunhyo_list + "/" + s_ji64_list  + "/" + list_result64_selected_index + "/" + year_month_day_hour_12jiji;
+	//jum64_list_key:  (2020 .1 .26. 21:34) /震爲雷(11.29)/가나다라
+	//jum64_list_val:  (2020 .1 .26. 21:34) /001001/110001/111000/0/庚子丁丑戊辰癸亥/가나다라
+	var jum64_list_key = date_time + "/" + get_base64_list()[1] + "/" + txt_jum64;
+	
+	var jum64_list_val = date_time + "/" + s_base64_list + "/" + s_byunhyo_list + "/" + s_ji64_list  + "/" + list_result64_selected_index + "/" + year_month_day_hour_12jiji + "/" + txt_jum64;
 	document.JuYeokForm.jum64_list.options[jum64_list_len] = new Option(jum64_list_key, jum64_list_val);
 
+	//console.log("get_base64_list()[1]: " + get_base64_list()[1]);
+	//console.log("jum64_list_key: " + jum64_list_key);
+	//console.log("jum64_list_val: " + jum64_list_val);
+
 	document.JuYeokForm.jum64_list.selectedIndex = jum64_list_len;
-	document.JuYeokForm.txt_jum64.value = "";
-
-
+	//document.JuYeokForm.txt_jum64.value = "";
 	
 }
 
@@ -2923,15 +2928,18 @@ function get_jum64_list(aSelectedIndex) {
 
 	var s = document.JuYeokForm.jum64_list.options[aSelectedIndex].value;
 
-	//alert("기억된 정보: " + s);
+	//(2020 .1 .26. 21:40) /011100/000000/011100/0/庚子丁丑戊辰癸亥/ABCD
 	//console.log("기억된 정보: " + s);
 	
 
 	var s_list = s.split("/");
 
-	var s_base64_list = s_list[0];
-	var s_byunhyo_list = s_list[1];
-	var s_ji64_list = s_list[2];
+	var s_base64_list = s_list[1];
+	var s_byunhyo_list = s_list[2];
+	var s_ji64_list = s_list[3];
+
+	//목적사
+	document.JuYeokForm.txt_jum64.value = s_list[6];
 	
 
 	
@@ -2941,7 +2949,7 @@ function get_jum64_list(aSelectedIndex) {
 		g_ji64_list[i] = s_ji64_list[i]; //s[i+14]; 
 	}
 
-	var s_year_month_day_hour_12jiji = s_list[4];
+	var s_year_month_day_hour_12jiji = s_list[5];
 	//alert("s_year_month_day_hour_12jiji: " + s_year_month_day_hour_12jiji);
 
 	g_yyyy_mm_dd_hh["year"] = [s_year_month_day_hour_12jiji.charAt(0), s_year_month_day_hour_12jiji.charAt(1)];
@@ -2956,7 +2964,7 @@ function get_jum64_list(aSelectedIndex) {
 	show_new6hyo();
 
 
-	document.JuYeokForm.lstResult64.selectedIndex = s_list[3];
+	document.JuYeokForm.lstResult64.selectedIndex = s_list[4];
 	do64();
 
 	
@@ -9102,6 +9110,11 @@ function moveSaju() {
 
 
 		function analysisEdu4ju2juyeok() {
+			JuYeokForm.txt_jum64.value = "";
+			JuYeokForm.jum64_list.selectedIndex = 0;
+
+
+
 			var target_edu_JuyeokSaju_form = document.getElementById("EduJuyeokSajuForm");
 	
 			var idx_area = target_edu_JuyeokSaju_form.eduJuyeokSajuSelect.selectedIndex;
