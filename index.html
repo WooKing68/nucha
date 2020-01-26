@@ -1026,6 +1026,14 @@ function makeLunarToSolar(yyyy, mm, dd, aYunMonth) {
 }
 
 
+function makeSolarToLunar(yyyy, mm, dd) {
+    //var total_day = getTotalLunarDayFrom_1881_01_30(yyyy, mm, dd, aYunMonth);
+    //var nucha_number = getNuchaNumber(1881, 1, 29) + total_day;
+
+    return "";
+}
+
+
 </script>
 
 
@@ -2427,9 +2435,9 @@ function setNineStarTable(aTableName, aBoardArray) {
 				</select>지역 &nbsp;&nbsp;<br>
 		<!--담날 남중시각: &nbsp;<input type="text" name="LunarToSolarEOT" size="2" disabled>-->
 		<br>
-		<label><input type="radio" name="lunar_month_type" value="std" checked /> 평달</label>
+		<label><input type="radio" name="lunar_month_type" value="std" /> 평달</label>
         <label><input type="radio" name="lunar_month_type" value="yun" /> 윤달</label>
-        <label><input type="radio" name="lunar_month_type" value="what" /> 모름</label>
+        <label><input type="radio" name="lunar_month_type" value="what" checked /> 모름</label>
         
     </p>
 		<input type="button" value="음력 → 양력" onclick="changeLunarToSolar();" /> 
@@ -5835,9 +5843,6 @@ function quick_body_saju_right_move() {
 <tr><td><h1>박찬우 -그레고리력</h1></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h1>남중시각</h1></td></tr>
 <tr><td valign="top">
 <form name="newCalendarForm">
-	
-    
-	
 	   
 
     <table id="newCal" border="1"> 
