@@ -3261,8 +3261,13 @@ var g_6hyo_10skygan = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "
 //子丑寅卯 辰巳午未 申酉戌亥
 var g_6hyo_12jiji = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
 
-var g_6hyo_12jiji_5haeng = {
+var g_old6hyo_12jiji_5haeng = {
 	"子":"水", "丑":"土", "寅":"木", "卯":"木", "辰":"土", "巳":"火", "午":"火", "未":"土", "申":"金", "酉":"金", "戌":"土", "亥":"水"};
+
+
+//상화 [미술]을 [토]로 보지 않고 [화]로 본다.
+var g_new6hyo_12jiji_5haeng = {
+	"子":"水", "丑":"土", "寅":"木", "卯":"木", "辰":"土", "巳":"火", "午":"火", "未":"火", "申":"金", "酉":"金", "戌":"火", "亥":"水"};
 
 
 //사주 12운성...
@@ -3591,7 +3596,7 @@ function show_old6hyo() {
 	
 	for (var i=6;i>0;i--) {
 		var my_nabgab_jiji = my_nabgab.charAt(6-i); //위에서 부터 십신 붙여갈 것임.
-		var my_nabgab_5haeing = g_6hyo_12jiji_5haeng[my_nabgab_jiji];
+		var my_nabgab_5haeing = g_old6hyo_12jiji_5haeng[my_nabgab_jiji];
 		var my_nabgab_5haeing_index = std_5haeng.indexOf(my_nabgab_5haeing); 
 
 		var delta_5haeing_index = my_nabgab_5haeing_index - gung_5haeng_index;
@@ -3607,7 +3612,7 @@ function show_old6hyo() {
 	for (var i=6;i>0;i--) {
 		if (g_byunhyo_list[6-i]==1) { //변효 위치라면
 			var my_ji_nabgab_jiji = my_ji_nabgab.charAt(6-i); //위에서 부터 십신 붙여갈 것임.
-			var my_ji_nabgab_5haeing = g_6hyo_12jiji_5haeng[my_ji_nabgab_jiji];
+			var my_ji_nabgab_5haeing = g_old6hyo_12jiji_5haeng[my_ji_nabgab_jiji];
 			var my_ji_nabgab_5haeing_index = std_5haeng.indexOf(my_ji_nabgab_5haeing); 
 
 			var delta_ji_5haeing_index = my_ji_nabgab_5haeing_index - gung_5haeng_index;
@@ -3779,26 +3784,26 @@ function show_old6hyo() {
 	//임계일 : 현부터
 	//천간: 甲乙丙丁戊己庚辛壬癸
 	var day_sky_gan = my_day_list[0];
-	var my_old6_6u_start_index = -1;
+	var my_old6_6su_start_index = -1;
 
 	if ( "甲乙".indexOf(day_sky_gan) > -1 ) {
-		my_old6_6u_start_index = 0;
+		my_old6_6su_start_index = 0;
 	} else if ( "丙丁".indexOf(day_sky_gan) > -1 ) {
-		my_old6_6u_start_index = 1;
+		my_old6_6su_start_index = 1;
 	} else if ( "戊".indexOf(day_sky_gan) > -1 ) {
-		my_old6_6u_start_index = 2;
+		my_old6_6su_start_index = 2;
 	} else if ( "己".indexOf(day_sky_gan) > -1 ) {
-		my_old6_6u_start_index = 3;
+		my_old6_6su_start_index = 3;
 	} else if ( "庚辛".indexOf(day_sky_gan) > -1 ) {
-		my_old6_6u_start_index = 4;
+		my_old6_6su_start_index = 4;
 	} else if ( "壬癸".indexOf(day_sky_gan) > -1 ) {
-		my_old6_6u_start_index = 5;
+		my_old6_6su_start_index = 5;
 	}
 
 	for (var i=1;i<7;i++) {
-		var real_old6_6u_index = r(my_old6_6u_start_index + (i-1), 6);
-		var my_old6_6u = g_6hyo_6su_list[real_old6_6u_index];
-		document.getElementById("old6_6su_" + i).innerHTML="<font size='6' color='brown'>" + my_old6_6u + "</font>";
+		var real_old6_6su_index = r(my_old6_6su_start_index + (i-1), 6);
+		var my_old6_6su = g_6hyo_6su_list[real_old6_6su_index];
+		document.getElementById("old6_6su_" + i).innerHTML="<font size='6' color='brown'>" + my_old6_6su + "</font>";
 	}
 
 	//복신(伏神) 찾기...
@@ -4116,7 +4121,7 @@ function show_new6hyo() {
 	
 	for (var i=6;i>0;i--) {
 		var my_nabgab_jiji = my_nabgab.charAt(6-i); //위에서 부터 십신 붙여갈 것임.
-		var my_nabgab_5haeing = g_6hyo_12jiji_5haeng[my_nabgab_jiji];
+		var my_nabgab_5haeing = g_new6hyo_12jiji_5haeng[my_nabgab_jiji];
 		var my_nabgab_5haeing_index = std_5haeng.indexOf(my_nabgab_5haeing); 
 
 		var delta_5haeing_index = my_nabgab_5haeing_index - gung_5haeng_index;
@@ -4132,7 +4137,7 @@ function show_new6hyo() {
 	for (var i=6;i>0;i--) {
 		if (g_byunhyo_list[6-i]==1) { //변효 위치라면
 			var my_ji_nabgab_jiji = my_ji_nabgab.charAt(6-i); //위에서 부터 십신 붙여갈 것임.
-			var my_ji_nabgab_5haeing = g_6hyo_12jiji_5haeng[my_ji_nabgab_jiji];
+			var my_ji_nabgab_5haeing = g_new6hyo_12jiji_5haeng[my_ji_nabgab_jiji];
 			var my_ji_nabgab_5haeing_index = std_5haeng.indexOf(my_ji_nabgab_5haeing); 
 
 			var delta_ji_5haeing_index = my_ji_nabgab_5haeing_index - gung_5haeng_index;
@@ -4302,26 +4307,26 @@ function show_new6hyo() {
 	//임계일 : 현부터
 	//천간: 甲乙丙丁戊己庚辛壬癸
 	var day_sky_gan = my_day_list[0];
-	var my_new6_6u_start_index = -1;
+	var my_new6_6su_start_index = -1;
 
 	if ( "甲乙".indexOf(day_sky_gan) > -1 ) {
-		my_new6_6u_start_index = 0;
+		my_new6_6su_start_index = 0;
 	} else if ( "丙丁".indexOf(day_sky_gan) > -1 ) {
-		my_new6_6u_start_index = 1;
+		my_new6_6su_start_index = 1;
 	} else if ( "戊".indexOf(day_sky_gan) > -1 ) {
-		my_new6_6u_start_index = 2;
+		my_new6_6su_start_index = 2;
 	} else if ( "己".indexOf(day_sky_gan) > -1 ) {
-		my_new6_6u_start_index = 3;
+		my_new6_6su_start_index = 3;
 	} else if ( "庚辛".indexOf(day_sky_gan) > -1 ) {
-		my_new6_6u_start_index = 4;
+		my_new6_6su_start_index = 4;
 	} else if ( "壬癸".indexOf(day_sky_gan) > -1 ) {
-		my_new6_6u_start_index = 5;
+		my_new6_6su_start_index = 5;
 	}
 
 	for (var i=1;i<7;i++) {
-		var real_new6_6u_index = r(my_new6_6u_start_index + (i-1), 6);
-		var my_new6_6u = g_6hyo_6su_list[real_new6_6u_index];
-		document.getElementById("new6_6su_" + i).innerHTML="<font size='6' color='brown'>" + my_new6_6u + "</font>";
+		var real_new6_6su_index = r(my_new6_6su_start_index + (i-1), 6);
+		var my_new6_6su = g_6hyo_6su_list[real_new6_6su_index];
+		document.getElementById("new6_6su_" + i).innerHTML="<font size='6' color='brown'>" + my_new6_6su + "</font>";
 	}
 
 	//복신(伏神) 찾기...
@@ -4646,12 +4651,12 @@ function get_old6_10sin(std_jiji_5haeing, what_jiji) {
 
 	var std_5haeng = "木火土金水";
 
-	//var std_jiji_5haeing = g_6hyo_12jiji_5haeng[std_jiji];
+	//var std_jiji_5haeing = g_old6hyo_12jiji_5haeng[std_jiji];
 
 	var len = what_jiji.length;
 	for (var i=0;i<len;i++) {
 		var each_jiji_char = what_jiji.charAt(i);
-		var each_jiji_char_5heang = g_6hyo_12jiji_5haeng[each_jiji_char];
+		var each_jiji_char_5heang = g_old6hyo_12jiji_5haeng[each_jiji_char];
 
 		var std_jiji_5haeing_index = std_5haeng.indexOf(std_jiji_5haeing);
 		var each_jiji_char_5heang_index = std_5haeng.indexOf(each_jiji_char_5heang);
@@ -4674,12 +4679,12 @@ function get_new6_10sin(std_jiji_5haeing, what_jiji) {
 
 	var std_5haeng = "木火土金水";
 
-	//var std_jiji_5haeing = g_6hyo_12jiji_5haeng[std_jiji];
+	//var std_jiji_5haeing = g_new6hyo_12jiji_5haeng[std_jiji];
 
 	var len = what_jiji.length;
 	for (var i=0;i<len;i++) {
 		var each_jiji_char = what_jiji.charAt(i);
-		var each_jiji_char_5heang = g_6hyo_12jiji_5haeng[each_jiji_char];
+		var each_jiji_char_5heang = g_new6hyo_12jiji_5haeng[each_jiji_char];
 
 		var std_jiji_5haeing_index = std_5haeng.indexOf(std_jiji_5haeing);
 		var each_jiji_char_5heang_index = std_5haeng.indexOf(each_jiji_char_5heang);
@@ -5366,8 +5371,7 @@ function quick_body_saju_right_move() {
 	   
 
     <table id="newCal" border="1"> 
-	<tr><td colspan="8" align="center">현재시간:&nbsp;<input type="text" name="txtTime" value="" size="10" style="text-align:center;" disabled></td></tr>
-	<tr><td colspan="8" id="newCalToday" align="center"></td></tr>
+	
 	<tr><td colspan="8" align="center">
 		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalender();">
 		<input type="button" value="◁" onclick="changePrevMonth();getNewCalender();">
@@ -5386,7 +5390,9 @@ function quick_body_saju_right_move() {
     <tr><td id="newCalTd_22">1</td><td id="newCalTd_23">2</td><td id="newCalTd_24">3</td><td id="newCalTd_25">4</td><td id="newCalTd_26">5</td><td id="newCalTd_27">6</td><td id="newCalTd_28">7</td></tr>
     <tr><td id="newCalTd_29">1</td><td id="newCalTd_30">2</td><td id="newCalTd_31">3</td><td id="newCalTd_32">4</td><td id="newCalTd_33">5</td><td id="newCalTd_34">6</td><td id="newCalTd_35">7</td></tr>
     <tr><td id="newCalTd_36">1</td><td id="newCalTd_37">2</td><td id="newCalTd_38">3</td><td id="newCalTd_39">4</td><td id="newCalTd_40">5</td><td id="newCalTd_41">6</td><td id="newCalTd_42">7</td></tr>
-    </table><br>
+	<tr><td colspan="8" align="center">현재시간:&nbsp;<input type="text" name="txtTime" value="" size="10" style="text-align:center;" disabled></td></tr>
+	<tr><td colspan="8" id="newCalToday" align="center"></td></tr>
+	</table><br>
 *** [연도], [월] 버튼을 클릭 -> 빠른 이동
 <br>
 (기능 사용을 요구하면 허용 후 재시도)
@@ -9357,7 +9363,7 @@ function moveSaju() {
 			<table border="1">
 				<tr><td>본괘</td><td id="old6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지괘</td><td id="old6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td id="old6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
 				<tr><td></td><td></td><td></td><td></td><td id="old6_year" align="center"></td><td id="old6_month" align="center" bgcolor="#000FF">6열</td><td></td><td  id="old6_day" align="center" bgcolor="#FF0000">일</td><td id="old6_hour" align="center">시</td><td></td><td></td><td></td><td></td><!--td>14열</td--></tr>
-				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td align="center">육수: 일간 기준</td></tr>
 				<tr><td id="old6_ji_10sin_6" align="center">1열</td><td id="old6_ji_nabgab_6" align="center">2열</td><td id="old6_ji_chungpa_6">3열</td><td id="old6_10sin_6" align="center">4열</td><td id="old6_nabgab_6" align="center" >5열</td><td id="old6_chungpa_6">6열</td><td id='old6hyo_6' align="center">7열</td><td id="old6hyo_seung_6">8열</td><td id="old6_sinmyeong_6">9열</td><td id="old6_boksin_char_6" align="center">10열</td><td id="old6_bok_10sin_6" align="center">11열</td><td id="old6_bok_nabgab_6" align="center">12열</td><td id="old6_bok_chungpa_6">13열</td><td id="old6_6su_6" align="center">14열</td></tr>
 				<tr><td id="old6_ji_10sin_5" align="center">1열</td><td id="old6_ji_nabgab_5" align="center">2열</td><td id="old6_ji_chungpa_5">3열</td><td id="old6_10sin_5" align="center">4열</td><td id="old6_nabgab_5" align="center" >5열</td><td id="old6_chungpa_5">6열</td><td id='old6hyo_5' align="center">7열</td><td id="old6hyo_seung_5">8열</td><td id="old6_sinmyeong_5">9열</td><td id="old6_boksin_char_5" align="center">10열</td><td id="old6_bok_10sin_5" align="center">11열</td><td id="old6_bok_nabgab_5" align="center">12열</td><td id="old6_bok_chungpa_5">13열</td><td id="old6_6su_5" align="center">14열</td></tr>
 				<tr><td id="old6_ji_10sin_4" align="center">1열</td><td id="old6_ji_nabgab_4" align="center">2열</td><td id="old6_ji_chungpa_4">3열</td><td id="old6_10sin_4" align="center">4열</td><td id="old6_nabgab_4" align="center" >5열</td><td id="old6_chungpa_4">6열</td><td id='old6hyo_4' align="center">7열</td><td id="old6hyo_seung_4">8열</td><td id="old6_sinmyeong_4">9열</td><td id="old6_boksin_char_4" align="center">10열</td><td id="old6_bok_10sin_4" align="center">11열</td><td id="old6_bok_nabgab_4" align="center">12열</td><td id="old6_bok_chungpa_4">13열</td><td id="old6_6su_4" align="center">14열</td></tr>
@@ -9366,7 +9372,7 @@ function moveSaju() {
 				<tr><td id="old6_ji_10sin_2" align="center">1열</td><td id="old6_ji_nabgab_2" align="center">2열</td><td id="old6_ji_chungpa_2">3열</td><td id="old6_10sin_2" align="center">4열</td><td id="old6_nabgab_2" align="center" >5열</td><td  id="old6_chungpa_2">6열</td><td id='old6hyo_2' align="center">7열</td><td id="old6hyo_seung_2">8열</td><td id="old6_sinmyeong_2">9열</td><td id="old6_boksin_char_2" align="center">10열</td><td id="old6_bok_10sin_2" align="center">11열</td><td id="old6_bok_nabgab_2" align="center">12열</td><td id="old6_bok_chungpa_2">13열</td><td id="old6_6su_2" align="center">14열</td></tr>
 				<tr><td id="old6_ji_10sin_1" align="center">1열</td><td id="old6_ji_nabgab_1" align="center">2열</td><td id="old6_ji_chungpa_1">3열</td><td id="old6_10sin_1" align="center">4열</td><td id="old6_nabgab_1" align="center" >5열</td><td  id="old6_chungpa_1">6열</td><td id='old6hyo_1' align="center">7열</td><td id="old6hyo_seung_1">8열</td><td id="old6_sinmyeong_1">9열</td><td id="old6_boksin_char_1" align="center">10열</td><td id="old6_bok_10sin_1" align="center">11열</td><td id="old6_bok_nabgab_1" align="center">12열</td><td id="old6_bok_chungpa_1">13열</td><td id="old6_6su_1" align="center">14열</td></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="old6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="old6_gong_mang" align="center"></td><td id="old6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="old6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="old6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="old6_gong_mang" align="center"></td><td id="old6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="old6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td align="center"><font color='blue'>未戌: 오행 土</font></td></tr>
 			</table>
 		</td>
 		<td>&nbsp;&nbsp;&nbsp;</td>
@@ -9374,7 +9380,7 @@ function moveSaju() {
 			<table border="1">
 				<tr><td>본괘</td><td id="new6_bon" align="center" colspan="2" bgcolor="#0000FF"></td><td align="center">지괘</td><td id="new6_ji" align="center" colspan="2" bgcolor="#FF0000"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td id="new6_gung_name" rowspan="2" align="center" bgcolor="#000000">14열</td></tr>
 				<tr><td></td><td></td><td></td><td></td><td id="new6_year" align="center"></td><td id="new6_month" align="center" bgcolor="#000FF">6열</td><td></td><td  id="new6_day" align="center" bgcolor="#FF0000">일</td><td id="new6_hour" align="center">시</td><td></td><td></td><td></td><td></td><!--td>14열</td--></tr>
-				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td align="center" ><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td align="center">육수: 일간 기준</td></tr>
 				<tr><td id="new6_ji_10sin_6" align="center">1열</td><td id="new6_ji_nabgab_6" align="center">2열</td><td id="new6_ji_chungpa_6">3열</td><td id="new6_10sin_6" align="center">4열</td><td id="new6_nabgab_6" align="center" >5열</td><td id="new6_chungpa_6">6열</td><td id='new6hyo_6' align="center">7열</td><td id="new6hyo_seung_6">8열</td><td id="new6_sinmyeong_6">9열</td><td id="new6_boksin_char_6" align="center">10열</td><td id="new6_bok_10sin_6" align="center">11열</td><td id="new6_bok_nabgab_6" align="center">12열</td><td id="new6_bok_chungpa_6">13열</td><td id="new6_6su_6" align="center">14열</td></tr>
 				<tr><td id="new6_ji_10sin_5" align="center">1열</td><td id="new6_ji_nabgab_5" align="center">2열</td><td id="new6_ji_chungpa_5">3열</td><td id="new6_10sin_5" align="center">4열</td><td id="new6_nabgab_5" align="center" >5열</td><td id="new6_chungpa_5">6열</td><td id='new6hyo_5' align="center">7열</td><td id="new6hyo_seung_5">8열</td><td id="new6_sinmyeong_5">9열</td><td id="new6_boksin_char_5" align="center">10열</td><td id="new6_bok_10sin_5" align="center">11열</td><td id="new6_bok_nabgab_5" align="center">12열</td><td id="new6_bok_chungpa_5">13열</td><td id="new6_6su_5" align="center">14열</td></tr>
 				<tr><td id="new6_ji_10sin_4" align="center">1열</td><td id="new6_ji_nabgab_4" align="center">2열</td><td id="new6_ji_chungpa_4">3열</td><td id="new6_10sin_4" align="center">4열</td><td id="new6_nabgab_4" align="center" >5열</td><td id="new6_chungpa_4">6열</td><td id='new6hyo_4' align="center">7열</td><td id="new6hyo_seung_4">8열</td><td id="new6_sinmyeong_4">9열</td><td id="new6_boksin_char_4" align="center">10열</td><td id="new6_bok_10sin_4" align="center">11열</td><td id="new6_bok_nabgab_4" align="center">12열</td><td id="new6_bok_chungpa_4">13열</td><td id="new6_6su_4" align="center">14열</td></tr>
@@ -9383,7 +9389,7 @@ function moveSaju() {
 				<tr><td id="new6_ji_10sin_2" align="center">1열</td><td id="new6_ji_nabgab_2" align="center">2열</td><td id="new6_ji_chungpa_2">3열</td><td id="new6_10sin_2" align="center">4열</td><td id="new6_nabgab_2" align="center" >5열</td><td  id="new6_chungpa_2">6열</td><td id='new6hyo_2' align="center">7열</td><td id="new6hyo_seung_2">8열</td><td id="new6_sinmyeong_2">9열</td><td id="new6_boksin_char_2" align="center">10열</td><td id="new6_bok_10sin_2" align="center">11열</td><td id="new6_bok_nabgab_2" align="center">12열</td><td id="new6_bok_chungpa_2">13열</td><td id="new6_6su_2" align="center">14열</td></tr>
 				<tr><td id="new6_ji_10sin_1" align="center">1열</td><td id="new6_ji_nabgab_1" align="center">2열</td><td id="new6_ji_chungpa_1">3열</td><td id="new6_10sin_1" align="center">4열</td><td id="new6_nabgab_1" align="center" >5열</td><td  id="new6_chungpa_1">6열</td><td id='new6hyo_1' align="center">7열</td><td id="new6hyo_seung_1">8열</td><td id="new6_sinmyeong_1">9열</td><td id="new6_boksin_char_1" align="center">10열</td><td id="new6_bok_10sin_1" align="center">11열</td><td id="new6_bok_nabgab_1" align="center">12열</td><td id="new6_bok_chungpa_1">13열</td><td id="new6_6su_1" align="center">14열</td></tr>
 				<tr><td>&nbsp;</td><td></td><td></td><td></td><td align="center" ></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="new6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="new6_gong_mang" align="center"></td><td id="new6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="new6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr><td align="center" bgcolor="#0000FF"><font size="4" color="white">괘신</font></td><td id="new6_ge_sin" align="center"></td><td align="center" bgcolor="#000000"><font size="4" color="white">일공망</font></td><td id="new6_gong_mang" align="center"></td><td id="new6_chung_hap_hon" align="center" bgcolor="#FF0000"></td><td id="new6_bokum_banum" align="center" bgcolor="#0000FF"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td align="center"><font color='red'>未戌: 오행 火</font></td></tr>
 			</table>
 		</td>
 	</tr>
