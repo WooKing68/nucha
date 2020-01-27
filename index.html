@@ -2,93 +2,53 @@
 <html lang="ko">
  <head>
 	<title> 육효 </title>
-  <meta charset="UTF-8">
-  <meta name="Generator" content="Visual Studio Code">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="Author" content="">
-  <meta name="Keywords" content="구성, 주역, 사주, 체질">
-  <meta name="Description" content="구성, 주역, 사주, 체질">
+	<meta charset="UTF-8">
+	<meta name="Generator" content="Visual Studio Code">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="Author" content="">
+	<meta name="Keywords" content="구성, 주역, 사주, 체질">
+	<meta name="Description" content="구성, 주역, 사주, 체질">
 
-  <SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
+	<SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
   
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.navbar {
-    overflow: hidden;
-    background-color: #333;
-    font-family: Arial, Helvetica, sans-serif;
-}
+	<style>
+		/**
+		To create a fixed top menu, use position:fixed and top:0. 
+		Note that the fixed menu will overlay your other content. 
+		To fix this, add a margin-top (to the content) that is equal or larger than the height of your menu.
+		*/
+		
+		/* The navigation bar */
+		.navbar {
+		overflow: hidden;
+		background-color: #333;
+		position: fixed; /* Set the navbar to fixed position */
+		top: 0; /* Position the navbar at the top of the page */
+		width: 100%; /* Full width */
+		}
 
-.navbar a {
-    float: left;
-    font-size: 16px;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
+		/* Links inside the navbar */
+		.navbar a {
+		float: left;
+		display: block;
+		color: #f2f2f2;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+		}
 
-.dropdown {
-    float: left;
-    overflow: hidden;
-}
+		/* Change background on mouse-over */
+		.navbar a:hover {
+		background: #ddd;
+		color: black;
+		}
 
-.dropdown .dropbtn {
-    font-size: 16px;    
-    border: none;
-    outline: none;
-    color: white;
-    padding: 14px 16px;
-    background-color: inherit;
-    font-family: inherit;
-    margin: 0;
-}
-
-.navbar a:hover, .dropdown:hover .dropbtn {
-    background-color: red;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.dropdown-content a {
-    float: none;
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-}
-
-.dropdown-content a:hover {
-    background-color: #ddd;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-
-.content {
-  padding: 16px;
-}
-
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-.sticky + .content {
-  padding-top: 60px;
-}
+		/* Main content */
+		.main {
+		margin-top: 30px; /* Add a top margin to avoid content overlay */
+		}
 </style>
 
 
@@ -811,36 +771,52 @@
         while (s.length < (size || 2)) {s = "0" + s;}
         return s;
     }
+	
+	//x가 a~b 사이에 있으면 y를 리턴
+	//x가 a~b 사이에 없으면 0을 리턴
+	function omega(a, x, b, y) {
+		var my_result = 0;
+
+		if (a<=x && x<=b) {
+			my_result = y;
+		}
+		else {
+			my_result = 0;
+		}
+
+		return my_result;
+	}
 
     //자연수 aNuchaNumber에 대응하는 서기 년월일 "2020.01.27"을 반환함
     function getYYYYMMDD(aNuchaNumber) {
         var my_result = "";
 
-        var my_year = q(aNuchaNumber, 365);
-        if (my_year==0) my_year = 1;
+		var my_fraction = 365.0 + 1.0/4.0 - 1.0/100.0 + 1.0/400.0;
 
-        //윤일이 지나치게 많이 반영되어 있을 수 있음.
-        if (getNuchaNumber(my_year, 12, 31) > aNuchaNumber) my_year -= 2;
+		var my_test_year = Math.ceil(aNuchaNumber/my_fraction);
 
-        
-        
-        if (getNuchaNumber(my_year, 12, 31) < aNuchaNumber && aNuchaNumber <= getNuchaNumber(my_year+1, 12, 31)) {
-            my_year += 1;
-        }
-        else if (getNuchaNumber(my_year+1, 12, 31) < aNuchaNumber && aNuchaNumber <= getNuchaNumber(my_year+2, 12, 31)) {
-            my_year += 2;
-        }
-        else if (getNuchaNumber(my_year+2, 12, 31) < aNuchaNumber && aNuchaNumber <= getNuchaNumber(my_year+3, 12, 31)) {
-            my_year += 3;
-        }
-        else if (getNuchaNumber(my_year+3, 12, 31) < aNuchaNumber && aNuchaNumber <= getNuchaNumber(my_year+4, 12, 31)) {
-            my_year += 4;
-        }
-        else if (getNuchaNumber(my_year+4, 12, 31) < aNuchaNumber && aNuchaNumber <= getNuchaNumber(my_year+5, 12, 31)) {
-            my_year += 5;
-        }
+		//세 가지 가능한 경우
+		var my_year_m1 = my_test_year - 1;
+		var my_year_z0 = my_test_year;
+		var my_year_p1 = my_test_year + 1;
 
-        
+		var my_year = 0;
+		//my_year 결정: 방법 1
+		if (getNuchaNumber(my_year_m1, 1, 1)<=aNuchaNumber && aNuchaNumber<=getNuchaNumber(my_year_m1, 12, 31)) {
+			my_year = my_year_m1;
+		}
+		else if (getNuchaNumber(my_year_z0, 1, 1)<=aNuchaNumber && aNuchaNumber<=getNuchaNumber(my_year_z0, 12, 31)) {
+			my_year = my_year_z0;
+		}
+		else if (getNuchaNumber(my_year_p1, 1, 1)<=aNuchaNumber && aNuchaNumber<=getNuchaNumber(my_year_p1, 12, 31)) {
+			my_year = my_year_p1;
+		}
+
+		//my_year 결정: 방법 2 (연도 공식)
+		//for (var k=-1;k<=1;k++) {
+		//	my_year += omega(getNuchaNumber(my_test_year+k, 1, 1), aNuchaNumber, getNuchaNumber(my_test_year+k, 12, 31), my_test_year+k);
+		//}
+
 
         var dd_list = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -868,7 +844,7 @@ function getTotalYearDayFromLunar(yyyy) {
     var total_day = 0;
     for (var i=0;i<13;i++) {
         var my_month_digital_num = my_lunar_year_data.charAt(i);
-        if (my_month_digital_num != 0) {
+        if (my_month_digital_num != 0) { //만년 데이타 마지막 정보가 0이면 계산 안함.
             total_day += 29 + r(parseInt(my_month_digital_num) + 1 , 2); //만년 데이타가 짝수이면 30일
         }
     }
@@ -2390,23 +2366,85 @@ function setNineStarTable(aTableName, aBoardArray) {
 			target_lunar2solar_form.TextMyYunSolar.value = "없음";
 		}
 	}
+
+	function controlStaticMenu() {
+
+		var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+		var my_vertical_scroll = window.pageYOffset;
+
+		var my_speed_menu = document.getElementById('STATICMENU');
+		if (my_speed_menu.style.visibility === 'hidden') {
+			my_speed_menu.style.visibility = 'visible';
+		} else {
+			my_speed_menu.style.visibility = 'hidden';
+		}
+
+		//document.body.scrollLeft
+		//document.body.scrollTop
+	}
+
+	function getScrollTop() {
+		var scrollTop;
+		if(typeof(window.pageYOffset) == 'number')
+		{
+			// DOM compliant, IE9+
+			scrollTop = window.pageYOffset;
+		}
+		else
+		{
+			// IE6-8 workaround
+			if(document.body && document.body.scrollTop)
+			{
+				// IE quirks mode
+				scrollTop = document.body.scrollTop;
+			}
+			else if(document.documentElement && document.documentElement.scrollTop)
+			{
+				// IE6+ standards compliant mode
+				scrollTop = document.documentElement.scrollTop;
+			}
+		}
+		return scrollTop;
+	}
+ 
+	function getScrollLeft() {
+		
+		var scrollLeft;
+		if(typeof(window.pageXOffset) == 'number')
+		{
+			// DOM compliant, IE9+
+			scrollLeft = window.pageXOffset;
+		}
+		else
+		{
+			// IE6-8 workaround
+			if(document.body && document.body.scrollLeft)
+			{
+				// IE quirks mode
+				scrollLeft = document.body.scrollLeft;
+			}
+			else if(document.documentElement && document.documentElement.scrollLeft)
+			{
+				// IE6+ standards compliant mode
+				scrollLeft = document.documentElement.scrollLeft;
+			}
+		}
+		return scrollLeft;
+	}
 </script>
 
-<div class="navbar" id="navbar">
-	<a href="#home">동양철학의 메카</a>
-	<a href="#news">뉴스</a>
-	<div class="dropdown">
-	  <button class="dropbtn">메뉴선택 
-		<i class="fa fa-caret-down"></i>
-	  </button>
-	  <div class="dropdown-content">
-		<a href="#menu_saju8body">체질사주</a>
-		<a href="#menu_6hyo">육효주역</a>
-		<a href="#">...</a>
-	  </div>
-	</div> 
-  </div>
-  <br><br><br><br>
+
+<div class="navbar">
+	<a href="#home">Home</a>
+	<a href="#info">동양철학의 메카</a>
+	<a href="#news">최신뉴스</a>
+	<a href="" onclick="controlStaticMenu();">빠른메뉴</a>
+	<a href="#contact">Contact</a>
+</div>
+  
+  
 
 <div id="STATICMENU">
 	<br><br><br>
