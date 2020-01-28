@@ -2530,7 +2530,7 @@ function setNineStarTable(aTableName, aBoardArray) {
 </head>
 
  <body id="NSN" onload="InitializeDynamicMenu();showTime();">
-
+<div id="menu_home"></div>
 <script>
 	function changeLunarToSolar() {
 		var target_lunar2solar_form = document.getElementById("LunarToSolarForm");
@@ -2770,7 +2770,7 @@ function setNineStarTable(aTableName, aBoardArray) {
 
 
 <div class="navbar">
-	<a href="#home">Home</a>
+	<a href="#menu_home">Home</a>
 	<a href="#info">동양철학의 메카</a>
 	<a href="#menu_cal8body">역학달력</a>
 	<a href="#menu_monthun9sung">구성월운</a>
@@ -6684,7 +6684,7 @@ The <b>greatest error:</b><br>
 	<table border=1>
 		<tr>
 			<td align=center colspan=4 id="id_type8_name"><h1>홍길동(洪吉同)</h1>ㅎㅗㅇㄱㅣㄹㄷㅗㅇ</td>
-			<td valign=top align=center>작명 리스트<br><select id="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();"></select></td>
+			<td valign=top align=center>작명 리스트<br><select id="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();" ondblclick="popup_win('./hanja_search.html');"></select></td>
 		</tr>
 		<tr>
 			<td align=center></td><td align=center>성씨(L)</td><td align=center>가운데 이름(F1)</td><td align=center>끝 이름(F2)</td><td align=center>비고</td>
@@ -6756,7 +6756,11 @@ The <b>greatest error:</b><br>
 		//return false;
 	}
 	
-	function comSearchHanja(bSave, a_name_sex_meaning, a_name_sex_sound, a_name_sex_sound2, a_name_sex_num, a_name1_meaning, a_name1_sound, a_name1_sound2, a_name1_num, a_name2_meaning, a_name2_sound, a_name2_sound2, a_name2_num) {
+	var NAMING_SEARCH = 0;
+	var NAMING_SAVE = 1;
+	var NAMING_UPDATE = 2;
+	//aWorkMenu: [NAMING_SHOW, NAMING_SAVE, NAMING_UPDATE]
+	function comSearchHanja(aWorkMenu, a_name_sex_meaning, a_name_sex_sound, a_name_sex_sound2, a_name_sex_num, a_name1_meaning, a_name1_sound, a_name1_sound2, a_name1_num, a_name2_meaning, a_name2_sound, a_name2_sound2, a_name2_num) {
 		
 		if (a_name_sex_meaning=="" && a_name1_meaning=="" && a_name2_meaning=="") {return;}
 
@@ -6799,7 +6803,7 @@ The <b>greatest error:</b><br>
 		
 		
 		//추가저장하기
-		if (bSave) {
+		if (aWorkMenu==NAMING_SAVE) {
 			var id_save_name_list_len = Type8NameForm.id_save_name_list.length;
 
 			var customer_name_key = my_split(name_sex_sound, "/") + my_split(name1_sound, "/") + my_split(name2_sound, "/") 
@@ -6811,7 +6815,7 @@ The <b>greatest error:</b><br>
 			Type8NameForm.id_save_name_list.options[id_save_name_list_len] = new Option(customer_name_key, customer_name_val);
 			Type8NameForm.id_save_name_list.selectedIndex = id_save_name_list_len;
 		}
-		else { //변경하기
+		else if (aWorkMenu==NAMING_UPDATE) { //변경하기
 			var sel_idx = Type8NameForm.id_save_name_list.selectedIndex;
 
 			var customer_name_key = my_split(name_sex_sound, "/") + my_split(name1_sound, "/") + my_split(name2_sound, "/") 
@@ -6821,8 +6825,16 @@ The <b>greatest error:</b><br>
 								  + name2_meaning + "~" + name2_sound + "~" + name2_sound2 + "~" + name2_num;
 			
 			Type8NameForm.id_save_name_list.options[sel_idx].value = customer_name_val;
-			Type8NameForm.id_save_name_list.options[sel_idx].label = customer_name_key;
+			Type8NameForm.id_save_name_list.options[sel_idx].text = customer_name_key; //.label을 .text로 변경
+
+			////선택상자의 정보도 갱신해야 함.
+			//var my_selected_index = document.getElementById("id_save_name_list").selectedIndex;
+			//var my_option = document.getElementById("id_save_name_list").options[my_selected_index];
+			////value:KEY and text:VALUE property
+			//my_option.text = "박찬우";
 			
+		}
+		else if (aWorkMenu==NAMING_SEARCH) {
 		}
 		
 		document.getElementById("id_type8_name").innerHTML = customer_name;
