@@ -2898,7 +2898,8 @@ function setNewCalender() {
     //yyyy년 mm월 1일의 요일(0:일요일~6:토요일)
     var FIRST_DAY_OF_WEEK = r(thisNuchaNumber, 7);
 
-	var um_nucha_number = getNuchaNumber(1881, 1, 30);
+	var um_start_nucha_number = getNuchaNumber(1881, 1, 30);
+	var um_end_nucha_number = getNuchaNumber(2050, 11, 30);
 
     for (var j=1; j<=42; j++) {
         document.getElementById('newCalTd_' + j).innerHTML = "";
@@ -2908,7 +2909,7 @@ function setNewCalender() {
     for (var j=1; j<=totalDD; j++) {
 		//음력 정보는 양력 1881년 1월 30일부터 제공한다.
 		var lunar_info = "";
-		if (getNuchaNumber(yyyy, mm, j) >= um_nucha_number) {
+		if ( (um_start_nucha_number <= getNuchaNumber(yyyy, mm, j)) && (getNuchaNumber(yyyy, mm, j) <= um_end_nucha_number) ) {
 			var tmp_lunar_info = makeSolarToLunar(yyyy, mm, j); //2020.윤04.01
 			lunar_info = `(${tmp_lunar_info.substr(5, tmp_lunar_info.length - 5)})`;
 		}
@@ -2952,15 +2953,18 @@ function getNewCalender() {
 
 function changeYear() {
     var yyyy = prompt("원하는 '연도'를 입력하시오", "");
-    if (yyyy != null) {
+	
+    if (yyyy != null && yyyy.trim() != "") {
         newCalendarForm.newCalYear.value = yyyy;
+		getNewCalender();
     }
 }
 
 function changeMonth() {
     var mm = prompt("원하는 '월'를 입력하시오", "");
-    if (mm != null) {
+    if (mm != null && mm.trim() != "") {
         newCalendarForm.newCalMonth.value = (r(mm, 12)==0) ? 12: r(mm, 12);
+		getNewCalender();
     }
 }
 
@@ -6261,8 +6265,8 @@ function quick_body_saju_right_move() {
 		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalender();">
 		<input type="button" value="◁" onclick="changePrevMonth();getNewCalender();">
 		
-		<input type="button" name="newCalYear" value="" onclick="changeYear();getNewCalender();">년&nbsp;
-		<input type="button" name="newCalMonth" value="" onclick="changeMonth();getNewCalender();">월
+		<input type="button" name="newCalYear" value="" onclick="changeYear();">년&nbsp;
+		<input type="button" name="newCalMonth" value="" onclick="changeMonth();">월
 		<input type="button" value="▷" onclick="changeNextMonth();getNewCalender();">
 		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalender();"> 
 		</td>
