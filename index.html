@@ -2831,10 +2831,11 @@ function setNineStarTable(aTableName, aBoardArray) {
 
 
 <script>
+	/**
 window.onscroll = function() {myFunction()};
 
 var navbar = document.getElementById("navbar");
-var sticky = navbar.offsetTop;
+var sticky = 0; navbar.offsetTop;
 
 function myFunction() {
   if (window.pageYOffset >= sticky) {
@@ -2843,6 +2844,7 @@ function myFunction() {
     navbar.classList.remove("sticky");
   }
 }
+*/
 </script>
 
 <div id="menu_cal8body"></div>
@@ -2918,7 +2920,7 @@ function setNewCalender() {
 		}
 		
 
-		var sky_jiji_info = get60GapJaDay(year, month, j);
+		var sky_jiji_info = get60GapJaDay(yyyy, mm, j);
         if (r(j+FIRST_DAY_OF_WEEK,7)==0) {
 			//토요일이면...
             document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='blue'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji_info;
@@ -5825,19 +5827,7 @@ var target_body_type_table = null;
 
 </script>
 
-<script language="JavaScript">
-	var today = new Date();
 
-	var year = today.getFullYear();
-	var month = today.getMonth() + 1;
-	var day = today.getDate();
-
-	var myYMD = getNuchaNumber(year, month, day);
-	var my20130621 = getNuchaNumber(2013, 6, 21);
-	var my1987 = 1987 - (myYMD  - my20130621 +1);
-
-	formSinDay.txtSinDay.value = "2013년 06월 21일부터 오늘까지 (" + commaFormat(myYMD  - my20130621 + 1) + ")번 째 날입니다. 1987번째 날까지 " + my1987 + "일 남았습니다.";
-</script>
 
 <script language="JavaScript">
 /**
@@ -10967,6 +10957,21 @@ function doTest() {
 </script>
 
 <form name="formSinDay"><input type="text" name="txtSinDay" disabled size="80" align="right"></form>
+
+<script language="JavaScript">
+	var today = new Date();
+
+	var year = today.getFullYear();
+	var month = today.getMonth() + 1;
+	var day = today.getDate();
+
+	var myYMD = getNuchaNumber(year, month, day);
+	var my20130621 = getNuchaNumber(2013, 6, 21);
+	var my1987 = 1987 - (myYMD  - my20130621 +1);
+
+	formSinDay.txtSinDay.value = "2013년 06월 21일부터 오늘까지 (" + commaFormat(myYMD  - my20130621 + 1) + ")번 째 날입니다. 1987번째 날까지 " + my1987 + "일 남았습니다.";
+</script>
+
 
 </body>
 </html>
