@@ -930,7 +930,6 @@
 		2050:384
 	};
 
-
     //서기 년도 yyyy는 윤년인가?
     function isLeapYear(yyyy) {
         var my_num = (q(yyyy, 4) - q(yyyy - 1, 4)) - (q(yyyy, 100) - q(yyyy - 1, 100)) + (q(yyyy, 400) - q(yyyy - 1, 400));
@@ -1164,66 +1163,58 @@ function getTotalLunarDayFrom_1881_01_30(yyyy, mm, dd, aYunMonth) {
 }
 
 //음력(1881.1.1)을 첫번째 날로 해서 음력 총일수 um_total_day는 "몇년 몇월 몇일(평달 혹은 윤달)" 정보를 리턴
-function getYYYYMMDD_Yun(um_total_day) {
+function getYYYYMMDD_Lunar(um_total_day) {
 	var year_info = "";
 	var month_info = "";
 	var day_info = "";
 
 	var rest_day = um_total_day;
 
-	var tmp_year_total_day_minus = um_total_day;
-	var tmp_year_total_day = 0;
-	var my_year = 1880;
+	
+	var my_year = 1881;
+	do {
+		var tmp = rest_day;
+		rest_day -= g_lunar_year_day_data[my_year];
 
-	//um_total_day에서 각 연도의 총일수를 계속 빼면서 0 이하가 될 때까지 뺀다
-	//실제로 0 이하가 나타나는 순간의 연도가 찾는 연도이다.
-	while (tmp_year_total_day_minus > 0) {
-		tmp_year_total_day_minus -= g_lunar_year_day_data[my_year + 1];
-		
-		my_year++;
-
-		if (my_year > 1881) {
-			tmp_year_total_day += g_lunar_year_day_data[my_year - 1]; //이전 연도까지 총일수
+		if (rest_day <= 0) {
+			rest_day = tmp;
+			break;
 		}
-	}
+
+		my_year++;
+	} while (true);
+
 
 	year_info = `${(my_year).pad(4)}`;
 
-	rest_day = rest_day - tmp_year_total_day;
 
-	//1968:"1221212321212"
-	//1968:"1221212321212"
-	var my_10000_year_info = g_lunar_data[my_year];
-	//alert("my_10000_year_info: " + my_10000_year_info );
+	var my_month_index = 0;
 	var my_month_digit_info = -1;
-	var my_month_total_day = 0;
-	var my_month_index = -1; 
+	do {
+		var tmp = rest_day;
+		my_month_digit_info = parseInt(g_lunar_data[my_year].charAt(my_month_index));
 
-	var tmp_month_total_day_minus = rest_day; //0 이하 될 때까지 월수를 뺀다.
-	while (tmp_month_total_day_minus > 0) {
-		my_month_digit_info = parseInt(my_10000_year_info.charAt(my_month_index + 1));
 		var my_month_day = 0;
 		if (my_month_digit_info != 0) {
 			my_month_day = 29 + r(my_month_digit_info + 1, 2);
 		}
 
-		tmp_month_total_day_minus -= my_month_day;
-		
-		my_month_index++;
-
-		if (my_month_index > 0) {
-			my_month_total_day += my_month_day;
+		rest_day -= my_month_day;
+		 
+		if (rest_day <= 0) {
+			rest_day = tmp;
+			break;
 		}
-	}
 
-	
+		my_month_index++;
+	} while (true);
 
 	var real_yun_lunar_index = getYunMonthIndexFromLunarYear(my_year);
 
 	if (real_yun_lunar_index != 12) {//윤달이 존재하는 경우
 
 		if (real_yun_lunar_index==my_month_index) { //윤달이면
-			month_info = `(윤)${(my_month_index).pad(2)}`;
+			month_info = `윤${(my_month_index).pad(2)}`;
 		}
 		else if (my_month_index < real_yun_lunar_index) {
 			month_info = `${(my_month_index + 1).pad(2)}`;
@@ -1237,9 +1228,7 @@ function getYYYYMMDD_Yun(um_total_day) {
 	}
 
 
-
-	rest_day = rest_day - my_month_total_day; 
-	day_info = `${(rest_day).pad(2)}`;
+	day_info = `${(rest_day).pad(2)}`; //왜 rest_day에 1을 더해야 맞는 답이 나오는 지 모르겠음.
 
 	return `${year_info}.${month_info}.${day_info}`;
 }
@@ -1249,11 +1238,12 @@ function getYYYYMMDD_Yun(um_total_day) {
 //[음력 1881년 1월 1일]은 [양력 1881년 01월 30일]에 해당됨.
 //음력 yyyy,mm,dd에 해당하는 양력 "yyyy.mm.dd"를 리턴
 //단, 양력 1881, 1, 30일을 음력의 첫번째 날(1881.1.1)로 가정한다.
-function makeLunarToSolar(yyyy, mm, dd, aYunMonth) {
-    var total_day = getTotalLunarDayFrom_1881_01_30(yyyy, mm, dd, aYunMonth);
-    var nucha_number = getNuchaNumber(1881, 1, 29) + total_day;
-
-    return getYYYYMMDD(nucha_number);
+function makeLunarToSolar(yyyy, mm, dd) {
+	//[양력 1881, 1, 30일]을 음력 1881. 1. 1 첫째날로 삼는다.
+    var total_day = getNuchaNumber(yyyy, mm, dd) - getNuchaNumber(1881, 1, 29);//getTotalLunarDayFrom_1881_01_30(yyyy, mm, dd, aYunMonth);
+    //var nucha_number = getNuchaNumber(1881, 1, 29) + total_day;
+	
+    return getYYYYMMDD_Lunar(total_day);
 }
 
 //양력 yyyy, mm, dd를 입력받아 음력 "yyyy.(윤)mm.dd"를 리턴함
@@ -1268,10 +1258,11 @@ function makeSolarToLunar(yyyy, mm, dd) {
 	//예상되는 근접 년도는...
 	
 
-    return getYYYYMMDD_Yun(my_um_total_day);
+    return getYYYYMMDD_Lunar(my_um_total_day);
 }
 
-//alert(makeSolarToLunar(1968, 8, 8));
+//alert(getNuchaNumber(1881, 1, 30));
+//alert(makeSolarToLunar(1881, 1, 30));
 
 function makeTotalManYearDay() {
 	var s = "";
@@ -2641,6 +2632,71 @@ function setNineStarTable(aTableName, aBoardArray) {
 		}
 	}
 
+	function changeSolarToLunar() {
+		var target_lunar2solar_form = document.getElementById("LunarToSolarForm");
+
+		var idx_area = target_lunar2solar_form.LunarToSolarSelect.selectedIndex;
+		
+		var idx_year1 = target_lunar2solar_form.LunarToSolarYear1Select.selectedIndex;
+		var idx_year2 = target_lunar2solar_form.LunarToSolarYear2Select.selectedIndex;
+		var idx_year3 = target_lunar2solar_form.LunarToSolarYear3Select.selectedIndex;
+
+		var idx_month = target_lunar2solar_form.LunarToSolarMonthSelect.selectedIndex;
+		var idx_day = target_lunar2solar_form.LunarToSolarDaySelect.selectedIndex;
+		var idx_hour = target_lunar2solar_form.LunarToSolarHourSelect.selectedIndex;
+		var idx_min = target_lunar2solar_form.LunarToSolarMinSelect.selectedIndex;
+		
+
+		if (idx_area<=0) {
+			target_lunar2solar_form.LunarToSolarAreaSelect.selectedIndex = 1; //서울지역
+			idx_area = 1;
+		}
+
+		//if (target_lunar2solar_form.LunarToSolarYear.value.trim()=="") {return;}
+		if (idx_year1==0 || idx_year2==0 || idx_year3==0) {return;}
+		if (idx_month==0) {return;}
+		if (idx_day==0) {return;}
+		
+
+
+		var my_year = eval(target_lunar2solar_form.LunarToSolarYear1Select.options[idx_year1].value + target_lunar2solar_form.LunarToSolarYear2Select.options[idx_year2].value + target_lunar2solar_form.LunarToSolarYear3Select.options[idx_year3].value);
+
+		var my_month = eval(target_lunar2solar_form.LunarToSolarMonthSelect.options[idx_month].value);
+		var my_day = eval(target_lunar2solar_form.LunarToSolarDaySelect.options[idx_day].value);
+		var my_hour = eval(target_lunar2solar_form.LunarToSolarHourSelect.options[idx_hour].value);
+		var my_min = eval(target_lunar2solar_form.LunarToSolarMinSelect.options[idx_min].value);
+
+
+
+		var my_area_val = eval(target_lunar2solar_form.LunarToSolarAreaSelect.options[idx_area].value);
+		var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+		var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+		var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+		//target_lunar2solar_form.LunarToSolarEOT.value = eot_next_hour_min_list[0] + ":" + eot_next_hour_min_list[1]; 
+
+
+		if (my_hour>=23 && my_min>=eot_next_hour_min_list[1]) {
+			my_year = yyyy_mm_dd_from_next_day_list[0];
+			my_month = yyyy_mm_dd_from_next_day_list[1];
+			my_day = yyyy_mm_dd_from_next_day_list[2];
+		}
+
+		//숫자를 문자열로 전환
+		//my_year += "";
+		//my_month += "";
+		//my_day += "";
+		
+		//if (my_month.length==1) { my_month = "0" + my_month; }
+		//if (my_day.length==1) { my_day = "0" + my_day; }
+
+
+		//target_lunar2solar_form.TextMyStdSolar.value = "";
+		//target_lunar2solar_form.TextMyYunSolar.value = "";
+
+		target_lunar2solar_form.TextMyLunar.value = makeLunarToSolar(my_year, my_month, my_day);
+		target_lunar2solar_form.TextMyLunar.select();
+	}
+
 	function controlStaticMenu() {
 
 		var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
@@ -2713,8 +2769,13 @@ function setNineStarTable(aTableName, aBoardArray) {
 <div class="navbar">
 	<a href="#home">Home</a>
 	<a href="#info">동양철학의 메카</a>
-	<a href="#news">최신뉴스</a>
-	<a href="" onclick="controlStaticMenu();">빠른메뉴</a>
+	<a href="#menu_cal8body">역학달력</a>
+	<a href="#menu_monthun9sung">구성월운</a>
+	<a href="#menu_saju8body">체질사주</a>
+	<a href="#menu_name8body">체질작명</a> <!--onclick="popup_win('./hanja_search.html');"-->
+	<a href="#menu_6hyo">육효주역</a>
+	<!--href 값을 언급하는 순간 페이지가 리로딩 됨. 왜?-->
+	<a onclick="controlStaticMenu();">음력 ↔ 양력</a>
 	<a href="#contact">Contact</a>
 </div>
   
@@ -2722,7 +2783,7 @@ function setNineStarTable(aTableName, aBoardArray) {
 
 <div id="STATICMENU">
 	<br><br><br>
-	음력: (연도: 1900 ~ 2043)<br>
+	입력 데이타: 양력 혹은 음력
 	<form name="LunarToSolarForm" id="LunarToSolarForm">
 		<select id="LunarToSolarYear1Select" name="LunarToSolarYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="LunarToSolarYear2Select" name="LunarToSolarYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="LunarToSolarYear3Select" name="LunarToSolarYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
 		<select id="LunarToSolarMonthSelect" name="LunarToSolarMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
@@ -2752,18 +2813,16 @@ function setNineStarTable(aTableName, aBoardArray) {
         <label><input type="radio" name="lunar_month_type" value="what" checked /> 모름</label>
         
     </p>
-		<input type="button" value="음력 → 양력" onclick="changeLunarToSolar();" /> 
-		<br><br>
+		<input type="button" value="음력 → 양력" onclick="changeLunarToSolar();" />&nbsp;(음력 연도: 1900 ~ 2050)
+		<br>
 		양력(음력평달): <input type="text" name="TextMyStdSolar" value="2020.01.01" size="10" />
 		<br>
 		양력(음력윤달): <input type="text" name="TextMyYunSolar" value="2020.01.01" size="10" />
+		<br><br>
+		<input type="button" value="양력 → 음력" onclick="changeSolarToLunar();" /> 
+		<br>
+		음력: <input type="text" name="TextMyLunar" value="2020.윤04.01" size="10" />
 	</form>
-	<br>
-	<hr>
-	<br>
-	<a href="#menu_saju8body"><b>체질사주</b></a><br>
-	<a href="#menu_name8body"><b>체질작명</b></a><br>
-	<a href="#menu_6hyo"><b>육효주역</b></a><br>
 </div>
 
 
@@ -2783,8 +2842,8 @@ function myFunction() {
 }
 </script>
 
-
-
+<div id="menu_cal8body"></div>
+<br><br>
 <h2>하늘의 흐름을 따르니 <br><font color=blue>기</font>를 모아 <font color=blue>공</font>을 이루고, <font color=red>공</font>을 버려 <font color=red>무</font>를 이룬다</h2>
 
 </script>
@@ -2839,19 +2898,32 @@ function setNewCalender() {
     //yyyy년 mm월 1일의 요일(0:일요일~6:토요일)
     var FIRST_DAY_OF_WEEK = r(thisNuchaNumber, 7);
 
+	var um_nucha_number = getNuchaNumber(1881, 1, 30);
 
     for (var j=1; j<=42; j++) {
-        document.getElementById('newCalTd_' + j).innerHTML = "&nbsp;";
-        document.getElementById('newCalTd_' + j).setAttribute("align", "right");
+        document.getElementById('newCalTd_' + j).innerHTML = "";
+        document.getElementById('newCalTd_' + j).setAttribute("align", "center");
     }
 
     for (var j=1; j<=totalDD; j++) {
+		//음력 정보는 양력 1881년 1월 30일부터 제공한다.
+		var lunar_info = "";
+		if (getNuchaNumber(yyyy, mm, j) >= um_nucha_number) {
+			var tmp_lunar_info = makeSolarToLunar(yyyy, mm, j); //2020.윤04.01
+			lunar_info = `(${tmp_lunar_info.substr(5, tmp_lunar_info.length - 5)})`;
+		}
+		
+
+		var sky_jiji_info = get60GapJaDay(year, month, j);
         if (r(j+FIRST_DAY_OF_WEEK,7)==0) {
-            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='blue'>" + j + "</font>";
+			//토요일이면...
+            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='blue'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji_info;
         } else if (r(j+FIRST_DAY_OF_WEEK,7)==1) {
-            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='red'>" + j + "</font>";
+			//일요일이면...
+            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='red'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji_info;
         } else {
-            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='black'>" + j + "</font>";
+			//평일이면...
+            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='black'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji_info;
         }
     } 
 }
@@ -2943,13 +3015,32 @@ function changeNextMonth() {
 </script>
 
 <script>
+	var g_yyymmdd_update = false;
     function showTime() {
         var myTime = new Date();
         var myHH = myTime.getHours();
         var myMM = myTime.getMinutes();
         var mySS = myTime.getSeconds();
 
-        newCalendarForm.txtTime.value = myHH + "시 " + myMM + "분 " + mySS + "초"; 
+        newCalendarForm.txtTime.value = myHH + "시 " + myMM + "분 " + mySS + "초";
+
+		if (g_yyymmdd_update == false) {
+			if ( (myHH>=23 && myMM>=59 && mySS>=55) || (myHH<=1 && myMM<=0 && mySS<=5) ) {
+				var today = new Date();
+				var yyyy = today.getFullYear();
+				var mm = today.getMonth() + 1;
+				var dd = today.getDate();
+
+				var idxWeek = r(getNuchaNumber(yyyy, mm, dd), 7);
+
+				document.getElementById("newCalToday").innerHTML = "<font style='font:12'>" + yyyy + "년 " + mm + "월 " + dd + "일 " + ARR_DAY_OF_WEEK[idxWeek] + "요일" + "</font>";
+
+				g_yyymmdd_update = true;
+			}
+		}
+		else if ( (myHH>=11 && myMM>=59 && mySS>=55) || (myHH<=12 && myMM<=0 && mySS<=5) ) {
+			g_yyymmdd_update = false;
+		}
 
         setNewCalToday();
         window.setTimeout("showTime()", 1000);
@@ -5557,10 +5648,6 @@ function get_12jiji_6hap(first_jiji, second_jiji, hap6) {
 </script>
 
 
-
-
-<form name="formSinDay"><input type="text" name="txtSinDay" disabled size="80" align="right"></form>
-
 <script >
 var target_body_saju_form = null;
 var target_body_saju_table = null;
@@ -6160,8 +6247,10 @@ function quick_body_saju_right_move() {
 
 </script>
 
+
+
 <table>
-<tr><td><h1>박찬우 -그레고리력</h1></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h1>남중시각</h1></td></tr>
+<tr><td align="center"><h1>[ 박찬우-그레고리 ] 역학달력</h1></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><h1>남중시각</h1></td></tr>
 <tr><td valign="top">
 <form name="newCalendarForm">
 	   
@@ -6180,12 +6269,14 @@ function quick_body_saju_right_move() {
 	</tr>
 	
 	<tr><td align="center"><font color="red"><b>일</b></font></td><td align="center">월</td><td align="center">화</td><td align="center">수</td><td align="center">목</td><td align="center">금</td><td align="center"><font color="blue"><b>토</b></font></td></tr>
-    <tr><td id="newCalTd_1">1</td><td id="newCalTd_2">2</td><td id="newCalTd_3">3</td><td id="newCalTd_4">4</td><td id="newCalTd_5">5</td><td id="newCalTd_6">6</td><td id="newCalTd_7">7</td></tr>
-    <tr><td id="newCalTd_8">1</td><td id="newCalTd_9">2</td><td id="newCalTd_10">3</td><td id="newCalTd_11">4</td><td id="newCalTd_12">5</td><td id="newCalTd_13">6</td><td id="newCalTd_14">7</td></tr>
-    <tr><td id="newCalTd_15">1</td><td id="newCalTd_16">2</td><td id="newCalTd_17">3</td><td id="newCalTd_18">4</td><td id="newCalTd_19">5</td><td id="newCalTd_20">6</td><td id="newCalTd_21">7</td></tr>
-    <tr><td id="newCalTd_22">1</td><td id="newCalTd_23">2</td><td id="newCalTd_24">3</td><td id="newCalTd_25">4</td><td id="newCalTd_26">5</td><td id="newCalTd_27">6</td><td id="newCalTd_28">7</td></tr>
-    <tr><td id="newCalTd_29">1</td><td id="newCalTd_30">2</td><td id="newCalTd_31">3</td><td id="newCalTd_32">4</td><td id="newCalTd_33">5</td><td id="newCalTd_34">6</td><td id="newCalTd_35">7</td></tr>
-    <tr><td id="newCalTd_36">1</td><td id="newCalTd_37">2</td><td id="newCalTd_38">3</td><td id="newCalTd_39">4</td><td id="newCalTd_40">5</td><td id="newCalTd_41">6</td><td id="newCalTd_42">7</td></tr>
+	
+	<tr><td <td style="width:65px"id="newCalTd_1">1</td><td <td style="width:65px"id="newCalTd_2">2</td><td <td style="width:65px"id="newCalTd_3">3</td><td <td style="width:65px"id="newCalTd_4">4</td><td <td style="width:65px"id="newCalTd_5">5</td><td <td style="width:65px"id="newCalTd_6">6</td><td <td style="width:65px"id="newCalTd_7">7</td></tr>
+    <tr><td <td style="width:65px"id="newCalTd_8">1</td><td <td style="width:65px"id="newCalTd_9">2</td><td <td style="width:65px"id="newCalTd_10">3</td><td <td style="width:65px"id="newCalTd_11">4</td><td <td style="width:65px"id="newCalTd_12">5</td><td <td style="width:65px"id="newCalTd_13">6</td><td <td style="width:65px"id="newCalTd_14">7</td></tr>
+    <tr><td <td style="width:65px"id="newCalTd_15">1</td><td <td style="width:65px"id="newCalTd_16">2</td><td <td style="width:65px"id="newCalTd_17">3</td><td <td style="width:65px"id="newCalTd_18">4</td><td <td style="width:65px"id="newCalTd_19">5</td><td <td style="width:65px"id="newCalTd_20">6</td><td <td style="width:65px"id="newCalTd_21">7</td></tr>
+    <tr><td <td style="width:65px"id="newCalTd_22">1</td><td <td style="width:65px"id="newCalTd_23">2</td><td <td style="width:65px"id="newCalTd_24">3</td><td <td style="width:65px"id="newCalTd_25">4</td><td <td style="width:65px"id="newCalTd_26">5</td><td <td style="width:65px"id="newCalTd_27">6</td><td <td style="width:65px"id="newCalTd_28">7</td></tr>
+    <tr><td <td style="width:65px"id="newCalTd_29">1</td><td <td style="width:65px"id="newCalTd_30">2</td><td <td style="width:65px"id="newCalTd_31">3</td><td <td style="width:65px"id="newCalTd_32">4</td><td <td style="width:65px"id="newCalTd_33">5</td><td <td style="width:65px"id="newCalTd_34">6</td><td <td style="width:65px"id="newCalTd_35">7</td></tr>
+    <tr><td <td style="width:65px"id="newCalTd_36">1</td><td <td style="width:65px"id="newCalTd_37">2</td><td <td style="width:65px"id="newCalTd_38">3</td><td <td style="width:65px"id="newCalTd_39">4</td><td <td style="width:65px"id="newCalTd_40">5</td><td <td style="width:65px"id="newCalTd_41">6</td><td <td style="width:65px"id="newCalTd_42">7</td></tr>
+	
 	<tr><td colspan="8" align="center">현재시간:&nbsp;<input type="text" name="txtTime" value="" size="10" style="text-align:center;" disabled></td></tr>
 	<tr><td colspan="8" id="newCalToday" align="center"></td></tr>
 	</table><br>
@@ -10462,11 +10553,13 @@ function moveSaju() {
 		document.getElementById("id_youtube_td").innerHTML = YoutubeMovieForm.YoutubeList.options[sel_idx].value;
 	}
 </script>
-
+<div id="menu_monthun9sung"></div>
+<br>
 <hr>
 <hr>
 <hr>
-
+<br>
+<br>
 <h3>월운: 일년 신수, 몇월 쯤에 그 사건이 발생할까?</h3>
 <form name="MyForm" method="post" action="">
 	<font color=red>본명성:</font> <input type="text" name="BornYearStar"><BR>
@@ -10866,7 +10959,7 @@ function doTest() {
 }
 </script>
 
-
+<form name="formSinDay"><input type="text" name="txtSinDay" disabled size="80" align="right"></form>
 
 </body>
 </html>
