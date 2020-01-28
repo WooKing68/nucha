@@ -2877,7 +2877,7 @@ ____시: <input type="text" name="YourBirthTime">
 
 var ARR_DAY_OF_WEEK = new Array("일", "월", "화", "수", "목", "금", "토");
 
-function setNewCalender() {
+function setNewCalendar() {
     var yyyy = eval(newCalendarForm.newCalYear.value);
     var mm = eval(newCalendarForm.newCalMonth.value);
 
@@ -2950,7 +2950,7 @@ function setNewCalToday() {
 
 
 function getNewCalendar() {
-	setNewCalender();
+	setNewCalendar();
 }
 
 
@@ -2960,7 +2960,7 @@ function changeYear() {
 	
     if (yyyy != null && yyyy.trim() != "") {
         newCalendarForm.newCalYear.value = yyyy;
-		getNewCalender();
+		getNewCalendar();
     }
 }
 
@@ -2968,7 +2968,7 @@ function changeMonth() {
     var mm = prompt("원하는 '월'를 입력하시오", "");
     if (mm != null && mm.trim() != "") {
         newCalendarForm.newCalMonth.value = (r(mm, 12)==0) ? 12: r(mm, 12);
-		getNewCalender();
+		getNewCalendar();
     }
 }
 
@@ -6254,13 +6254,13 @@ function quick_body_saju_right_move() {
     <table id="newCal" border="1"> 
 	
 	<tr><td colspan="8" align="center">
-		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalender();">
-		<input type="button" value="◁" onclick="changePrevMonth();getNewCalender();">
+		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalendar();">
+		<input type="button" value="◁" onclick="changePrevMonth();getNewCalendar();">
 		
 		<input type="button" name="newCalYear" value="" onclick="changeYear();">년&nbsp;
 		<input type="button" name="newCalMonth" value="" onclick="changeMonth();">월
-		<input type="button" value="▷" onclick="changeNextMonth();getNewCalender();">
-		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalender();"> 
+		<input type="button" value="▷" onclick="changeNextMonth();getNewCalendar();">
+		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalendar();"> 
 		</td>
 	</tr>
 	
@@ -9678,11 +9678,9 @@ block: 보이기
     newCalendarForm.newCalMonth.value = mm;
 
 
-    setNewCalender();
+    setNewCalendar();
 
-<!--alert(document.getElementById('newCalTd_' + 12).innerHTML);-->
-<!--document.getElementById('newCalTd_');-->
-<!--document.getElementById('newCal').setAttribute('style', 'display: black');-->
+
 </script>
 <br>
 
