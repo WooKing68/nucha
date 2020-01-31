@@ -11116,6 +11116,52 @@ function moveSaju() {
 <hr>
 <br>
 
+
+<script>
+	//<option value='my_value'>my_text
+	function showEduBodySaju() {
+		var my_select = document.getElementById("EduBodySajuSelect");
+		var my_selected_index = my_select.selectedIndex;
+
+		if (my_selected_index == 0) {
+			document.getElementById("ShowEduBodySajuDiv").innerHTML = "";
+			return
+		}
+		//alert("text: " + my_select.options[my_selected_index].text);
+		//alert("value: " + my_select.options[my_selected_index].value);
+
+		var my_selected_text = my_select.options[my_selected_index].text;
+		document.getElementById("ShowEduBodySajuDiv").innerHTML = getBody_8chim_html(my_selected_text);
+	}
+</script>
+
+
+<h1>체질 선택(교육용)</h1>
+<form name="EduBodySajuForm" id="EduBodySajuForm">
+	<select id="EduBodySajuSelect" name="EduBodySajuSelect" onchange="showEduBodySaju();">
+		<option value='-1'>
+		<option value='태양_1'>태양1
+		<option value='태양_2'>태양2
+		<option value='태음_1'>태음1
+		<option value='태음_2'>태음2
+		<option value='소양_1'>소양1
+		<option value='소양_2'>소양2
+		<option value='소음_1'>소음1
+		<option value='소음_2'>소음2
+	</select>
+</form>
+
+<div id="ShowEduBodySajuDiv"></div>
+<br>
+<br>
+
+<hr>
+<hr>
+<hr>
+
+<br>
+<br>
+
 <Form name="mathForm">
 b=<input type="text" name="bMath" size="1" value="1" style="text-align:right;">, c=<input type="text" name="cMath" size="1" value="-1" style="text-align:right;">, a=<input type="text" name="aMath" value="3" size="1" style="text-align:right;"><br>
 <table id="tbl_math_seq"><tr>
@@ -11153,6 +11199,9 @@ function nuchaSequence() {
 
 mathForm.txtMathResult.value = nuchaSequence();
 </script>
+
+		
+
 <br><br>
 
 읽어볼만한 사이트: <a href="http://lifesci.net/pod/bbs/board.php?bo_table=B07&wr_id=62" target="_blank"><u>음력양력 변환에 관해 (윤달 계산)</u></a>
@@ -11164,42 +11213,6 @@ mathForm.txtMathResult.value = nuchaSequence();
 <hr>
 
 <h1>Test Area</h1>
-
-
-
-<div id="DivShowTest">
-<span id="spanShowTest">
-<a href="">나는 들에 </a>
-<form>ak</form>
-</span>
-</div>
-
-
-<div id="DivMyTest0">
-<span id="spanMyTest0">
-</div>
-
-<br>
-============================
-<div id="DivMyTest1">
-<span id="spanMyTest1">
-Hello, FirstSpan
-<form name="FormMyTest" id="FormMyTest">
-<input type="button" value="Where are you?" onclick=";">
-<input type="text" value="text">
-</form>
-</span>
-</div>
-
-<br>
-
-<div id="DivMyTest2">
-<span id="spanMyTest2">
-Hello, Second Span
-</span>
-</div>
-
-</br>
 
 
 
@@ -11252,7 +11265,8 @@ function doTest() {
     	}
 */
 }
-</script>
+</script
+>
 
 <form name="formSinDay"><input type="text" name="txtSinDay" disabled size="80" align="right"></form>
 
