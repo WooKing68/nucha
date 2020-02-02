@@ -3354,6 +3354,7 @@ function changeNextMonth() {
 //육효 육친(여자 표준): 孫父財官兄
 var g_juyeok_0 = ["", "<img src=1.png>", "<img src=2.png>", "<img src=3.png>", "<img src=4.png>", "", "<img src=6.png>", "<img src=7.png>", "<img src=8.png>", "<img src=9.png>"];//["", "☵", "☷", "☳", "☴", "", "☰", "☱", "☶", "☲"];
 var g_juyeok_1 = ["", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+var g_juyeok_11 = {"":"", "1":"귀", "2":"배", "3":"발", "4":"허벅지", "5":"", "6":"머리", "7":"입", "8":"손", "9":"눈"};
 var g_juyeok_2 = ["", "감", "곤", "진", "손", "", "건", "태", "간", "리"];
 var g_juyeok_3 = ["", "수", "지", "뢰", "풍", "", "천", "택", "산", "화"];
 var g_juyeok_4 = ["", "010", "000", "001", "110", "", "111", "011", "100", "101"];
@@ -10790,10 +10791,15 @@ function moveSaju() {
 		<td valign=top>
 			<select id="id_youtube_list" name="YoutubeList" onchange="showYoutubeMovie();" size=25>
 				<option></option>
+
+				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/BKyJrphtpts" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>BTS(방탄소년단): 'Answer : Love Myself'</option>
+				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/eT2de-CgqN0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>폴킴: 모든 날 모든 순간</option>
+				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/lZumx70VjU4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>윤하(Feat. RM of BTS): Winter Flower</option>
+				
 				<!--option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/_2clW8Zxq88" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>Bahubali (영화:바후발리)</option-->
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/G65yiUGo93Y" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>리만가설(NHK Hi-Vision Special - The Cosmic Code Breakers)</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/zYYuDFor5Ns" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>촛불 혁명 [CandleLight Revolution]</option>
-				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/BKyJrphtpts" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>BTS(방탄소년단): 'Answer : Love Myself'</option>
+				
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/UbibhcTvNlU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>BTS(방탄소년단): 작은 것들을 위한 시 (Boy With Luv) Special Stage</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/obsU9plaHqg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>BTS(방탄소년단) at Times Square New Year's Eve 2020(00:40 )</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/2dATxR00fVs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>BLACKPINK(블랙핑크): As If It's Your Last</option>
@@ -11246,7 +11252,7 @@ function moveSaju() {
 				}
 			}
 		}
-		else { //군화체질이라면... [태음체질 혹은 소양체질]
+		else if (gun_hwa_idx <= sang_hwa_idx) { //군화체질이라면... [태음체질 혹은 소양체질]
 			if (mok_idx < to_idx) { //태음체질
 				if (su_idx < to_idx) { //태양2 체질
 					my_body8_type = "태음2";
