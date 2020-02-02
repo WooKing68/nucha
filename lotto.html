@@ -1,0 +1,1732 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ko">
+ <head>
+	<title> 로또 번호 생성기 </title>
+	<meta charset="UTF-8">
+	<meta name="Generator" content="Visual Studio Code">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="Author" content="">
+	
+
+    <script type="text/javascript">
+        //(7).pad(3);  //returns "007"
+        Number.prototype.pad = function(size) {
+            var s = String(this);
+            while (s.length < (size || 2)) {s = "0" + s;}
+            return s;
+        }
+
+        //a ~ b
+        function getRandomNumber(a, b) {
+            //a부터 b까지 정수값을 임의로 발생
+            return q( (b+1-a) * Math.random() + a, 1);
+        }
+    </script>
+    
+    
+
+    <script type="text/javascript">
+
+        function my_split(aStr, aDelimiter) {
+            var s = "";
+            var s_split = aStr.split(aDelimiter);
+            for (var i=0;i<s_split.length;i++) {
+                s = s + s_split[i]; 
+            }
+
+            return s;
+        }
+
+
+        function getEOT(aYear, aMonth, aDay, aLongitude) {
+            var myMinute = (24*60/360) * Math.abs(aLongitude - 135);
+
+
+
+            var year = aYear; 
+            var month = aMonth; 
+            var day = aDay;
+
+            var pi = Math.PI;
+            var Radian = pi / 180.0;
+
+            // WW is the Earth's mean angular orbital velocity in degrees per day.
+            var WW = 360 / 365.2422;
+
+            // DD is the date, in days starting at zero on 1 January (i.e. the days part of the ordinal date ?1).
+                var dd = getNuchaNumber(year, month, day) - getNuchaNumber(year, 1, 1);
+
+
+            // AA is the angle the earth would move on its orbit at its average speed from the December solstice to date D.
+            // 10 is the approximate number of days from the December solstice to 1 January.
+            var AA = WW * (dd + 10); //각도임
+
+
+            // BB is the angle the Earth moves from the solstice to date D, including a first-order correction for the Earth's orbital eccentricity
+            // The number 2 is the number of days from January 1 to the date of the Earth's perihelion
+            var BB = AA + 1.9137 * Math.sin((WW * (dd - 2)) * Radian); //각도임
+
+            // CC is the difference between the angles moved at mean speed, and at the corrected speed projected onto the equatorial plane
+            // and divided by 180 to get the difference in "half turns"
+            var XX = Math.atan(Math.tan(BB * Radian) / Math.cos(23.44 * Radian)) * 180.0 / pi;
+            var CC = (AA - XX) / 180.0;
+
+            var eot = 720 * (CC - q(CC + 0.5, 1)); //VBA Code: 720 * (CC - Int(CC + 0.5));
+
+
+            return [12, q(myMinute - eot, 1)];   //12시 OO분 //return [12, q(myMinute - eot + 0.5, 1)]; 
+
+        }
+
+        function getEquationOfTime() {
+            
+            var selectedAreaLongitude;
+            var eotOptLen = eotForm.eotSelect.options.length;
+
+            
+
+            for(var i=0; i<eotOptLen; i++) {
+                if (eotForm.eotSelect.options[i].selected) {
+                    selectedAreaLongitude = eotForm.eotSelect.options[i].value;
+                }  
+            }
+
+            var myMinute = (24*60/360) * Math.abs(eval(selectedAreaLongitude) - 135);
+
+
+
+            var year = eval(eotForm.eotYear.value); 
+            var month = eval(eotForm.eotMonth.value); 
+            var day = eval(eotForm.eotDay.value); 
+
+            var hour_min_list = getEOT(year, month, day, eval(selectedAreaLongitude));
+
+
+
+            eotForm.eotResult.value = `(약) ${hour_min_list[0]}시 ${hour_min_list[1]}분`;
+        }
+    </script>
+
+
+
+
+
+    <script type="text/javascript">
+    
+        //천간 지지 스크립트
+        //전역변수 선언
+        var SKY_10 = new Array("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸");
+        var EARTH_12 = new Array("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥");
+        var MONTH_NUM = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+
+        
+        var CHIYUN_STAR_NUM0622 = 3;
+        var CHIYUN_STAR_NUM1222 = 7;
+        
+        //일본 동경에 비해 한국 서울은 약 32분 47초 정도 늦게 된다.
+        var KOREAN_DELAY_MINUTE = 32;
+        var KOREAN_DELAY_SECOND = 47;
+
+        ///////////////////////////////////////////////
+        
+        /* 몫과 나머지 함수 정의 - 음수, 양수 모두 나눗셈이 가능한 함수  */
+
+
+        //몫 구하기
+        function q(b, a) {
+            var result = 0;
+
+            if (a==0) {
+                return null;
+            }
+
+            if (a>0) {
+                return Math.floor(b/a)
+            }
+
+            if (a<0) {
+                return -Math.floor(-b/a)
+            }
+        }
+
+        //나머지 구하기
+        function r(b, a) {
+            return b - a * q(b, a); 
+        }
+
+        /////////////////////////////////////////////////////////
+
+        
+        //1~45
+        function getLottoNumberList(a, b) {
+            var lotto_num_list = [];
+            for(var i=0; i<6; i++) {
+                var my_num = getRandomNumber(a, b);
+                lotto_num_list.push(my_num);
+            }
+            return lotto_num_list;
+        }
+
+        function list_sum(x_list) {
+            var sum = 0.0;
+            var loop_cnt = x_list.length;
+            for (var i=0;i<loop_cnt;i++) {
+                sum += x_list[i];
+            }
+
+            return sum;
+        }
+
+        function isUniqueArray(myArray) {
+            for (var i = 0; i < myArray.length; i++) {
+                for (var j = 0; j < myArray.length; j++) {
+                    if (i != j) {
+                        if (myArray[i] == myArray[j]) {
+                            return false; // means there are duplicate values
+                        }
+                    }
+                }
+            }
+            return true; // means there are no duplicate values.
+        }
+
+
+        function ascSortArray(my_list) {
+            my_list.sort(function(a, b){return a-b});
+        }
+
+        function descSortArray(my_list) {
+            my_list.sort(function(a, b){return b-a});
+        }
+
+
+        function createLottoNumber() {
+            var lotto_num_list_1 = null;
+            var lotto_num_list_2 = null;
+            var lotto_num_list_3 = null;
+
+
+            var my_lotto_num_type = LottoForm.lotto_num_type.value;
+
+            //로또 번호 기반...
+            if (my_lotto_num_type=="num") {
+                do {
+                    lotto_num_list_1 = getLottoNumberList(1, 45);
+                    
+                    var my_list_sum = list_sum(lotto_num_list_1);
+                    if (isUniqueArray(lotto_num_list_1) && r(my_list_sum, 9) == 3) {
+                        //오름차순 정렬
+                        //lotto_num_list_1[0]의 값이 최소값
+                        ascSortArray(lotto_num_list_1);
+                        LottoForm.TextMyLottoNum_1.value = `${lotto_num_list_1[0]} / ${lotto_num_list_1[1]} / ${lotto_num_list_1[2]} / ${lotto_num_list_1[3]} / ${lotto_num_list_1[4]} / ${lotto_num_list_1[5]}`;
+                        lotto_num_list_1 = null;
+                        break;
+                    }
+
+                } while(true);
+            }
+            
+
+            //음력 생일 기반...
+            if (my_lotto_num_type=="birth") {
+                var my_month_text = LottoForm.TextMyLottoMonth.value;
+                var my_day_text = LottoForm.TextMyLottoDay.value;
+                if (my_month_text.trim()=="" || my_day_text.trim()=="") {
+                    alert("먼저 음력 생년월일을 먼저 입력하세요.");
+                    LottoForm.TextMyLottoYear.focus();
+                    return;
+                }
+
+                var my_um_month = parseInt(LottoForm.TextMyLottoMonth.value);
+                var my_um_day = parseInt(LottoForm.TextMyLottoDay.value);
+
+                do {
+                    lotto_num_list_1 = getLottoNumberList(1, 45);
+                    
+                    var my_list_sum = list_sum(lotto_num_list_1);
+                    if (isUniqueArray(lotto_num_list_1) && r(my_list_sum + my_um_month + my_um_day, 9) == 3) {
+                        //오름차순 정렬
+                        //lotto_num_list_1[0]의 값이 최소값
+                        ascSortArray(lotto_num_list_1);
+                        LottoForm.TextMyLottoNum_2.value = `${lotto_num_list_1[0]} / ${lotto_num_list_1[1]} / ${lotto_num_list_1[2]} / ${lotto_num_list_1[3]} / ${lotto_num_list_1[4]} / ${lotto_num_list_1[5]}`;
+                        lotto_num_list_1 = null;
+                        break;
+                    }
+
+                } while(true);
+            }
+
+
+
+        }
+
+        /////////////////////////////////////////////////////////
+
+        //서기 1년 1월 1일부터 
+        //서기 year년 month월 day일 까지의 총일수 구하기
+        function getNuchaNumber(aYear, aMonth, aDay) {
+            var result = 0;
+            
+            result = 365 * ( aYear + q(aMonth - 3, 12) )
+                    + q( aYear + q(aMonth - 3, 12), 4) 
+                    - q( aYear + q(aMonth - 3, 12), 100) 
+                    + q( aYear + q(aMonth - 3, 12), 400) 
+                    + q(153 * (aMonth -12 * q(aMonth - 3, 12) ) - 1987, 5) + aDay; 
+            
+            return result;
+        }
+
+
+        ///////////////////////////////////////////////////////////////
+
+        /**
+        * 윤년인가 아닌가?
+        * @param year
+        * @return
+        */
+        function isYunYear(year) {
+            var n4 = q(year, 4) - q(year - 1, 4);
+            var n100 = q(year, 100) - q(year - 1, 100);
+            var n400 = q(year, 400) - q(year - 1, 400);
+            
+            var n = n4 - n100 + n400;
+            
+            return n == 1? true : false;
+            
+        }
+        
+
+        ///////////////////////////////////////////////////////////////
+
+        function getMonthLastNumber(myYear, myMonth) {
+            var monthLastNumber = MONTH_NUM[myMonth - 1];
+
+            //윤년이고 2월이면 1을 더한다.
+            if (isYunYear(myYear) && (myMonth == 2)) {
+                monthLastNumber = monthLastNumber + 1;
+            }
+
+            return monthLastNumber;
+        }
+        
+
+        /** 
+        * 날짜를 하루 미래로 재세팅
+        */
+        function getYYYYMMDD_NextDay(myYear, myMonth, myDay) {
+            //그 달의 끝 날짜 구하기
+            var monthLastNumber = getMonthLastNumber(myYear, myMonth);
+
+            var new_my_year = myYear;
+            var new_my_month = myMonth;
+            var new_my_day = myDay;
+            
+
+            new_my_day = myDay + 1;
+            if (new_my_day > monthLastNumber) {
+                new_my_day = 1;
+                new_my_month = myMonth + 1;
+                if (new_my_month > 12) {
+                    new_my_month = 1;
+                    new_my_year = myYear + 1;
+                }
+            }
+
+            return [new_my_year, new_my_month, new_my_day];
+        }
+
+        ///////////////////////////////////////////////////////////////
+
+        //60갑자 리턴하기
+        function get60GapJa(skyIndex, earthIndex) {
+            return [getSky10(skyIndex) , getEarth12(earthIndex)];
+        }
+        
+        function getSky10(skyIndex) {
+            return "" + SKY_10[r(skyIndex, 10)];
+        }
+        
+        function getEarth12(earthIndex) {
+            return "" + EARTH_12[r(earthIndex, 12)];
+        }
+
+
+        ////////////////////////////////////////////
+
+        /* 사주팔자 구하기 */
+
+        //년주 구하기
+        function get60GapJaYear(year) {
+            //2012년 '임진년'
+            return get60GapJa(r(year - 4, 10), r(year - 4, 12));
+        }
+
+        //년주의 지지 구하기
+        function get12JiJiYear(year) {
+            return getEarth12(r(year - 4, 12));
+        }
+
+        //월주 구하기
+        //양력으로 해당년월의 60갑자 리턴하기 - 월주
+        function get60GapJaMonth(year, month) {
+            var result = "";
+            
+            //기준월 - 1968.08은 '경신월'
+            var index = (year - 1968) * 12 + month;
+            
+            var skyIndex = r(index, 10) + 8;
+            var earthIndex = r(index, 12);
+            
+            
+            
+            return get60GapJa(skyIndex, earthIndex);
+        }
+
+        //월주의 12지지만 구하기
+        function get12JiJiMonth(year, month) {
+            var result = "";
+            
+            //기준월 - 1968.08은 '경신월'
+            var index = (year - 1968) * 12 + month;
+            
+            //var skyIndex = r(index, 10) + 8;
+            var earthIndex = r(index, 12);
+            
+            
+            result = getEarth12(earthIndex);
+            return result;
+        }
+
+        //일주의 12지지만 구하기
+        function get12JiJiDay(year, month, day) {
+            var result = null;
+                            
+            var nuchaNum = getNuchaNumber(year, month, day);
+            
+            //var sky10Idx = r(nuchaNum, 10) + 4;
+            var earth12Idx = r(nuchaNum, 12) + 2;
+            
+            result = getEarth12(earth12Idx); 
+
+            return result;
+        }
+
+
+        //일주 구하기
+        function get60GapJaDay(year, month, day) {
+            var result = null;
+                            
+            var nuchaNum = getNuchaNumber(year, month, day);
+            
+            var sky10Idx = r(nuchaNum, 10) + 4;
+            var earth12Idx = r(nuchaNum, 12) + 2;
+            
+            
+
+            
+            return [getSky10(sky10Idx) , getEarth12(earth12Idx)];
+            
+        }
+
+        function get60GapJaDayFromNuchaNumber(nuchaNumber) {
+        
+            var sky10Idx = r(nuchaNumber, 10) + 4;
+            var earth12Idx = r(nuchaNumber, 12) + 2;
+            
+            result = getSky10(sky10Idx) + getEarth12(earth12Idx); 
+        
+            return result;
+
+        }
+
+        //시주 구하기
+        function get60GapJaTime(year, month, day, hour, minute) {
+            var result = "";
+            
+            var daySky10 = get60GapJaDay(year, month, day)[0];
+
+            
+            var time12Index = getTime12Index(hour, minute);
+
+            //구현 필요
+            if ((daySky10 == "甲") || (daySky10 == "己")) {
+                result = [SKY_10[r(time12Index, 10)] , EARTH_12[r(time12Index, 12)] ];
+            }
+            else if ((daySky10 == "乙") || (daySky10 == "庚")) {
+                result = [SKY_10[r(time12Index + 2, 10)] , EARTH_12[r(time12Index, 12)] ];
+            }
+            else if ((daySky10 == "丙") || (daySky10 == "辛")) {
+                result = [SKY_10[r(time12Index + 4, 10)] , EARTH_12[r(time12Index, 12)] ];
+            }
+            else if ((daySky10 == "丁") || (daySky10 == "壬")) {
+                result = [SKY_10[r(time12Index + 6, 10)] , EARTH_12[r(time12Index, 12)] ];
+            }
+            else if ((daySky10 == "戊") || (daySky10 == "癸")) {
+                result = [SKY_10[r(time12Index + 8, 10)] , EARTH_12[r(time12Index, 12)] ];
+            }
+
+            return result;
+        }
+
+        
+    </script>
+
+
+
+    <SCRIPT language=javascript>
+
+
+        /**
+        * 양력 - 음력 변환 스크립트
+        * 
+        * 양력: 1881.01.30 = 음력: 1881.01.01 (기준 첫째날)
+        * 음력만년달력: "1212122322121"에서 1월, 2월, 3월... 순이고 
+        *                짝수이면 30일, 홀수이면 29일까지 있다. 
+        *                '1' 혹은 '2'가 아니면 윤달(월)이다. 
+        *                이 경우 '3'은 '윤7월'이며, 그 후 8월, 9월, ... 등으로 기록된다. 
+        */
+
+        // 소위 '만년 데이타'라 불리움.
+    var g_lunar_data = {
+        1881:"1212122322121",  
+        1882:"1212121221220",
+        1883:"1121121222120",
+        1884:"2112132122122",
+        1885:"2112112121220",
+        1886:"2121211212120",
+        1887:"2212321121212",
+        1888:"2122121121210",
+        1889:"2122121212120",
+        1890:"1232122121212",
+        1891:"1212121221220",
+        1892:"1121123221222",
+        1893:"1121121212220",
+        1894:"1212112121220",
+        1895:"2121231212121",
+        1896:"2221211212120",
+        1897:"1221212121210",
+        1898:"2123221212121",
+        1899:"2121212212120",
+        1900:"1211212232212",
+        1901:"1211212122210",
+        1902:"2121121212220",
+        1903:"1212132112212",
+        1904:"2212112112210",
+        1905:"2212211212120",
+        1906:"1221412121212",
+        1907:"1212122121210",
+        1908:"2112212122120",
+        1909:"1231212122212",
+        1910:"1211212122210",
+        1911:"2121123122122",
+        1912:"2121121122120",
+        1913:"2212112112120",
+        1914:"2212231212112",
+        1915:"2122121212120",
+        1916:"1212122121210",
+        1917:"2132122122121",
+        1918:"2112121222120",
+        1919:"1211212322122",
+        1920:"1211211221220",
+        1921:"2121121121220",
+        1922:"2122132112122",
+        1923:"1221212121120",
+        1924:"2121221212110",
+        1925:"2122321221212",
+        1926:"1121212212210",
+        1927:"2112121221220",
+        1928:"1231211221222",
+        1929:"1211211212220",
+        1930:"1221123121221",
+        1931:"2221121121210",
+        1932:"2221212112120",
+        1933:"1221241212112",
+        1934:"1212212212120",
+        1935:"1121212212210",
+        1936:"2114121212221",
+        1937:"2112112122210",
+        1938:"2211211412212",
+        1939:"2211211212120",
+        1940:"2212121121210",
+        1941:"2212214112121",
+        1942:"2122122121120",
+        1943:"1212122122120",
+        1944:"1121412122122",
+        1945:"1121121222120",
+        1946:"2112112122120",
+        1947:"2231211212122",
+        1948:"2121211212120",
+        1949:"2212121321212",
+        1950:"2122121121210",
+        1951:"2122121212120",
+        1952:"1212142121212",
+        1953:"1211221221220",
+        1954:"1121121221220",
+        1955:"2114112121222",
+        1956:"1212112121220",
+        1957:"2121211232122",
+        1958:"1221211212120",
+        1959:"1221212121210",
+        1960:"2121223212121",
+        1961:"2121212212120",
+        1962:"1211212212210",
+        1963:"2121321212221",
+        1964:"2121121212220",
+        1965:"1212112112210",
+        1966:"2223211211221",
+        1967:"2212211212120",
+        1968:"1221212321212",
+        1969:"1212122121210",
+        1970:"2112212122120",
+        1971:"1211232122212",
+        1972:"1211212122210",
+        1973:"2121121122210",
+        1974:"2212312112212",
+        1975:"2212112112120",
+        1976:"2212121232112",
+        1977:"2122121212110",
+        1978:"2212122121210",
+        1979:"2112124122121",
+        1980:"2112121221220",
+        1981:"1211211221220",
+        1982:"2121321122122",
+        1983:"2121121121220",
+        1984:"2122112112322",
+        1985:"1221212112120",
+        1986:"1221221212110",
+        1987:"2122123221212",
+        1988:"1121212212210",
+        1989:"2112121221220",
+        1990:"1211231212222",
+        1991:"1211211212220",
+        1992:"1221121121220",
+        1993:"1223212112121",
+        1994:"2221212112120",
+        1995:"1221221232112",
+        1996:"1212212122120",
+        1997:"1121212212210",
+        1998:"2112132212221",
+        1999:"2112112122210",
+        2000:"2211211212210",
+        2001:"2221321121212",
+        2002:"2212121121210",
+        2003:"2212212112120",
+        2004:"1232212122112",
+        2005:"1212122122120",
+        2006:"1121212322122",
+        2007:"1121121222120",
+        2008:"2112112122120",
+        2009:"2211231212122",
+        2010:"2121211212120",
+        2011:"2122121121210",
+        2012:"2124212112121",
+        2013:"2122121212120",
+        2014:"1212121223212",
+        2015:"1211212221220",
+        2016:"1121121221220",
+        2017:"2112132121222",
+        2018:"1212112121220",
+        2019:"2121211212120",
+        2020:"2122321121212",
+        2021:"1221212121210",
+        2022:"2121221212120",
+        2023:"1232121221212",
+        2024:"1211212212210",
+        2025:"2121123212221",
+        2026:"2121121212220",
+        2027:"1212112112220",
+        2028:"1221231211221",
+        2029:"2212211211220",
+        2030:"1212212121210",
+        2031:"2123212212121",
+        2032:"2112122122120",
+        2033:"1211212322212",
+        2034:"1211212122210",
+        2035:"2121121122120",
+        2036:"2212114112122",
+        2037:"2212112112120",
+        2038:"2212121211210",
+        2039:"2212232121211",
+        2040:"2122122121210",
+        2041:"2112122122120",
+        2042:"1231212122212",
+        2043:"1211211221220",
+        2044:"2121121321222",
+        2045:"2121121121220",
+        2046:"2122112112120",
+        2047:"2122141211212",
+        2048:"1221221212110",
+        2049:"2121221221210",
+        2050:"2114121221221"
+    };
+
+
+    /**
+        console.log("작업시작...");
+
+        
+        for(var y=1881;y<=2050;y++) {
+            for (var i=0;i<=12;i++) {
+                if (parseInt(g_lunar_data[y][i])>=3) {
+                    console.log(`C(${y}년, ${i}) = ${g_lunar_data[y][i]} \n`);
+                }
+            }
+            
+        }
+        
+        console.log("...작업완료");
+    */	
+
+    var g_lunar_year_day_data = {
+        1881:384, 
+        1882:355, 
+        1883:354, 
+        1884:384, 
+        1885:354, 
+        1886:354, 
+        1887:384, 
+        1888:354, 
+        1889:355, 
+        1890:384, 
+        1891:355, 
+        1892:384, 
+        1893:354, 
+        1894:354, 
+        1895:383, 
+        1896:355, 
+        1897:354, 
+        1898:384, 
+        1899:355, 
+        1900:384, 
+        1901:354, 
+        1902:355, 
+        1903:383, 
+        1904:354, 
+        1905:355, 
+        1906:384, 
+        1907:354, 
+        1908:355, 
+        1909:384, 
+        1910:354, 
+        1911:384, 
+        1912:354, 
+        1913:354, 
+        1914:384, 
+        1915:355, 
+        1916:354, 
+        1917:384, 
+        1918:355, 
+        1919:384, 
+        1920:354, 
+        1921:354, 
+        1922:384, 
+        1923:354, 
+        1924:354, 
+        1925:385, 
+        1926:354, 
+        1927:355, 
+        1928:384, 
+        1929:354, 
+        1930:383, 
+        1931:354, 
+        1932:355, 
+        1933:384, 
+        1934:355, 
+        1935:354, 
+        1936:384, 
+        1937:354, 
+        1938:384, 
+        1939:354, 
+        1940:354, 
+        1941:384, 
+        1942:355, 
+        1943:355, 
+        1944:384, 
+        1945:354, 
+        1946:354, 
+        1947:384, 
+        1948:354, 
+        1949:384, 
+        1950:354, 
+        1951:355, 
+        1952:384, 
+        1953:355, 
+        1954:354, 
+        1955:384, 
+        1956:354, 
+        1957:384, 
+        1958:354, 
+        1959:354, 
+        1960:384, 
+        1961:355, 
+        1962:354, 
+        1963:384, 
+        1964:355, 
+        1965:353, 
+        1966:384, 
+        1967:355, 
+        1968:384, 
+        1969:354, 
+        1970:355, 
+        1971:384, 
+        1972:354, 
+        1973:354, 
+        1974:384, 
+        1975:354, 
+        1976:384, 
+        1977:354, 
+        1978:355, 
+        1979:384, 
+        1980:355, 
+        1981:354, 
+        1982:384, 
+        1983:354, 
+        1984:384, 
+        1985:354, 
+        1986:354, 
+        1987:385, 
+        1988:354, 
+        1989:355, 
+        1990:384, 
+        1991:354, 
+        1992:354, 
+        1993:383, 
+        1994:355, 
+        1995:384, 
+        1996:355, 
+        1997:354, 
+        1998:384, 
+        1999:354, 
+        2000:354, 
+        2001:384, 
+        2002:354, 
+        2003:355, 
+        2004:384, 
+        2005:355, 
+        2006:384, 
+        2007:354, 
+        2008:354, 
+        2009:384, 
+        2010:354, 
+        2011:354, 
+        2012:384, 
+        2013:355, 
+        2014:384, 
+        2015:355, 
+        2016:354, 
+        2017:384, 
+        2018:354, 
+        2019:354, 
+        2020:384, 
+        2021:354, 
+        2022:355, 
+        2023:384, 
+        2024:354, 
+        2025:384, 
+        2026:355, 
+        2027:354, 
+        2028:383, 
+        2029:355, 
+        2030:354, 
+        2031:384, 
+        2032:355, 
+        2033:384, 
+        2034:354, 
+        2035:354, 
+        2036:384, 
+        2037:354, 
+        2038:354, 
+        2039:384, 
+        2040:355, 
+        2041:355, 
+        2042:384, 
+        2043:354, 
+        2044:384, 
+        2045:354, 
+        2046:354, 
+        2047:384, 
+        2048:354, 
+        2049:355, 
+        2050:384
+    };
+
+        //서기 년도 yyyy는 윤년인가?
+        function isLeapYear(yyyy) {
+            var my_num = (q(yyyy, 4) - q(yyyy - 1, 4)) - (q(yyyy, 100) - q(yyyy - 1, 100)) + (q(yyyy, 400) - q(yyyy - 1, 400));
+
+            return (my_num == 1);
+        }
+
+        
+        
+    //my_bool: 참이면 x, 거짓이면 y를 리턴
+    function my_if(my_bool, x, y) {
+        var my_result = 0;
+
+        if (a<=x && x<=b) {
+            my_result = y;
+        }
+        else {
+            my_result = 0;
+        }
+
+        return my_result;
+    }
+
+        
+
+    //특정 연도 yyyy(정수)의 총 음력일수
+    function getTotalYearDayFromLunar(yyyy) {
+        var my_lunar_year_data = g_lunar_data[yyyy];
+        
+        var total_day = 0;
+        for (var i=0;i<13;i++) {
+            var my_month_digital_num = my_lunar_year_data.charAt(i);
+            if (my_month_digital_num != 0) { //만년 데이타 마지막 정보가 0이면 계산 안함.
+                total_day += 29 + r(parseInt(my_month_digital_num) + 1 , 2); //만년 데이타가 짝수이면 30일
+            }
+        }
+
+        return total_day;
+    }
+
+    //1881년부터 특정 연도 yyyy(정수)까지의 총 음력일수
+    function getTotalYearDayFromLunar1881(yyyy) {
+        var total_day = 0;
+        for (var i=1881;i<=yyyy;i++) {
+            total_day += getTotalYearDayFromLunar(i);
+        }
+        
+        return total_day;
+    }
+
+
+
+    // 해당 음력년도의 윤달 넘버를 반환. 윤달이 없으면 12를 반환
+    // 만약 6을 반환하면 윤6월이 있게 됨.
+    function getYunMonthIndexFromLunarYear(yyyy) {
+        var my_yun_month_index = 12;
+
+        var my_lunar_year_data = g_lunar_data[yyyy];
+        for (var i=0;i<13;i++) {
+            if (parseInt(my_lunar_year_data.charAt(i)) > 2) {
+                my_yun_month_index = i;
+                break;
+            }
+        }
+
+    
+        
+        return my_yun_month_index;
+    }
+
+    //음력 yyyy년 mm월은 윤달이 존재하는가? 혹은 윤달인가?
+    function isYunMonth(yyyy, mm) {
+        var my_mm = getYunMonthIndexFromLunarYear(yyyy);
+
+        if (mm == my_mm && mm < 12) return true;
+
+        return false;
+    }
+
+    /////////////////////////////////////////////////////////////////
+
+    function delta(x, y) {
+        if (x==y) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+
+    function tau(x, y) {
+        if (x==y) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
+
+    //# y 연도가 윤년이면 1을 리턴, 그렇지 않으면 0을 리턴
+    function leap_one(y) {
+        return ( q(y, 4) - q(y - 1, 4) ) - ( q(y, 100) - q(y - 1, 100) ) + ( q(y, 400) - q(y - 1, 400) );
+    }
+
+
+    //#Solar_Day_Of_Month(y, m) = δ(m, 1) + δ(m, 2)×( Leap_One(y) - 3 ) + ( 30 + [1 + [m + 2]_5 ]_2 )
+    //#음력 특정 연도, 특정 월(index)의 총일수
+    //# i: 0~12
+    function solar_day_of_month(y, m) {
+        //#공식은 단순하나 성능이 낮다. 
+        //#따라서 2월의 경우 δ(m, 2)×( Leap_One(y) - 3 ) 대신 아래와 같이 바꿔서 코딩.
+        var my_m2 = 0;
+        if (m==2) {
+            if (leap_one(y)==1) {
+                my_m2 = -2;
+            }
+            else {
+                my_m2 = -3;
+            }
+        }
+        
+        return ( 30 + r(1 + r(m + 2, 5), 2) ) + delta(m, 1) + my_m2; 
+    }
+
+
+    //#Lunar_Day_Of_Month(y, i) = τ(0. C(y, i))×(30 - r(C(y, i), 2)
+    //#음력 특정 연도, 특정 월(index)의 총일수
+    //# i: 0~12
+    function lunar_day_of_month(y, i) {
+        var idx_num = parseInt(g_lunar_data[y][i]); 
+        return tau(0, idx_num) * (30 - r(idx_num, 2));
+    }
+
+    //#음력 특정 연도 1월(index=0)부터 index>=0 월까지의 총일수
+    function lunar_day_of_month_from_m1(y, i) {
+        var my_days = 0;
+        for (var idx=0;idx<=i;idx++) {
+            my_days += lunar_day_of_month(y, idx);  
+        }
+
+        return my_days;
+    }
+
+    //윤달이 존재한다면 그 숫자를 리턴
+    //없다면 0을 리턴
+    function lunar_leap_month_index(y) {
+        var my_leap_year_data = g_lunar_data[y];
+
+        var my_leap_index = 0
+        for (var i=0;i<=12;i++) {
+            // my_leap_index += q( parseInt(my_leap_year_data[i]), 3)
+            
+            if ( parseInt(my_leap_year_data[i])>=3 ) {
+                my_leap_index = i;
+                break
+            }
+        }
+
+        return my_leap_index;
+    }
+
+
+
+    //#Lunar_Day_Of_Year(y) = ∑{0≤i≤12}τ(0. C(y, i))×(30 - r(C(y, i), 2) 
+    //#음력 특정 연도의 총일수
+    function lunar_day_Of_year(y) {
+        var my_sum = 0;
+        for (var i=0;i<=12;i++) {
+            var idx_num = parseInt(g_lunar_data[y][i]);
+            my_sum += lunar_day_of_month(y, i);
+        }
+
+        return my_sum;
+    }
+
+
+    //#음력 1881년부터 음력 y(>=1881) 연도까지 총일수
+    function lunar_day_Of_year_from_1881(y) {
+        var my_days = 0;
+        for (var each_year=1881;each_year<=y;each_year++) {
+            my_days += lunar_day_Of_year(each_year);
+        }
+
+        return my_days;
+    }
+
+
+
+    //#음력 y 연도의 1월 1일을 첫번째 날로 해서 total_days는 index월 day일에 해당됨. 
+    function lunar_get_index_day_list_from_m1d1(y, total_days) {
+        var my_days = total_days;
+        var my_index = -1;
+        for (var i=0;i<=12;i++) {
+            my_days -= lunar_day_of_month(y, i);
+            if (my_days <= 0) {
+                my_index = i;
+                
+                //# 불필요하게 뺀 값은 다시 되돌린다.
+                my_days += lunar_day_of_month(y, i);
+                break
+            }
+        }
+                
+
+        return [my_index, my_days]
+    }
+
+
+    //#음력 y 연도의 1월 1일을 첫번째 날로 해서 total_days는 음력 y년 index월 day일에 해당됨. 
+    //리턴값: [my_year, my_index, my_day]
+    function lunar_get_year_index_day_list_from_y18810101(total_days) {
+        var my_days = total_days;
+        var my_year = -1;
+        for (var each_year=1881;each_year<=2050;each_year++) {
+            my_days -= lunar_day_Of_year(each_year);
+            if (my_days <= 0) {
+                my_year = each_year;
+                //# 불필요하게 뺀 값은 다시 되돌린다.
+                my_days += lunar_day_Of_year(each_year);
+                break
+            }
+        }
+
+        var my_index_day_list = lunar_get_index_day_list_from_m1d1(my_year, my_days);
+
+        return [ my_year, my_index_day_list[0], my_index_day_list[1] ];
+    }
+
+
+
+    //리턴값: [연도, "윤", 월, 일]
+    function lunar_get_year_month_day_list_from_18810101(total_days) {
+        var my_month = ["", 0];
+
+        var my_year_index_day_list = lunar_get_year_index_day_list_from_y18810101(total_days);
+        var my_year = my_year_index_day_list[0];
+        var my_index = my_year_index_day_list[1]; 
+        var my_day = my_year_index_day_list[2];
+
+        var my_leap_index = lunar_leap_month_index(my_year);
+        
+
+        if (my_leap_index>0) {
+            if (my_index==my_leap_index) {
+                my_month = ["윤", my_index];
+            }
+            else if (my_index > my_leap_index) {
+                my_month = ["", my_index];
+            }
+            else {
+                my_month = ["", my_index + 1];
+            }
+        }
+        else {
+            my_month = ["", my_index + 1];
+        }
+
+
+        //# 연도, "윤", 월, 일
+        return [my_year, my_month[0], my_month[1], my_day];
+        
+    }
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////
+
+
+    //음력 y년 m월 d일은 양력으로 변환
+    //음력 1881.01.01을 첫번째 날로 해서 [음력 y.m(윤).d]은 몇번째 날인지 먼저 계산한다.
+    //is_yun: 윤달이 존재한다면 is_yun=true일 경우, 윤달의 m월 d일을 양력으로 변환한다. 
+    function get_lunar_day_from_18810101(y, m, d, is_yun) {
+        var my_days = 0;
+        
+        //이전 음력 연도까지 총일수 
+        if (y > 1881) {
+            my_days += lunar_day_Of_year_from_1881(y - 1);
+        }
+
+        //이전 음력월까지 총일수
+        var leap_index = lunar_leap_month_index(y);
+        if (leap_index > 0) {
+            if (is_yun==true) {
+                //윤달 이전 인덱스(월)까지 총일수 합
+                my_days += lunar_day_of_month_from_m1(y, leap_index - 1); 
+            }
+            else {//윤달과 월수가 같은 평달(leap_index-1)의 이전월(leap_index-2)까지 총일수 합
+                my_days += lunar_day_of_month_from_m1(y, leap_index - 2); 
+            }
+        }
+        else { //윤달이 없다면 m = index + 1, index = m - 1
+            //이전 인덱스(index-2)까지 총일수 합
+            my_days += lunar_day_of_month_from_m1(y, m - 2); 
+        }
+        
+        my_days += d;
+
+        return my_days;
+    }
+
+    //자연수 aNuchaNumber에 대응하는 서기 년월일 "2020.01.27"을 반환함
+    function getYYYYMMDD_Solar(aNuchaNumber) {
+        var my_result = "";
+
+        var my_fraction = 365.0 + 1.0/4.0 - 1.0/100.0 + 1.0/400.0;
+
+        var my_test_year = Math.ceil(aNuchaNumber/my_fraction);
+
+        //세 가지 가능한 경우
+        var my_year_m1 = my_test_year - 1;
+        var my_year_z0 = my_test_year;
+        var my_year_p1 = my_test_year + 1;
+
+        var my_year = 0;
+        //my_year 결정: 방법 1
+        if (getNuchaNumber(my_year_m1, 1, 1)<=aNuchaNumber && aNuchaNumber<=getNuchaNumber(my_year_m1, 12, 31)) {
+            my_year = my_year_m1;
+        }
+        else if (getNuchaNumber(my_year_z0, 1, 1)<=aNuchaNumber && aNuchaNumber<=getNuchaNumber(my_year_z0, 12, 31)) {
+            my_year = my_year_z0;
+        }
+        else if (getNuchaNumber(my_year_p1, 1, 1)<=aNuchaNumber && aNuchaNumber<=getNuchaNumber(my_year_p1, 12, 31)) {
+            my_year = my_year_p1;
+        }
+
+        //my_year 결정: 방법 2 (연도 공식)
+        //for (var k=-1;k<=1;k++) {
+        //	my_year += my_if(getNuchaNumber(my_test_year+k, 1, 1) <= aNuchaNumber && aNuchaNumber <= getNuchaNumber(my_test_year+k, 12, 31), my_test_year+k, 0);
+        //}
+
+
+        var dd_list = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        
+        if (isLeapYear(my_year)) {dd_list[2] = 29;}
+
+        for (var i=1;i<=12;i++) {
+            for (var j=1; j<=dd_list[i]; j++) {
+                var my_nucha_number = getNuchaNumber(my_year, i, j);
+                if (my_nucha_number == aNuchaNumber) {
+                    my_result += `${(my_year).pad(4)}.${(i).pad(2)}.${(j).pad(2)}`;
+                    return my_result;
+                }
+            }
+        }
+
+        return my_result;
+
+    }
+
+    //#양력 year, month, day에 해당하는 음력 연월일 리턴
+    //음력 총일수를 안다면 function getYYYYMMDD_Lunar(um_total_day)를 이용할 것.
+    function get_solar_to_lunar(y, m, d) {
+        //# 음력 1881, 1, 30을 음력의 첫번째 날로 설정
+        var my_total_days = getNuchaNumber(y, m, d) - getNuchaNumber(1881, 1, 29);
+
+        var year_month_day_list = lunar_get_year_month_day_list_from_18810101(my_total_days);
+
+        var my_year = year_month_day_list[0];
+        var my_yun_info = year_month_day_list[1];
+        var my_month = year_month_day_list[2];
+        var my_day = year_month_day_list[3];
+
+        return `${(my_year).pad(4)}.${my_yun_info}${(my_month).pad(2)}.${(my_day).pad(2)}`;
+    }
+
+
+    //음력 [y, m, d, is_yun]을 양력으로 전환
+    function get_lunar_to_solar(y, m, d, is_yun) {
+        var um_days = get_lunar_day_from_18810101(y, m, d, is_yun);
+
+        var my_nucha_number = getNuchaNumber(1881, 1, 29) +  um_days;
+
+        return getYYYYMMDD_Solar(my_nucha_number);
+    }
+
+    </script>
+
+</head>
+
+ <body id="NSN" onload="showTime();">
+
+    <script>
+        function changeLunarToSolar() {
+            var target_lunar2solar_form = document.getElementById("LunarToSolarForm");
+        
+            var idx_area = target_lunar2solar_form.LunarToSolarSelect.selectedIndex;
+            
+            var idx_year1 = target_lunar2solar_form.LunarToSolarYear1Select.selectedIndex;
+            var idx_year2 = target_lunar2solar_form.LunarToSolarYear2Select.selectedIndex;
+            var idx_year3 = target_lunar2solar_form.LunarToSolarYear3Select.selectedIndex;
+    
+            var idx_month = target_lunar2solar_form.LunarToSolarMonthSelect.selectedIndex;
+            var idx_day = target_lunar2solar_form.LunarToSolarDaySelect.selectedIndex;
+            var idx_hour = target_lunar2solar_form.LunarToSolarHourSelect.selectedIndex;
+            var idx_min = target_lunar2solar_form.LunarToSolarMinSelect.selectedIndex;
+            
+    
+            if (idx_area<=0) {
+                target_lunar2solar_form.LunarToSolarAreaSelect.selectedIndex = 1; //서울지역
+                idx_area = 1;
+            }
+    
+            //if (target_lunar2solar_form.LunarToSolarYear.value.trim()=="") {return;}
+            if (idx_year1==0 || idx_year2==0 || idx_year3==0) {return;}
+            if (idx_month==0) {return;}
+            if (idx_day==0) {return;}
+            
+    
+    
+            var my_year = eval(target_lunar2solar_form.LunarToSolarYear1Select.options[idx_year1].value + target_lunar2solar_form.LunarToSolarYear2Select.options[idx_year2].value + target_lunar2solar_form.LunarToSolarYear3Select.options[idx_year3].value);
+    
+            var my_month = eval(target_lunar2solar_form.LunarToSolarMonthSelect.options[idx_month].value);
+            var my_day = eval(target_lunar2solar_form.LunarToSolarDaySelect.options[idx_day].value);
+            var my_hour = eval(target_lunar2solar_form.LunarToSolarHourSelect.options[idx_hour].value);
+            var my_min = eval(target_lunar2solar_form.LunarToSolarMinSelect.options[idx_min].value);
+    
+    
+    
+            var my_area_val = eval(target_lunar2solar_form.LunarToSolarAreaSelect.options[idx_area].value);
+            var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+            var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+            var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+            //target_lunar2solar_form.LunarToSolarEOT.value = eot_next_hour_min_list[0] + ":" + eot_next_hour_min_list[1]; 
+    
+    
+            if (my_hour>=23 && my_min>=eot_next_hour_min_list[1]) {
+                my_year = yyyy_mm_dd_from_next_day_list[0];
+                my_month = yyyy_mm_dd_from_next_day_list[1];
+                my_day = yyyy_mm_dd_from_next_day_list[2];
+            }
+    
+            //숫자를 문자열로 전환
+            my_year += "";
+            my_month += "";
+            my_day += "";
+            
+            if (my_month.length==1) { my_month = "0" + my_month; }
+            if (my_day.length==1) { my_day = "0" + my_day; }
+    
+    
+            target_lunar2solar_form.TextMyStdSolar.value = "";
+            target_lunar2solar_form.TextMyYunSolar.value = "";
+            
+    
+            var my_radio_value = LunarToSolarForm.lunar_month_type.value;
+            var existYunMonth = isYunMonth(parseInt(my_year), parseInt(my_month));
+            
+            var bYunMonth = false;
+            if (my_radio_value=="yun" && existYunMonth==true) {
+                var mySolarDate = get_lunar_to_solar(parseInt(my_year), parseInt(my_month), parseInt(my_day), true);
+                target_lunar2solar_form.TextMyStdSolar.value = "존재";
+                target_lunar2solar_form.TextMyYunSolar.value = mySolarDate;
+            }
+            else if (my_radio_value=="yun" && existYunMonth==false) {
+                var mySolarDate = get_lunar_to_solar(parseInt(my_year), parseInt(my_month), parseInt(my_day), false);
+                target_lunar2solar_form.TextMyStdSolar.value = mySolarDate;
+                target_lunar2solar_form.TextMyYunSolar.value = "없음";
+                
+            }
+            else if (my_radio_value=="std" && existYunMonth==false) {
+                var mySolarDate = get_lunar_to_solar(parseInt(my_year), parseInt(my_month), parseInt(my_day), false);
+                target_lunar2solar_form.TextMyStdSolar.value = mySolarDate;
+                target_lunar2solar_form.TextMyYunSolar.value = "";
+                
+            }
+            else if (my_radio_value=="std" && existYunMonth==true) {
+                var mySolarDate = get_lunar_to_solar(parseInt(my_year), parseInt(my_month), parseInt(my_day), false);
+                target_lunar2solar_form.TextMyStdSolar.value = mySolarDate;
+                target_lunar2solar_form.TextMyYunSolar.value = "존재";
+                
+            }
+            else if (my_radio_value=="what" && existYunMonth==true) {
+                var mySolarDate_1 = get_lunar_to_solar(parseInt(my_year), parseInt(my_month), parseInt(my_day), false);
+                var mySolarDate_2 = get_lunar_to_solar(parseInt(my_year), parseInt(my_month), parseInt(my_day), true);
+                target_lunar2solar_form.TextMyStdSolar.value = mySolarDate_1;
+                target_lunar2solar_form.TextMyYunSolar.value = mySolarDate_2;
+            }
+            else if (my_radio_value=="what" && existYunMonth==false) {
+                
+                var mySolarDate_1 = get_lunar_to_solar(parseInt(my_year), parseInt(my_month), parseInt(my_day), false);
+                
+                target_lunar2solar_form.TextMyStdSolar.value = mySolarDate_1;
+                target_lunar2solar_form.TextMyYunSolar.value = "없음";
+            }
+        }
+    
+        function changeSolarToLunar() {
+            var target_lunar2solar_form = document.getElementById("LunarToSolarForm");
+    
+            var idx_area = target_lunar2solar_form.LunarToSolarSelect.selectedIndex;
+            
+            var idx_year1 = target_lunar2solar_form.LunarToSolarYear1Select.selectedIndex;
+            var idx_year2 = target_lunar2solar_form.LunarToSolarYear2Select.selectedIndex;
+            var idx_year3 = target_lunar2solar_form.LunarToSolarYear3Select.selectedIndex;
+    
+            var idx_month = target_lunar2solar_form.LunarToSolarMonthSelect.selectedIndex;
+            var idx_day = target_lunar2solar_form.LunarToSolarDaySelect.selectedIndex;
+            var idx_hour = target_lunar2solar_form.LunarToSolarHourSelect.selectedIndex;
+            var idx_min = target_lunar2solar_form.LunarToSolarMinSelect.selectedIndex;
+            
+    
+            if (idx_area<=0) {
+                target_lunar2solar_form.LunarToSolarAreaSelect.selectedIndex = 1; //서울지역
+                idx_area = 1;
+            }
+    
+            //if (target_lunar2solar_form.LunarToSolarYear.value.trim()=="") {return;}
+            if (idx_year1==0 || idx_year2==0 || idx_year3==0) {return;}
+            if (idx_month==0) {return;}
+            if (idx_day==0) {return;}
+            
+    
+    
+            var my_year = eval(target_lunar2solar_form.LunarToSolarYear1Select.options[idx_year1].value + target_lunar2solar_form.LunarToSolarYear2Select.options[idx_year2].value + target_lunar2solar_form.LunarToSolarYear3Select.options[idx_year3].value);
+    
+            var my_month = eval(target_lunar2solar_form.LunarToSolarMonthSelect.options[idx_month].value);
+            var my_day = eval(target_lunar2solar_form.LunarToSolarDaySelect.options[idx_day].value);
+            var my_hour = eval(target_lunar2solar_form.LunarToSolarHourSelect.options[idx_hour].value);
+            var my_min = eval(target_lunar2solar_form.LunarToSolarMinSelect.options[idx_min].value);
+    
+    
+    
+            var my_area_val = eval(target_lunar2solar_form.LunarToSolarAreaSelect.options[idx_area].value);
+            var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+            var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+            var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+            //target_lunar2solar_form.LunarToSolarEOT.value = eot_next_hour_min_list[0] + ":" + eot_next_hour_min_list[1]; 
+    
+    
+            if (my_hour>=23 && my_min>=eot_next_hour_min_list[1]) {
+                my_year = yyyy_mm_dd_from_next_day_list[0];
+                my_month = yyyy_mm_dd_from_next_day_list[1];
+                my_day = yyyy_mm_dd_from_next_day_list[2];
+            }
+    
+            //숫자를 문자열로 전환
+            //my_year += "";
+            //my_month += "";
+            //my_day += "";
+            
+            //if (my_month.length==1) { my_month = "0" + my_month; }
+            //if (my_day.length==1) { my_day = "0" + my_day; }
+    
+    
+            //target_lunar2solar_form.TextMyStdSolar.value = "";
+            //target_lunar2solar_form.TextMyYunSolar.value = "";
+    
+            
+            target_lunar2solar_form.TextMyLunar.value = get_solar_to_lunar(my_year, my_month, my_day);
+            target_lunar2solar_form.TextMyLunar.select();
+        }
+    </script>        
+
+<br><br><br>
+
+<h1 align="center"><font color="red">로또</font> <font color="green">번호</font> <font color="blue">생성기</font></h1>
+<br><br>
+
+<table border="1" align="center">
+    <tr>
+        <td valign="top">
+            <h1>음력 ↔ 양력</h1>
+
+            <!--style=display:none"로는 나중에 visibility 속성 이용한 제어 안됨-->
+            <div id="LunarToSolarYearDiv" style="visibility:visible";> <!--hidden-->
+                <b>생년월일시</b>: 양력 혹은 음력
+                <form name="LunarToSolarForm" id="LunarToSolarForm">
+                    <select id="LunarToSolarYear1Select" name="LunarToSolarYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="LunarToSolarYear2Select" name="LunarToSolarYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="LunarToSolarYear3Select" name="LunarToSolarYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
+                    <select id="LunarToSolarMonthSelect" name="LunarToSolarMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
+                    <select id="LunarToSolarDaySelect" name="LunarToSolarDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일 &nbsp;&nbsp;
+                    <br>
+                    <select id="LunarToSolarHourSelect" name="LunarToSolarHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
+                    <select id="LunarToSolarMinSelect" name="LunarToSolarMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
+                    <select id="LunarToSolarSelect" name="LunarToSolarAreaSelect"> 
+                                <option value="">
+                                <option value="126.92">서울
+                                <option value="128.89">강릉
+                                <option value="126.92">광주
+                                <option value="128.63">대구
+                                <option value="127.41">대전
+                                <option value="129.10">부산
+                                <option value="130.89">울릉도
+                                <option value="127.14">전주
+                                <option value="126.50">제주
+                                <option value="128.69">창원
+                                <option value="128.48">청주
+                                <option value="127.72">춘천
+                            </select>지역 &nbsp;&nbsp;<br>
+                    <!--담날 남중시각: &nbsp;<input type="text" name="LunarToSolarEOT" size="2" disabled>-->
+                    <br>
+                    <label><input type="radio" name="lunar_month_type" value="std" /> 평달</label>
+                    <label><input type="radio" name="lunar_month_type" value="yun" /> 윤달</label>
+                    <label><input type="radio" name="lunar_month_type" value="what" checked /> 모름</label>
+                    
+                </p>
+                    <input type="button" value="음력 → 양력" onclick="changeLunarToSolar();" />&nbsp;(음력 연도: 1900 ~ 2050)
+                    <br>
+                    양력(음력평달): <input type="text" name="TextMyStdSolar" value="2020.01.01" size="10" />
+                    <br>
+                    양력(음력윤달): <input type="text" name="TextMyYunSolar" value="2020.01.01" size="10" />
+                    <br><br>
+                    <input type="button" value="양력 → 음력" onclick="changeSolarToLunar();" /> 
+                    <br>
+                    음력: <input type="text" name="TextMyLunar" value="2020.윤04.01" size="10" />
+                </form>
+            </div>
+        </td>
+        <td></td>
+        <td>
+            
+            <form name="newCalendarForm">
+                <table id="newCal" border="1"> 
+                    <tr><td colspan="7" align="center"><h1>역학 달력</h1></td></tr>
+                    <tr><td colspan="8" align="center">
+                        <input type="button" value="◀◀" onclick="changePrevYear();getNewCalendar();">
+                        <input type="button" value="◁" onclick="changePrevMonth();getNewCalendar();">
+                        &nbsp;&nbsp;
+                        <input type="button" name="newCalYear" value="" onclick="changeYear();">년&nbsp;
+                        <input type="button" name="newCalMonth" value="" onclick="changeMonth();">월
+                        &nbsp;&nbsp;
+                        <input type="button" value="▷" onclick="changeNextMonth();getNewCalendar();">
+                        <input type="button" value="▶▶" onclick="changeNextYear();getNewCalendar();"> 
+                        </td>
+                    </tr>
+                    
+                    <tr><td align="center"><font color="red"><b>일</b></font></td><td align="center">월</td><td align="center">화</td><td align="center">수</td><td align="center">목</td><td align="center">금</td><td align="center"><font color="blue"><b>토</b></font></td></tr>
+                    
+                    <tr><td <td style="width:65px"id="newCalTd_1">1</td><td <td style="width:65px"id="newCalTd_2">2</td><td <td style="width:65px"id="newCalTd_3">3</td><td <td style="width:65px"id="newCalTd_4">4</td><td <td style="width:65px"id="newCalTd_5">5</td><td <td style="width:65px"id="newCalTd_6">6</td><td <td style="width:65px"id="newCalTd_7">7</td></tr>
+                    <tr><td <td style="width:65px"id="newCalTd_8">1</td><td <td style="width:65px"id="newCalTd_9">2</td><td <td style="width:65px"id="newCalTd_10">3</td><td <td style="width:65px"id="newCalTd_11">4</td><td <td style="width:65px"id="newCalTd_12">5</td><td <td style="width:65px"id="newCalTd_13">6</td><td <td style="width:65px"id="newCalTd_14">7</td></tr>
+                    <tr><td <td style="width:65px"id="newCalTd_15">1</td><td <td style="width:65px"id="newCalTd_16">2</td><td <td style="width:65px"id="newCalTd_17">3</td><td <td style="width:65px"id="newCalTd_18">4</td><td <td style="width:65px"id="newCalTd_19">5</td><td <td style="width:65px"id="newCalTd_20">6</td><td <td style="width:65px"id="newCalTd_21">7</td></tr>
+                    <tr><td <td style="width:65px"id="newCalTd_22">1</td><td <td style="width:65px"id="newCalTd_23">2</td><td <td style="width:65px"id="newCalTd_24">3</td><td <td style="width:65px"id="newCalTd_25">4</td><td <td style="width:65px"id="newCalTd_26">5</td><td <td style="width:65px"id="newCalTd_27">6</td><td <td style="width:65px"id="newCalTd_28">7</td></tr>
+                    <tr><td <td style="width:65px"id="newCalTd_29">1</td><td <td style="width:65px"id="newCalTd_30">2</td><td <td style="width:65px"id="newCalTd_31">3</td><td <td style="width:65px"id="newCalTd_32">4</td><td <td style="width:65px"id="newCalTd_33">5</td><td <td style="width:65px"id="newCalTd_34">6</td><td <td style="width:65px"id="newCalTd_35">7</td></tr>
+                    <tr><td <td style="width:65px"id="newCalTd_36">1</td><td <td style="width:65px"id="newCalTd_37">2</td><td <td style="width:65px"id="newCalTd_38">3</td><td <td style="width:65px"id="newCalTd_39">4</td><td <td style="width:65px"id="newCalTd_40">5</td><td <td style="width:65px"id="newCalTd_41">6</td><td <td style="width:65px"id="newCalTd_42">7</td></tr>
+                    
+                    <tr><td colspan="8" align="center">현재시간:&nbsp;<input type="text" name="txtTime" value="" size="10" style="text-align:center;" disabled></td></tr>
+                    <tr><td colspan="8" id="newCalToday" align="center"></td></tr>
+                </table>
+            </form>  
+        </td>
+        <td></td>
+        
+        <td valign="top">
+            <h1>로또 번호 생성</h1>
+
+            <!--style=display:none"로는 나중에 visibility 속성 이용한 제어 안됨-->
+            <div id="LottoDiv" style="visibility:visible";> <!--hidden-->
+                <form name="LottoForm" id="LottoForm">
+                    <b>생년월일 (자신의 <font color="red">음력</font> 생년월일을 입력)</b><br>
+                    음력: 
+                    <input type="text" name="TextMyLottoYear" value="" size="6" />년 &nbsp;
+                    <input type="text" name="TextMyLottoMonth" value="" size="3" />월 &nbsp;
+                    <input type="text" name="TextMyLottoDay" value="" size="3" />일 &nbsp;
+                    <br><br>
+                    <input type="button" name="ButtonMyLotto" value="생성" onclick="createLottoNumber();" />
+                    <br><br>
+                    <label><input type="radio" name="lotto_num_type" value="num" checked /> 추출 번호 기반:</label> <input type="text" name="TextMyLottoNum_1" value="" size="20" /><br>
+                    <label><input type="radio" name="lotto_num_type" value="birth" /> 음력 생일 기반:</label> <input type="text" name="TextMyLottoNum_2" value="" size="20" /><br>
+                    
+
+                </form>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<br><br><br>
+
+
+
+
+<br>
+<script type="text/javascript">
+
+var ARR_DAY_OF_WEEK = new Array("일", "월", "화", "수", "목", "금", "토");
+
+function setNewCalendar() {
+    var yyyy = eval(newCalendarForm.newCalYear.value);
+    var mm = eval(newCalendarForm.newCalMonth.value);
+
+    
+    var nextYYYY;
+    var nextMM;
+
+    //다음 달 정보...
+    if (mm==12) {
+        nextYYYY = yyyy + 1;
+        nextMM = 1;    
+    } else {
+        nextYYYY = yyyy;
+        nextMM = mm + 1;
+    }
+
+    var thisNuchaNumber = getNuchaNumber(yyyy, mm, 1);
+    var nextNuchaNumber = getNuchaNumber(nextYYYY, nextMM, 1);
+
+    //yyyy년 mm월의 총일수
+    var totalDD = nextNuchaNumber - thisNuchaNumber;
+
+    //yyyy년 mm월 1일의 요일(0:일요일~6:토요일)
+    var FIRST_DAY_OF_WEEK = r(thisNuchaNumber, 7);
+
+	var um_start_nucha_number = getNuchaNumber(1881, 1, 30);
+	var um_end_nucha_number = getNuchaNumber(2050, 11, 30);
+
+    for (var j=1; j<=42; j++) {
+        document.getElementById('newCalTd_' + j).innerHTML = "";
+        document.getElementById('newCalTd_' + j).setAttribute("align", "center");
+    }
+
+    for (var j=1; j<=totalDD; j++) {
+		//음력 정보는 양력 1881년 1월 30일부터 제공한다.
+		var lunar_info = "";
+		if ( (um_start_nucha_number <= getNuchaNumber(yyyy, mm, j)) && (getNuchaNumber(yyyy, mm, j) <= um_end_nucha_number) ) {
+			//`${(my_year).pad(4)}.${my_yun_info}${(my_month).pad(2)}.${(my_day).pad(2)}`
+            var tmp_lunar_info = get_solar_to_lunar(yyyy, mm, j); //2020.윤04.01
+			var tmp_lunar_info_list = tmp_lunar_info.split(".");
+            lunar_info = tmp_lunar_info_list[1] + "." + tmp_lunar_info_list[2];
+		}
+		
+
+		var sky_jiji_info = get60GapJaDay(yyyy, mm, j);
+		var sky_jiji = sky_jiji_info[0] + sky_jiji_info[1]; 
+        if (r(j+FIRST_DAY_OF_WEEK,7)==0) {
+			//토요일이면...
+            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='blue'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+        } else if (r(j+FIRST_DAY_OF_WEEK,7)==1) {
+			//일요일이면...
+            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='red'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+        } else {
+			//평일이면...
+            document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='black'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+        }
+    } 
+}
+
+
+function setNewCalToday() {
+    
+
+    var today = new Date();
+    var yyyy = today.getFullYear();
+    var mm = today.getMonth() + 1;
+    var dd = today.getDate();
+
+    var idxWeek = r(getNuchaNumber(yyyy, mm, dd), 7);
+
+    document.getElementById("newCalToday").innerHTML = "<font style='font:12'>" + yyyy + "년 " + mm + "월 " + dd + "일 " + ARR_DAY_OF_WEEK[idxWeek] + "요일" + "</font>";
+}
+
+
+function getNewCalendar() {
+	setNewCalendar();
+}
+
+
+
+function changeYear() {
+    var yyyy = prompt("원하는 '연도'를 입력하시오", "");
+	
+    if (yyyy != null && yyyy.trim() != "") {
+        newCalendarForm.newCalYear.value = yyyy;
+		getNewCalendar();
+    }
+}
+
+function changeMonth() {
+    var mm = prompt("원하는 '월'를 입력하시오", "");
+    if (mm != null && mm.trim() != "") {
+        newCalendarForm.newCalMonth.value = (r(mm, 12)==0) ? 12: r(mm, 12);
+		getNewCalendar();
+    }
+}
+
+function changePrevYear() {
+
+    newCalendarForm.newCalYear.value = eval(newCalendarForm.newCalYear.value)-1;    
+}
+
+function changeNextYear() {
+
+    newCalendarForm.newCalYear.value = eval(newCalendarForm.newCalYear.value)+1;    
+}
+
+
+function changePrevMonth() {
+    var tmpYYYY = eval(newCalendarForm.newCalYear.value);
+    var tmpMM = eval(newCalendarForm.newCalMonth.value);
+
+    var yyyy;
+    var mm;
+    
+    if (tmpMM == 1) {
+        yyyy = tmpYYYY - 1;
+        mm = 12;
+    } else {
+        yyyy = tmpYYYY;
+        mm = tmpMM - 1;
+    }
+
+    newCalendarForm.newCalYear.value = yyyy;   
+    newCalendarForm.newCalMonth.value = mm;
+}
+
+function changeNextMonth() {
+    var tmpYYYY = eval(newCalendarForm.newCalYear.value);
+    var tmpMM = eval(newCalendarForm.newCalMonth.value);
+
+    var yyyy;
+    var mm;
+    
+    if (tmpMM == 12) {
+        yyyy = tmpYYYY + 1;
+        mm = 1;
+    } else {
+        yyyy = tmpYYYY;
+        mm = tmpMM + 1;
+    }
+
+    newCalendarForm.newCalYear.value = yyyy;   
+    newCalendarForm.newCalMonth.value = mm;
+}
+</script>
+
+<script>
+	var g_yyymmdd_update = false;
+    function showTime() {
+        
+        var myTime = new Date();
+        var myHH = myTime.getHours();
+        var myMM = myTime.getMinutes();
+        var mySS = myTime.getSeconds();
+
+        newCalendarForm.txtTime.value = myHH + "시 " + myMM + "분 " + mySS + "초";
+
+		if (g_yyymmdd_update == false) {
+			if ( (myHH>=23 && myMM>=59 && mySS>=55) || (myHH<=1 && myMM<=0 && mySS<=5) ) {
+				var today = new Date();
+				var yyyy = today.getFullYear();
+				var mm = today.getMonth() + 1;
+				var dd = today.getDate();
+
+				var idxWeek = r(getNuchaNumber(yyyy, mm, dd), 7);
+
+				document.getElementById("newCalToday").innerHTML = "<font style='font:12'>" + yyyy + "년 " + mm + "월 " + dd + "일 " + ARR_DAY_OF_WEEK[idxWeek] + "요일" + "</font>";
+
+				g_yyymmdd_update = true;
+			}
+		}
+		else if ( (myHH>=11 && myMM>=59 && mySS>=55) || (myHH<=12 && myMM<=0 && mySS<=5) ) {
+			setNewCalToday();
+            g_yyymmdd_update = false;
+		}
+
+        
+        window.setTimeout("showTime()", 1000);
+    
+    }
+</script>
+
+
+<script>
+    var today = new Date();
+    var yyyy = today.getFullYear();
+    var mm = today.getMonth() + 1;
+    var dd = today.getDate();
+
+    newCalendarForm.newCalYear.value = yyyy;
+    newCalendarForm.newCalMonth.value = mm;
+
+
+    setNewCalendar();
+
+
+</script>
+
+</body>
+</html>
