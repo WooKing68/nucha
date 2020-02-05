@@ -10431,6 +10431,10 @@ function moveSaju() {
 	
 	</script>
 
+<hr>
+<hr>
+<hr>
+
 <h1 id="menu_6hyo"></h1>
 
 <table>
@@ -10795,6 +10799,8 @@ function moveSaju() {
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/BKyJrphtpts" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>BTS(방탄소년단): 'Answer : Love Myself'</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/eT2de-CgqN0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>폴킴: 모든 날 모든 순간</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/lZumx70VjU4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>윤하(Feat. RM of BTS): Winter Flower</option>
+
+				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/lZumx70VjU4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>이채연(PRODUCE 48): Shower</option>
 				
 				<!--option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/_2clW8Zxq88" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>Bahubali (영화:바후발리)</option-->
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/G65yiUGo93Y" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>리만가설(NHK Hi-Vision Special - The Cosmic Code Breakers)</option>
@@ -11388,6 +11394,29 @@ function moveSaju() {
 
 	//statisticBody8Type(1968, 2020);
 
+	function same3PoleYYYYMMD(y, m, d) {
+		var year_pole_list = get60GapJaYear(y);
+		var month_pole_list = get60GapJaMonth(y, m);
+		var day_pole_list = get60GapJaDay(y, m, d);
+
+		var day_ji = day_pole_list[1];
+		var month_ji = month_pole_list[1];
+		var year_ji = year_pole_list[1]; 
+		var day_gan = day_pole_list[0]; 
+		var month_gan = month_pole_list[0]; 
+		var year_gan = year_pole_list[0];
+
+		var year_pole = year_pole_list[0] + year_pole_list[1];
+		var month_pole = month_pole_list[0] + month_pole_list[1];
+		var day_pole = day_pole_list[0] + day_pole_list[1];
+
+		
+		if (year_pole == month_pole && month_pole == day_pole) {
+				console.log(`${y}.${m}.${d}: ${year_pole}/${month_pole}/${day_pole}`);
+		}
+	}
+
+	
 
 </script>	
 	
