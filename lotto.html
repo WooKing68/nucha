@@ -199,65 +199,116 @@
             my_list.sort(function(a, b){return b-a});
         }
 
+        function getLottoNumByRandom() {
+            var my_lotto_num = "";
+            var lotto_num_list = null;
+            
+            
+            
+            do {
+                lotto_num_list = getLottoNumberList(1, 45);
+                
+                var my_list_sum = list_sum(lotto_num_list);
+
+                
+
+                if (isUniqueArray(lotto_num_list) && r(my_list_sum, 9) == 3) {
+
+                    
+
+                    //오름차순 정렬
+                    //lotto_num_list_1[0]의 값이 최소값
+                    ascSortArray(lotto_num_list);
+                    //LottoForm.TextMyLottoNum_1.value = `${lotto_num_list_1[0]} / ${lotto_num_list_1[1]} / ${lotto_num_list_1[2]} / ${lotto_num_list_1[3]} / ${lotto_num_list_1[4]} / ${lotto_num_list_1[5]}`;
+                    //lotto_num_list_1 = null;
+
+
+                    my_lotto_num = `${lotto_num_list[0]} / ${lotto_num_list[1]} / ${lotto_num_list[2]} / ${lotto_num_list[3]} / ${lotto_num_list[4]} / ${lotto_num_list[5]}`;
+                    break;
+                }
+
+            } while(true);
+            
+
+            return my_lotto_num;
+        }
+
+        function getLottoNumByBirthday() {
+            var my_lotto_num = "";
+            var lotto_num_list = null;
+            
+            
+
+            //음력 생일 기반...
+            var my_um_year_str = LottoForm.TextMyLottoYear.value.trim();
+            var my_um_month_str = LottoForm.TextMyLottoMonth.value.trim();
+            var my_um_day_str = LottoForm.TextMyLottoDay.value.trim();
+
+            var my_um_year = parseInt(my_um_year_str);
+            var my_um_month = parseInt(my_um_month_str);
+            var my_um_day = parseInt(my_um_day_str);
+
+            
+            do {
+                lotto_num_list = getLottoNumberList(1, 45);
+                
+                var my_list_sum = list_sum(lotto_num_list);
+                if (isUniqueArray(lotto_num_list) && r(my_list_sum + my_um_month + my_um_day, 9) == 3) {
+                    //오름차순 정렬
+                    //lotto_num_list_1[0]의 값이 최소값
+                    ascSortArray(lotto_num_list);
+                    //LottoForm.TextMyLottoNum_2.value = `${lotto_num_list_1[0]} / ${lotto_num_list_1[1]} / ${lotto_num_list_1[2]} / ${lotto_num_list_1[3]} / ${lotto_num_list_1[4]} / ${lotto_num_list_1[5]}`;
+                    //lotto_num_list_1 = null;
+
+                    my_lotto_num = `${lotto_num_list[0]} / ${lotto_num_list[1]} / ${lotto_num_list[2]} / ${lotto_num_list[3]} / ${lotto_num_list[4]} / ${lotto_num_list[5]}`;
+                    break;
+                }
+
+            } while(true);
+            
+
+            return my_lotto_num;
+        }
+
 
         function createLottoNumber() {
-            var lotto_num_list_1 = null;
-            var lotto_num_list_2 = null;
-            var lotto_num_list_3 = null;
+            var lotto_num_by_random = "";
+            var lotto_num_by_birthday = "";
+
+            
 
 
             var my_lotto_num_type = LottoForm.lotto_num_type.value;
 
             //로또 번호 기반...
             if (my_lotto_num_type=="num") {
-                do {
-                    lotto_num_list_1 = getLottoNumberList(1, 45);
-                    
-                    var my_list_sum = list_sum(lotto_num_list_1);
-                    if (isUniqueArray(lotto_num_list_1) && r(my_list_sum, 9) == 3) {
-                        //오름차순 정렬
-                        //lotto_num_list_1[0]의 값이 최소값
-                        ascSortArray(lotto_num_list_1);
-                        LottoForm.TextMyLottoNum_1.value = `${lotto_num_list_1[0]} / ${lotto_num_list_1[1]} / ${lotto_num_list_1[2]} / ${lotto_num_list_1[3]} / ${lotto_num_list_1[4]} / ${lotto_num_list_1[5]}`;
-                        lotto_num_list_1 = null;
-                        break;
-                    }
-
-                } while(true);
+                for (var i=0;i<5;i++) {
+                    lotto_num_by_random += getLottoNumByRandom() + "\n";
+                }
+                LottoForm.TextMyLottoNum_1.innerHTML = lotto_num_by_random;
             }
+
+
             
 
             //음력 생일 기반...
+            //음력 생일 기반...
+            
             if (my_lotto_num_type=="birth") {
-                var my_month_text = LottoForm.TextMyLottoMonth.value;
-                var my_day_text = LottoForm.TextMyLottoDay.value;
-                if (my_month_text.trim()=="" || my_day_text.trim()=="") {
-                    alert("먼저 음력 생년월일을 먼저 입력하세요.");
-                    LottoForm.TextMyLottoYear.focus();
+                var my_um_year_str = LottoForm.TextMyLottoYear.value.trim();
+                var my_um_month_str = LottoForm.TextMyLottoMonth.value.trim();
+                var my_um_day_str = LottoForm.TextMyLottoDay.value.trim();
+
+                if (my_um_year_str=="" || my_um_month_str=="" || my_um_day_str=="") {
+                    alert("음력 생년월일을 정확하게 입력하세요.");
                     return;
                 }
 
-                var my_um_month = parseInt(LottoForm.TextMyLottoMonth.value);
-                var my_um_day = parseInt(LottoForm.TextMyLottoDay.value);
-
-                do {
-                    lotto_num_list_1 = getLottoNumberList(1, 45);
-                    
-                    var my_list_sum = list_sum(lotto_num_list_1);
-                    if (isUniqueArray(lotto_num_list_1) && r(my_list_sum + my_um_month + my_um_day, 9) == 3) {
-                        //오름차순 정렬
-                        //lotto_num_list_1[0]의 값이 최소값
-                        ascSortArray(lotto_num_list_1);
-                        LottoForm.TextMyLottoNum_2.value = `${lotto_num_list_1[0]} / ${lotto_num_list_1[1]} / ${lotto_num_list_1[2]} / ${lotto_num_list_1[3]} / ${lotto_num_list_1[4]} / ${lotto_num_list_1[5]}`;
-                        lotto_num_list_1 = null;
-                        break;
-                    }
-
-                } while(true);
+                for (var i=0;i<5;i++) {
+                    lotto_num_by_birthday += getLottoNumByBirthday() + "\n";
+                }
+                LottoForm.TextMyLottoNum_2.innerHTML = lotto_num_by_birthday; 
             }
-
-
-
         }
 
         /////////////////////////////////////////////////////////
@@ -1405,20 +1456,19 @@
             target_lunar2solar_form.TextMyLunar.select();
         }
     </script>        
-<br><br>
-<table align="center">
-    <tr>
-        <td><img src="hado.jpg" /></td>
-        <td>
-
-            <h1 align="center"><font color="red">로또</font> <font color="green">번호</font> <font color="blue">생성기</font></h1>
-        </td>
-        <td><img src="nagseo.jpg" /></td>
-    </tr>
-</table>
-           
+<br>
 
 <table border="1" align="center">
+    <tr>
+        <td><img src="hado.jpg" /></td>
+        <td></td>
+        <td align="center">
+            <h2>하늘의 흐름을 따르니<br><br>기를 모아 공을 이루고<br>공을 버려 무를 이룬다</h2><br><br>
+            <h1 align="center"><font color="red">로또</font> <font color="green">번호</font> <font color="blue">생성기</font></h1>
+        </td>
+        <td></td>
+        <td><img src="nagseo.jpg" /></td>
+    </tr>
     <tr>
         <td valign="top">
             <h1>음력 ↔ 양력</h1>
@@ -1513,11 +1563,15 @@
                     <input type="text" name="TextMyLottoMonth" value="" size="3" />월 &nbsp;
                     <input type="text" name="TextMyLottoDay" value="" size="3" />일 &nbsp;
                     <br><br>
-                    <input type="button" name="ButtonMyLotto" value="생성" onclick="createLottoNumber();" />
-                    <br><br>
-                    <label><input type="radio" name="lotto_num_type" value="num" checked /> 추출 번호 기반:</label> <input type="text" name="TextMyLottoNum_1" value="" size="20" /><br>
-                    <label><input type="radio" name="lotto_num_type" value="birth" /> 음력 생일 기반:</label> <input type="text" name="TextMyLottoNum_2" value="" size="20" /><br>
                     
+                    <label><input type="radio" name="lotto_num_type" value="birth" /> 음력 생일 기반:</label>
+                    <br>
+                    <textarea name="TextMyLottoNum_2" rows="6" cols="30" ></textarea><br>
+                    <label><input type="radio" name="lotto_num_type" value="num" checked /> 추출 번호 기반:</label>
+                    <br>
+                    <textarea name="TextMyLottoNum_1" rows="6" cols="30" ></textarea>
+                    <br><br>
+                    <input type="button" name="ButtonMyLotto" value="생성" onclick="createLottoNumber();" />
 
                 </form>
             </div>
