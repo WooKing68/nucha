@@ -10469,6 +10469,7 @@ function moveSaju() {
 	<tr>
 		<td>
 			<br>
+			<br>
 			양력:
 			<form name="EduJuyeokSajuForm" id="EduJuyeokSajuForm">
 				<select id="eduJuyeokSajuYear1Select" name="eduJuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="eduJuyeokSajuYear2Select" name="eduJuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="eduJuyeokSajuYear3Select" name="eduJuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
@@ -10502,13 +10503,17 @@ function moveSaju() {
 				<select id="EduMonthGanJiSelect" name="EduMonthGanJiSelect"> 
 					<option value="">
 				</select>월
-				<select id="EduDayGanJiSelect" name="EduDayGanJiSelect"> 
+				<select id="EduDayGanSelect" name="EduDayGanSelect"> 
+					<option value="">
+				</select>
+				<select id="EduDayJiSelect" name="EduDayJiSelect"> 
 					<option value="">
 				</select>일
 				<input type="button" value="간지 → 연월일(양력)" onclick="selectYearMonDay();" />
 				<select id="EduYearMonDayByGanJiSelect" name="EduYearMonDayByGanJiSelect"> 
 					<option value="">
-				</select>일
+				</select>
+				<input type="button" value="적용" onclick="useEduMonthDayGanJi();" />
 			</form>
 		</td>
 	</tr>
@@ -10522,12 +10527,16 @@ function moveSaju() {
 		
 	}
 
-	for (var i=0;i<60;i++) {
-		var ii = r(i, 10);
-		var jj = r(i, 12);
+	for (var i=0;i<10;i++) {
+		//option("visible_text", "unvisible_value")
+		var day_gan = `${g_6hyo_10skygan[i]}`;
+		document.EduJuyeokSajuForm.EduDayGanSelect.options[i+1] = new Option(day_gan, day_ji);
+		
+	}
 
-		var my_ganji = `${g_6hyo_10skygan[ii]}${g_6hyo_12jiji[ii]}`;
-		document.EduJuyeokSajuForm.EduDayGanJiSelect.options[i+1] = new Option(my_ganji, my_ganji);
+	for (var i=0;i<12;i++) {
+		var day_ji = `${g_6hyo_12jiji[i]}`;
+		document.EduJuyeokSajuForm.EduDayJiSelect.options[i+1] = new Option(day_ji, day_ji);
 	}
 
 	//양력 y년 m월의 총일수
@@ -10550,11 +10559,14 @@ function moveSaju() {
 	}
 
 	function selectYearMonDay() {
+		document.EduJuyeokSajuForm.EduYearMonDayByGanJiSelect.selectedIndex = 0;
+
 		var idx_month = document.EduJuyeokSajuForm.EduMonthGanJiSelect.selectedIndex;
-		var idx_day = document.EduJuyeokSajuForm.EduDayGanJiSelect.selectedIndex;
+		var idx_day_gan = document.EduJuyeokSajuForm.EduDayGanSelect.selectedIndex;
+		var idx_day_ji = document.EduJuyeokSajuForm.EduDayJiSelect.selectedIndex;
 
 		var my_month_ji = document.EduJuyeokSajuForm.EduMonthGanJiSelect.options[idx_month].value;
-		var my_day_ganji = document.EduJuyeokSajuForm.EduDayGanJiSelect.options[idx_day].value;
+		var my_day_ganji = document.EduJuyeokSajuForm.EduDayGanSelect.options[idx_day_gan].value + document.EduJuyeokSajuForm.EduDayJiSelect.options[idx_day_ji].value;
 
 		var my_monji_dayganji = `${my_month_ji}${my_day_ganji}`;
 
@@ -10565,8 +10577,8 @@ function moveSaju() {
 		
 
 		var i = 0;
-		for (var y=(myYear-5);y<=myYear;y++) {
-			for (var m=1;m<=12;m++) {
+		for (var y=(myYear-1);y>=(myYear-10);y--) {
+			for (var m=12;m>=1;m--) {
 				var my_tmp_mon_ganji_list = get60GapJaMonth(y, m);
 				var my_tmp_mon_ji = my_tmp_mon_ganji_list[1];
 
@@ -10582,15 +10594,6 @@ function moveSaju() {
 					var my_tmp_monji_dayganji = my_3pole.substring(3, 6); //substring( start, end )
 
 
-					
-					console.log("");
-					console.log("my_monji_dayganji: " + my_monji_dayganji);
-					console.log("my_tmp_monji_dayganji: " + my_tmp_monji_dayganji);
-					
-					
-
-					
-
 					if (my_monji_dayganji==my_tmp_monji_dayganji) {
 						i++;
 						var my_y_m_d = `${(y).pad(4)}.${(m).pad(2)}.${(d).pad(2)}`;
@@ -10602,6 +10605,35 @@ function moveSaju() {
 				}
 			}
 		}
+	}
+
+	function useEduMonthDayGanJi() {
+		var idx = document.EduJuyeokSajuForm.EduYearMonDayByGanJiSelect.selectedIndex;
+		var my_val = document.EduJuyeokSajuForm.EduYearMonDayByGanJiSelect.options[idx].value;
+		
+		var pole_list = my_val.split(".");
+		var my_year = pole_list[0];
+		var my_tmp_month = pole_list[1];
+		var my_tmp_day = pole_list[2];
+
+		var my_year_100 = parseInt(my_year.substr(0, 2)); 
+		var my_year_10 = parseInt(my_year.substr(2, 1)); //string.substr( start, length )
+		var my_year_1 = parseInt(my_year.substr(3, 1)); 
+		var my_mon = parseInt(my_tmp_month);
+		var my_day = parseInt(my_tmp_day);
+
+		if (my_year_100==19) {
+			document.EduJuyeokSajuForm.eduJuyeokSajuYear1Select.selectedIndex = 1;
+		}
+		else if (my_year_100==20) {
+			document.EduJuyeokSajuForm.eduJuyeokSajuYear1Select.selectedIndex = 2;
+		}
+
+		document.EduJuyeokSajuForm.eduJuyeokSajuYear2Select.selectedIndex = my_year_10 + 1;
+		document.EduJuyeokSajuForm.eduJuyeokSajuYear3Select.selectedIndex = my_year_1 + 1;
+
+		document.EduJuyeokSajuForm.eduJuyeokSajuMonthSelect.selectedIndex = my_mon;
+		document.EduJuyeokSajuForm.eduJuyeokSajuDaySelect.selectedIndex = my_day;
 	}
 </script>
 	
