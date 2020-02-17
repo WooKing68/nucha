@@ -92,6 +92,18 @@
 		return bExist;
 	}
 
+	function save() {
+		var htmlContent = "Hello, File Save System";
+		var bl = new Blob(htmlContent, {type: "text/html"});
+		var a = document.createElement("a");
+		a.href = URL.createObjectURL(bl);
+		a.download = "your-download-name-here.html";
+		a.hidden = true;
+		document.body.appendChild(a);
+		a.innerHTML = "something random - nobody will see this, it doesn't matter what you put here";
+		a.click();
+	}
+
 	//aKey: 눈에 보임.
 	function saveValueInSelection(aSelection, aValue, aKey) {
 		if (existValueInSelection(aSelection, aValue) == false) {
@@ -10698,8 +10710,12 @@ function moveSaju() {
 
 
 
-<h1>체질 사주</h1>
-
+<font size='6'><b>체질 사주</b></font> &nbsp;
+<!--
+<input type="button" name="" value="열기" onclick="" /> &nbsp;
+<input type="button" name="" value="저장" onclick="" />
+-->
+<br><br>
 <table border=1>
 	
 		<tr >
