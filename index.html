@@ -96,7 +96,7 @@
 	function saveValueInSelection(aSelection, aValue, aKey) {
 		if (existValueInSelection(aSelection, aValue) == false) {
 			var len = aSelection.options.length;
-			aSelection.options[len] = new Option(aKey, aVal);
+			aSelection.options[len] = new Option(aKey, aValue);
 			aSelection.selectedIndex = len;
 		}
 	}
@@ -7338,7 +7338,7 @@ The <b>greatest error:</b><br>
 </td>
 </tr>
 </table>
-<h1 id="menu_saju8body"></h1>
+
 <br>
 <br>
 
@@ -10675,7 +10675,7 @@ function moveSaju() {
 
 
 <br>
-
+<h1 id="menu_saju8body"></h1>
 <hr>
 <hr>
 <hr>
@@ -10698,7 +10698,7 @@ function moveSaju() {
 
 
 
-<h1>명리 사주</h1>
+<h1>체질 사주</h1>
 
 <table border=1>
 	
@@ -10859,34 +10859,10 @@ function moveSaju() {
 			<td rowspan="3" valign="top">&nbsp;</td>
 
 			<td rowspan="3" valign="top">
-				<h1>가족 육효점</h1><br>
+				<h1>육효</h1><br><!--가족용--> 
 				<form name="Family6HyoForm" id="Family6HyoForm">
-				<!--양력:
-					<select id="family6HyoYear1Select" name="family6HyoYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="family6HyoYear2Select" name="family6HyoYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="family6HyoYear3Select" name="family6HyoYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
-					<select id="family6HyoMonthSelect" name="family6HyoMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
-					<select id="family6HyoDaySelect" name="family6HyoDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일 &nbsp;&nbsp;
-					<br>
-					<select id="family6HyoHourSelect" name="family6HyoHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
-					<select id="family6HyoMinSelect" name="family6HyoMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
-					<select id="family6HyoSelect" name="family6HyoAreaSelect"> 
-						<option value="">
-						<option value="126.92">서울
-						<option value="128.89">강릉
-						<option value="126.92">광주
-						<option value="128.63">대구
-						<option value="127.41">대전
-						<option value="129.10">부산
-						<option value="130.89">울릉도
-						<option value="127.14">전주
-						<option value="126.50">제주
-						<option value="128.69">창원
-						<option value="128.48">청주
-						<option value="127.72">춘천
-					</select>지역 &nbsp;&nbsp;<br>
-					담날 남중시각: &nbsp;<input type="text" name="family6HyoEOT" size="2" disabled>
-					<br><br>-->
 					목적사: <input type="text" name="old6_family_question" size="50" /><br><br>
-					<input type="button" value="육효점 (가족용)" onclick="click_old6hyo_with_family();" />&nbsp;
+					<input type="button" value="육효" onclick="click_old6hyo_with_family();" />&nbsp;
 					<select name="Family6HyoSearchSelect" onchange="change_old6hyo_with_family();">
 						<option value=""></option>
 					</select>
@@ -11271,9 +11247,12 @@ function moveSaju() {
 			var mm = "" + (today.getMonth() + 1);
 			var dd = "" + today.getDate();
 
-			var my_age = yyyy - my_year + 1;
+			var my_age = yyyy - my_year;
 
-			if (yyyy != my_age) {
+			if (yyyy == my_year) {
+				my_age = 1;
+			}
+			else {
 				if ( (mm>my_month) || (mm==my_month && dd>=my_day) ) {
 					my_age = my_age + 1;
 				}
@@ -12176,19 +12155,85 @@ function moveSaju() {
 	function init_old6hyo_with_family_data() {
 		//[my_year, my_month, my_day, my_hour, my_min, my_sec, s_bon, s_byeon, s_ji]
 		var my_juyeok_list = initJuYeok(); 
+		save_old6hyo_with_family_data(my_juyeok_list);
 	}
 
-	function update_old6hyo_with_family_data() {
+	//선택상자에 필요한 정보를 저장해둔다.
+	//[my_year, my_month, my_day, my_hour, my_min, my_sec, s_bon, s_byeon, s_ji, my_year_list, my_month_list, my_day_list, my_hour_list];
+	function save_old6hyo_with_family_data(my_juyeok_list) {
+		
+		var my_year =  my_juyeok_list[0];
+		var my_month =  my_juyeok_list[1]; 
+		var my_day =  my_juyeok_list[2]; 
+		var my_hour =  my_juyeok_list[3]; 
+		var my_min =  my_juyeok_list[4]; 
+		var my_sec =  my_juyeok_list[5]; 
+		var s_bon =  my_juyeok_list[6]; 
+		var s_byeon =  my_juyeok_list[7]; 
+		var s_ji =  my_juyeok_list[8]; 
 
+		var my_year_pole = my_juyeok_list[9]; 
+		var my_month_pole = my_juyeok_list[10]; 
+		var my_day_pole = my_juyeok_list[11]; 
+		var my_hour_pole = my_juyeok_list[12]; 
+
+		var my_total_pole = `${my_year_pole[0]}${my_year_pole[1]}${my_month_pole[0]}${my_month_pole[1]}${my_day_pole[0]}${my_day_pole[1]}${my_hour_pole[0]}${my_hour_pole[1]}`;
+
+		var my_question = Family6HyoForm.old6_family_question.value;
+		my_question = my_question.trim();
+
+		var family6HyoSearchSelect = Family6HyoForm.Family6HyoSearchSelect;
+		
+		var my_key = `${my_question}/${my_year}.${my_month}.${my_day} ${my_hour}:${my_min}`;
+		var my_val = `${my_question}/${s_bon}/${s_byeon}/${s_ji}/${my_total_pole}/${my_year}/${my_month}/${my_day}/${my_hour}/${my_min}`;
+		
+		
+		saveValueInSelection(family6HyoSearchSelect, my_val, my_key);
+	}
+
+	function change_old6hyo_with_family_data() {
+		var x = Family6HyoForm.Family6HyoSearchSelect;
+		var idx = x.selectedIndex;
+		var val = x.options[idx].value;
+
+		//${my_question}/${s_bon}/${s_byeon}/${s_ji}/${my_total_pole}/${my_year}/${my_month}/${my_day}/${my_hour}/${my_min}
+		var s_list = val.split("/");
+
+		//목적사
+		Family6HyoForm.old6_family_question.value = s_list[0];
+		
+
+		var s_base64_list = s_list[1];
+		var s_byunhyo_list = s_list[2];
+		var s_ji64_list = s_list[3];
+
+		
+
+		
+		for (var i=0;i<6;i++) {
+			g_base64_list[i] = s_base64_list[i]; //s[i]; 
+			g_byunhyo_list[i] = s_byunhyo_list[i]; //s[i+7]; 
+			g_ji64_list[i] = s_ji64_list[i]; //s[i+14]; 
+		}
+
+		var s_year_month_day_hour_12jiji = s_list[4];
+		//alert("s_year_month_day_hour_12jiji: " + s_year_month_day_hour_12jiji);
+
+		g_yyyy_mm_dd_hh["year"] = [s_year_month_day_hour_12jiji.charAt(0), s_year_month_day_hour_12jiji.charAt(1)];
+		g_yyyy_mm_dd_hh["month"] = [s_year_month_day_hour_12jiji.charAt(2), s_year_month_day_hour_12jiji.charAt(3)];
+		g_yyyy_mm_dd_hh["day"] = [s_year_month_day_hour_12jiji.charAt(4), s_year_month_day_hour_12jiji.charAt(5)];
+		g_yyyy_mm_dd_hh["hour"] = [s_year_month_day_hour_12jiji.charAt(6), s_year_month_day_hour_12jiji.charAt(7)];
 	}
 
 	function click_old6hyo_with_family() {
 		init_old6hyo_with_family_data();
+		
 		show_old6hyo_with_family();
 	}
 
 	function change_old6hyo_with_family() {
-		update_old6hyo_with_family_data();
+		change_old6hyo_with_family_data();
+
 		show_old6hyo_with_family();
 	}
 
@@ -12205,25 +12250,6 @@ function moveSaju() {
 		var my_hour_list = g_yyyy_mm_dd_hh["hour"];
 
 		var my_question = Family6HyoForm.old6_family_question.value;
-//
-		//var my_year =  my_juyeok_list[0];
-		//var my_month =  my_juyeok_list[1]; 
-		//var my_day =  my_juyeok_list[2]; 
-		//var my_hour =  my_juyeok_list[3]; 
-		//var my_min =  my_juyeok_list[4]; 
-		//var my_sec =  my_juyeok_list[5]; 
-		//var s_bon =  my_juyeok_list[6]; 
-		//var s_byeon =  my_juyeok_list[7]; 
-		//var s_ji =  my_juyeok_list[8]; 
-
-
-		
-		//var my_key = `${my_question}/${my_year}.${my_month}.${my_day} ${my_hour}:${my_min}`;
-		//var my_val = `${my_question}/${s_bon}/${s_byeon}/${s_ji}/${my_year}/${my_month}/${my_day}/${my_hour}/${my_min}`;
-		//var family6HyoSearchSelect = document.getElementsByName("Family6HyoSearchSelect");
-		//saveValueInSelection(family6HyoSearchSelect, my_val, my_key);
-
-
 
 		
 		//본괘//지괘
