@@ -10854,7 +10854,7 @@ function moveSaju() {
 
 			<td rowspan="3" valign="top">
 				<h1>가족 육효점</h1><br>
-				<form name="Family6HyoForm" id="Family6HyoForm"></form>
+				<form name="Family6HyoForm" id="Family6HyoForm">
 				<!--양력:
 					<select id="family6HyoYear1Select" name="family6HyoYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="family6HyoYear2Select" name="family6HyoYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="family6HyoYear3Select" name="family6HyoYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
 					<select id="family6HyoMonthSelect" name="family6HyoMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
@@ -12144,7 +12144,7 @@ function moveSaju() {
 		var s_ji64_list = s_list[3];
 
 		//목적사
-		document.Family6HyoForm.old6_family_question.value = s_list[0];
+		Family6HyoForm.old6_family_question.value = s_list[0];
 		
 
 		
@@ -12178,7 +12178,7 @@ function moveSaju() {
 		var my_day_list = g_yyyy_mm_dd_hh["day"];
 		var my_hour_list = g_yyyy_mm_dd_hh["hour"];
 
-		//var my_question = document.Family6HyoForm.old6_family_question.value;
+		var my_question = Family6HyoForm.old6_family_question.value;
 //
 		//var my_year =  my_juyeok_list[0];
 		//var my_month =  my_juyeok_list[1]; 
