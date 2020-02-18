@@ -2,7 +2,7 @@
 <html lang="ko">
  <head>
 	<title> 육효 </title>
-	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
 	<meta name="Generator" content="Visual Studio Code">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="Author" content="">
@@ -10,6 +10,8 @@
 	<meta name="Description" content="구성, 주역, 사주, 체질">
 
 	<SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
   
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -59,6 +61,141 @@
 	#STATICMENU { margin: 0pt; padding: 0pt;  position: absolute; right: 0px; top: 0px;}
 </style>
 
+
+<script type="text/javascript">
+
+    function ReadExcel() {
+        //Reference the FileUpload element.
+        var fileUpload = document.getElementById("loadFamilyData");
+ 
+        //Validate whether File is valid Excel file.
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.xls|.xlsx)$/;
+        if (regex.test(fileUpload.value.toLowerCase())) {
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+ 
+                //For Browsers other than IE.
+                if (reader.readAsBinaryString) {
+                    reader.onload = function (e) {
+                        ProcessExcel(e.target.result);
+                    };
+                    reader.readAsBinaryString(fileUpload.files[0]);
+                } else {
+                    //For IE Browser.
+                    reader.onload = function (e) {
+                        var data = "";
+                        var bytes = new Uint8Array(e.target.result);
+                        for (var i = 0; i < bytes.byteLength; i++) {
+                            data += String.fromCharCode(bytes[i]);
+                        }
+                        ProcessExcel(data);
+                    };
+                    reader.readAsArrayBuffer(fileUpload.files[0]);
+                }
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        } else {
+            alert("Please upload a valid Excel file.");
+        }
+		
+		
+	};
+    function ProcessExcel(data) {
+        //Read the Excel File data.
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+ 
+        //Fetch the name of First Sheet.
+        var firstSheet = workbook.SheetNames[0];
+ 
+        //Read all rows from First Sheet into an JSON array.
+        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+ 
+        //Create a HTML Table element.
+        var table = document.createElement("table");
+        table.border = "1";
+ 
+        //Add the header row.
+        var row = table.insertRow(-1);
+ 
+        //Add the header cells.
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Parents_Men";
+        row.appendChild(headerCell);
+ 
+        headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Parents_Women";
+        row.appendChild(headerCell);
+ 
+        headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Children_Men";
+        row.appendChild(headerCell);
+
+		headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Children_Women";
+        row.appendChild(headerCell);
+
+		headerCell = document.createElement("TH");
+        headerCell.innerHTML = "YukHyo";
+        row.appendChild(headerCell);
+ 
+        //Add the data rows from Excel file.
+		//Parents_Men	Parents_Women	Children_Men	Children_Women	YukHyo
+
+        for (var i = 0; i < excelRows.length; i++) {
+            //Add the data row.
+            var row = table.insertRow(-1);
+ 
+            //Add the data cells.
+            var cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].Parents_Men;
+ 
+            cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].Parents_Women;
+ 
+            cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].Children_Men;
+
+			cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].Children_Women || "";
+
+			cell = row.insertCell(-1);
+            cell.innerHTML = excelRows[i].YukHyo || "";
+        }
+ 
+        var dvExcel = document.getElementById("dvExcel");
+        dvExcel.innerHTML = "";
+        dvExcel.appendChild(table);
+    };
+
+	//Open IE -> Tools ->Internet Options -> Security -> Custom Level -> ActiveX controls 
+	//and plug-ins ->Enable "Initialize and script ActiveX controls not marked as safe for scripting"
+	function SaveExcel() {
+		
+		var encodedUri = encodeURI(csvContent);
+
+		var blob = new Blob([csvContent], { type: 'text/xls;charset=utf-8;' });
+		if (navigator.msSaveBlob) { // IE 10+
+			navigator.msSaveBlob(blob, filename);
+		} else {
+			var link = document.createElement("a");
+			if (link.download !== undefined) { // feature detection
+				// Browsers that support HTML5 download attribute
+				var url = URL.createObjectURL(blob);
+				link.setAttribute("href", url);
+				link.setAttribute("download", filename);
+				link.style.visibility = 'hidden';
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			}
+		}
+		
+	}
+</script>
+
 <script type="text/javascript">
 //(7).pad(3);  //returns "007"
     Number.prototype.pad = function(size) {
@@ -92,17 +229,7 @@
 		return bExist;
 	}
 
-	function save() {
-		var htmlContent = "Hello, File Save System";
-		var bl = new Blob(htmlContent, {type: "text/html"});
-		var a = document.createElement("a");
-		a.href = URL.createObjectURL(bl);
-		a.download = "your-download-name-here.html";
-		a.hidden = true;
-		document.body.appendChild(a);
-		a.innerHTML = "something random - nobody will see this, it doesn't matter what you put here";
-		a.click();
-	}
+	
 
 	//aKey: 눈에 보임.
 	function saveValueInSelection(aSelection, aValue, aKey) {
@@ -111,6 +238,25 @@
 			aSelection.options[len] = new Option(aKey, aValue);
 			aSelection.selectedIndex = len;
 		}
+	}
+
+	function stringSelection(aSelection, aDelim) {
+		var s_sum = "";
+		var len = aSelection.options.length;
+		for (var i=0;i<len;i++) {
+			var val = aSelection.options[i].value;
+			if (val == "") continue;
+
+			if (i==len-1) {
+				s_sum += val;
+			}
+			else {
+				s_sum += val + aDelim;
+			}
+			
+		}
+
+		return s_sum;
 	}
 
 
@@ -10711,11 +10857,19 @@ function moveSaju() {
 
 
 <font size='6'><b>체질 사주</b></font> &nbsp;
-<!--
-<input type="button" name="" value="열기" onclick="" /> &nbsp;
-<input type="button" name="" value="저장" onclick="" />
--->
+<form method="post" enctype="multipart/form-data">
+<label for="avatar">파일 열기</label>
+<input type="file" id="loadFamilyData" accept=".csv, .xls, .xlsx, .xlsm" name="" value="탐색" onclick="" /><!--accept=".xlsx, .xlsm"-->
+<input type="button" name="" value="열기" onclick="ReadExcel();"><!---->
+<input type="button" name="" value="저장" onclick="SaveExcel();">
+</form>
+
+<div id="dvExcel"></div>
+
+
+
 <br><br>
+<!--가족용--> 
 <table border=1>
 	
 		<tr >
@@ -10745,27 +10899,27 @@ function moveSaju() {
 						<td colspan="10">
 							<form name="Body8JuyeokSajuForm">
 								남녀구분: <select name="body8JuyeokSajuSexSelect"><option value='-1'><option value='1'>남자<option value='0'>여자</select>&nbsp;
-								<b>아래 양력 입력</b>:<br>
+								<font color='red'><b>양력 입력</b></font>:<br>
 								<select name="body8JuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select name="body8JuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select name="body8JuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
 								<select name="body8JuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
 								<select name="body8JuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일<br>
 								<select name="body8JuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
 								<select name="body8JuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
 								<select  name="body8JuyeokSajuAreaSelect"> 
-											<option value="">
-											<option value="126.92">서울
-											<option value="128.89">강릉
-											<option value="126.92">광주
-											<option value="128.63">대구
-											<option value="127.41">대전
-											<option value="129.10">부산
-											<option value="130.89">울릉도
-											<option value="127.14">전주
-											<option value="126.50">제주
-											<option value="128.69">창원
-											<option value="128.48">청주
-											<option value="127.72">춘천
-										</select>지역<br>
+									<option value="">
+									<option value="126.92">서울
+									<option value="128.89">강릉
+									<option value="126.92">광주
+									<option value="128.63">대구
+									<option value="127.41">대전
+									<option value="129.10">부산
+									<option value="130.89">울릉도
+									<option value="127.14">전주
+									<option value="126.50">제주
+									<option value="128.69">창원
+									<option value="128.48">청주
+									<option value="127.72">춘천
+								</select>지역<br>
 								담날 남중시각: &nbsp;<input type="text" name="body8JuyeokSajuEOT" size="2" disabled>
 								&nbsp;<input type="button" name="body8JuyeokSajuButton" value="사주" onclick="getFamilySaju(this);" />
 							</form>
@@ -10803,27 +10957,27 @@ function moveSaju() {
 						<td colspan="10">
 							<form name="Body8JuyeokSajuForm">
 								남녀구분: <select name="body8JuyeokSajuSexSelect"><option value='-1'><option value='1'>남자<option value='0'>여자</select>&nbsp;
-								<b>아래 양력 입력</b>:<br>
+									<font color='red'><b>양력 입력</b></font>:<br>
 								<select name="body8JuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select name="body8JuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select name="body8JuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
 								<select name="body8JuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
 								<select name="body8JuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일<br>
 								<select name="body8JuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
 								<select name="body8JuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
 								<select  name="body8JuyeokSajuAreaSelect"> 
-											<option value="">
-											<option value="126.92">서울
-											<option value="128.89">강릉
-											<option value="126.92">광주
-											<option value="128.63">대구
-											<option value="127.41">대전
-											<option value="129.10">부산
-											<option value="130.89">울릉도
-											<option value="127.14">전주
-											<option value="126.50">제주
-											<option value="128.69">창원
-											<option value="128.48">청주
-											<option value="127.72">춘천
-										</select>지역<br>
+									<option value="">
+									<option value="126.92">서울
+									<option value="128.89">강릉
+									<option value="126.92">광주
+									<option value="128.63">대구
+									<option value="127.41">대전
+									<option value="129.10">부산
+									<option value="130.89">울릉도
+									<option value="127.14">전주
+									<option value="126.50">제주
+									<option value="128.69">창원
+									<option value="128.48">청주
+									<option value="127.72">춘천
+								</select>지역<br>
 								담날 남중시각: &nbsp;<input type="text" name="body8JuyeokSajuEOT" size="2" disabled>
 								&nbsp;<input type="button" name="body8JuyeokSajuButton" value="사주" onclick="getFamilySaju(this);" />
 							</form>
@@ -10875,7 +11029,7 @@ function moveSaju() {
 			<td rowspan="3" valign="top">&nbsp;</td>
 
 			<td rowspan="3" valign="top">
-				<h1>육효</h1><br><!--가족용--> 
+				<h1>육효</h1><br><!--가족용 육효-->
 				<form name="Family6HyoForm" id="Family6HyoForm">
 					목적사: <input type="text" name="old6_family_question" size="50" /><br><br>
 					<input type="button" value="육효" onclick="click_old6hyo_with_family();" />&nbsp;
@@ -10931,27 +11085,27 @@ function moveSaju() {
 						<td colspan="10">
 							<form name="Body8JuyeokSajuForm">
 								남녀구분: <select name="body8JuyeokSajuSexSelect"><option value='-1'><option value='1'>남자<option value='0'>여자</select>&nbsp;
-									<b>아래 양력 입력</b>:<br>
+								<font color='red'><b>양력 입력</b></font>:<br>
 								<select name="body8JuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select name="body8JuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select name="body8JuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
 								<select name="body8JuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
 								<select name="body8JuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일<br>
 								<select name="body8JuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
 								<select name="body8JuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
 								<select  name="body8JuyeokSajuAreaSelect"> 
-											<option value="">
-											<option value="126.92">서울
-											<option value="128.89">강릉
-											<option value="126.92">광주
-											<option value="128.63">대구
-											<option value="127.41">대전
-											<option value="129.10">부산
-											<option value="130.89">울릉도
-											<option value="127.14">전주
-											<option value="126.50">제주
-											<option value="128.69">창원
-											<option value="128.48">청주
-											<option value="127.72">춘천
-										</select>지역<br>
+									<option value="">
+									<option value="126.92">서울
+									<option value="128.89">강릉
+									<option value="126.92">광주
+									<option value="128.63">대구
+									<option value="127.41">대전
+									<option value="129.10">부산
+									<option value="130.89">울릉도
+									<option value="127.14">전주
+									<option value="126.50">제주
+									<option value="128.69">창원
+									<option value="128.48">청주
+									<option value="127.72">춘천
+								</select>지역<br>
 								담날 남중시각: &nbsp;<input type="text" name="body8JuyeokSajuEOT" size="2" disabled>
 								&nbsp;<input type="button" name="body8JuyeokSajuButton" value="사주" onclick="getFamilySaju(this);" />
 							</form>
@@ -10989,27 +11143,27 @@ function moveSaju() {
 						<td colspan="10">
 							<form name="Body8JuyeokSajuForm">
 								남녀구분: <select name="body8JuyeokSajuSexSelect"><option value='-1'><option value='1'>남자<option value='0'>여자</select>&nbsp;
-								<b>아래 양력 입력</b>:<br>
+								<font color='red'><b>양력 입력</b></font>:<br>
 								<select name="body8JuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select name="body8JuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select name="body8JuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
 								<select name="body8JuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
 								<select name="body8JuyeokSajuDaySelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31</select>일<br>
 								<select name="body8JuyeokSajuHourSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23</select>시
 								<select name="body8JuyeokSajuMinSelect"><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12<option value='13'>13<option value='14'>14<option value='15'>15<option value='16'>16<option value='17'>17<option value='18'>18<option value='19'>19<option value='20'>20<option value='21'>21<option value='22'>22<option value='23'>23<option value='24'>24<option value='25'>25<option value='26'>26<option value='27'>27<option value='28'>28<option value='29'>29<option value='30'>30<option value='31'>31<option value='32'>32<option value='33'>33<option value='34'>34<option value='35'>35<option value='36'>36<option value='37'>37<option value='38'>38<option value='39'>39<option value='40'>40<option value='41'>41<option value='42'>42<option value='43'>43<option value='44'>44<option value='45'>45<option value='46'>46<option value='47'>47<option value='48'>48<option value='49'>49<option value='50'>50<option value='51'>51<option value='52'>52<option value='53'>53<option value='54'>54<option value='55'>55<option value='56'>56<option value='57'>57<option value='58'>58<option value='59'>59</select>분
 								<select  name="body8JuyeokSajuAreaSelect"> 
-											<option value="">
-											<option value="126.92">서울
-											<option value="128.89">강릉
-											<option value="126.92">광주
-											<option value="128.63">대구
-											<option value="127.41">대전
-											<option value="129.10">부산
-											<option value="130.89">울릉도
-											<option value="127.14">전주
-											<option value="126.50">제주
-											<option value="128.69">창원
-											<option value="128.48">청주
-											<option value="127.72">춘천
-										</select>지역<br>
+									<option value="">
+									<option value="126.92">서울
+									<option value="128.89">강릉
+									<option value="126.92">광주
+									<option value="128.63">대구
+									<option value="127.41">대전
+									<option value="129.10">부산
+									<option value="130.89">울릉도
+									<option value="127.14">전주
+									<option value="126.50">제주
+									<option value="128.69">창원
+									<option value="128.48">청주
+									<option value="127.72">춘천
+								</select>지역<br>
 								담날 남중시각: &nbsp;<input type="text" name="body8JuyeokSajuEOT" size="2" disabled>
 								&nbsp;<input type="button" name="body8JuyeokSajuButton" value="사주" onclick="getFamilySaju(this);" />
 							</form>
@@ -11085,16 +11239,16 @@ function moveSaju() {
 
 			
 			//var save_val = `${idx_sex}/${idx_year1}/${idx_year2}/${idx_year3}/${idx_month}/${idx_day}/${idx_hour}/${idx_min}/${idx_area}`;
-
-			document.getElementsByName("body8JuyeokSajuSexSelect")[ii].selectedIndex = parseInt(val_list[0]);
-			document.getElementsByName("body8JuyeokSajuYear1Select")[ii].selectedIndex = parseInt(val_list[1]);
-			document.getElementsByName("body8JuyeokSajuYear2Select")[ii].selectedIndex = parseInt(val_list[2]);
-			document.getElementsByName("body8JuyeokSajuYear3Select")[ii].selectedIndex = parseInt(val_list[3]);
-			document.getElementsByName("body8JuyeokSajuMonthSelect")[ii].selectedIndex = parseInt(val_list[4]);
-			document.getElementsByName("body8JuyeokSajuDaySelect")[ii].selectedIndex = parseInt(val_list[5]);
-			document.getElementsByName("body8JuyeokSajuHourSelect")[ii].selectedIndex = parseInt(val_list[6]);
-			document.getElementsByName("body8JuyeokSajuMinSelect")[ii].selectedIndex = parseInt(val_list[7]);
-			document.getElementsByName("body8JuyeokSajuAreaSelect")[ii].selectedIndex = parseInt(val_list[8]);
+			var j=1; //0:연월일
+			document.getElementsByName("body8JuyeokSajuSexSelect")[ii].selectedIndex = parseInt(val_list[j+0]);
+			document.getElementsByName("body8JuyeokSajuYear1Select")[ii].selectedIndex = parseInt(val_list[j+1]);
+			document.getElementsByName("body8JuyeokSajuYear2Select")[ii].selectedIndex = parseInt(val_list[j+2]);
+			document.getElementsByName("body8JuyeokSajuYear3Select")[ii].selectedIndex = parseInt(val_list[j+3]);
+			document.getElementsByName("body8JuyeokSajuMonthSelect")[ii].selectedIndex = parseInt(val_list[j+4]);
+			document.getElementsByName("body8JuyeokSajuDaySelect")[ii].selectedIndex = parseInt(val_list[j+5]);
+			document.getElementsByName("body8JuyeokSajuHourSelect")[ii].selectedIndex = parseInt(val_list[j+6]);
+			document.getElementsByName("body8JuyeokSajuMinSelect")[ii].selectedIndex = parseInt(val_list[j+7]);
+			document.getElementsByName("body8JuyeokSajuAreaSelect")[ii].selectedIndex = parseInt(val_list[j+8]);
 
 
 			getFamilySajuByIndex(ii);
@@ -11221,14 +11375,18 @@ function moveSaju() {
 			//0번째: 대운수, 1~12번째: 대운 간지
 			var my_daeun_list = getDaeUn(my_sex, year_pole_list[0], month_pole_list[0], month_pole_list[1], my_year, my_month, my_day, my_age);
 			var my_daeun_su = my_daeun_list[0];
-			for (var i=1;i<=12;i++) {
+			//var xDaeUn_1 = document.getElementsByName("BodyJuyeokSaju_daeun_" + 1);
+			//xDaeUn_1[ii].innerHTML = "nbsp;"; 
+			for (var i=1;i<=12;i++) {//BodyJuyeokSaju_daeun_1에는 월운 대운을 대운수 없이 표시한다.
 				var xDaeUn = document.getElementsByName("BodyJuyeokSaju_daeun_" + i);
 				//console.log(my_daeun_list[i-1]);
-				xDaeUn[ii].innerHTML = my_daeun_list[i];
+				xDaeUn[ii].innerHTML = my_daeun_list[i]; //0번째 요소는 대운수임.
 			}
 
-			var my_seun_list = getSeUn(my_daeun_su, my_year, thisYear);
-			for (var i=1;i<=12;i++) {
+			var my_seun_list = getSeUn(my_daeun_su, my_year, thisYear, my_age);
+			//var xSeUn_1 = document.getElementsByName("BodyJuyeokSaju_seun_" + 1);
+			//xSeUn_1[ii].innerHTML = "nbsp;"; 
+			for (var i=1;i<=12;i++) { //BodyJuyeokSaju_seun_1에는 월운 대운 관련된 세운을 표시한다.
 				var xSeUn = document.getElementsByName("BodyJuyeokSaju_seun_" + i);
 				//console.log(my_daeun_list[i-1]);
 				xSeUn[ii].innerHTML = my_seun_list[i-1];
@@ -11244,7 +11402,7 @@ function moveSaju() {
 			var idx_save = body8JuyeokSajuSaveSelect[ii].selectedIndex;
 			var save_length = body8JuyeokSajuSaveSelect[ii].options.length;
 			var save_key = `${my_year}.${(my_month).pad(2)}.${(my_day).pad(2)}`;
-			var save_val = `${idx_sex}/${idx_year1}/${idx_year2}/${idx_year3}/${idx_month}/${idx_day}/${idx_hour}/${idx_min}/${idx_area}`;
+			var save_val = `${my_year}.${(my_month).pad(2)}.${(my_day).pad(2)}/${idx_sex}/${idx_year1}/${idx_year2}/${idx_year3}/${idx_month}/${idx_day}/${idx_hour}/${idx_min}/${idx_area}`;
 
 			if (existValueInSelection(body8JuyeokSajuSaveSelect[ii], save_val)==false) {
 				body8JuyeokSajuSaveSelect[ii].options[save_length] = new Option(save_key, save_val);
@@ -11342,11 +11500,22 @@ function moveSaju() {
 			}
 
 			var my_daeun_list = [];
+
+			//0번째 요소는 대운수
+			my_daeun_list.push(my_daeun_su);
+
+			if (my_daeun_su != 1) {
+				if ( my_age <my_daeun_su ) {
+					my_daeun_list.push(` <br><h2><font color='red'>${g_6hyo_10skygan[r(month_gan_idx, 10)]}<br>${g_6hyo_12jiji[r(month_ji_idx, 12)]}</font></h2>`);
+				}
+				else {
+					my_daeun_list.push(` <br><h2>${g_6hyo_10skygan[r(month_gan_idx, 10)]}<br>${g_6hyo_12jiji[r(month_ji_idx, 12)]}</h2>`);
+				}
+				
+			}
 			
 
 			if (my_direction==1) {
-				my_daeun_list.push(my_daeun_su);
-				
 				for (var i=1;i<=12;i++) {
 					if ( (my_daeun_su + 10*(i-1))<=my_age && (my_age<my_daeun_su + 10*(i-1)+10) ) {
 						my_daeun_list.push(`${my_daeun_su + 10*(i-1)}<br><font color='red'><h2>${g_6hyo_10skygan[r(month_gan_idx+i, 10)]}<br>${g_6hyo_12jiji[r(month_ji_idx+i, 12)]}</h2></font>`);
@@ -11355,10 +11524,9 @@ function moveSaju() {
 						my_daeun_list.push(`${my_daeun_su + 10*(i-1)}<br><h2>${g_6hyo_10skygan[r(month_gan_idx+i, 10)]}<br>${g_6hyo_12jiji[r(month_ji_idx+i, 12)]}</h2>`);
 					}
 				}
+				
 			}
 			else {
-				my_daeun_list.push(my_daeun_su);
-
 				for (var i=1;i<=12;i++) {
 					if ( (my_daeun_su + 10*(i-1))<=my_age && (my_age<my_daeun_su + 10*(i-1)+10) ) {
 						my_daeun_list.push(`${my_daeun_su + 10*(i-1)}<br><font color='red'><h2>${g_6hyo_10skygan[r(month_gan_idx-i, 10)]}<br>${g_6hyo_12jiji[r(month_ji_idx-i, 12)]}</h2></font>`);
@@ -11373,9 +11541,42 @@ function moveSaju() {
 		}
 
 		//my_year: 생년, thisYear: 올해
-		function getSeUn(aDaeUnSu, my_year, thisYear) {
+		function getSeUn(aDaeUnSu, my_year, thisYear, my_age) {
 			
 			var my_seun_list = [];
+
+			if (aDaeUnSu != 1) { //aDaeUnSu가 4라면... 월운 대운 관련하여 1세부터 3세까지의 세운을 따로 보관.
+				var jj = 10 - (aDaeUnSu - 1);
+
+				var t = "";
+				for (var j=1;j<=10;j++) {
+					
+					if (j>jj) {
+						var each_year = my_year + (j - jj - 1);
+						//console.log("each_year: " + each_year);
+						var year_pole_list = get60GapJaYear(each_year);
+						// (1세 <= j-jj < 대운수) 전까지의 나이라면...
+						if ( (thisYear-10 <= each_year) && (each_year < thisYear) ) { //현재 나이보다 10년 아래 내에 있다면...
+							t += `<font color='blue'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
+						}
+						else if ( (thisYear < each_year ) && (each_year <= thisYear+10 ) ) { //현재 나이보다 10년 아래 내에 있다면...
+							t += `<font color='red'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
+						}
+						else {
+							t += `${year_pole_list[0]}${year_pole_list[1]}<br>`; //${daeun_year + (i-1)}: 
+						}
+						
+					}
+					else {
+						
+						t += "<br>";
+					}
+				}
+
+				my_seun_list.push(t);
+			}
+
+
 			for (var i=1;i<=12;i++) {
 				var daeun_year = (my_year + aDaeUnSu - 1) + 10*(i-1);
 				
@@ -14424,5 +14625,119 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 	}
 	
 </script>
+
+<table id="tblData">
+    <tr>
+        <th>Parents_Men</th>
+        <th>Parents_Women</th>
+		<th>Children_Men</th>
+		<th>Children_Women</th>
+		<th>YukHyo</th>
+    </tr>
+    <tr>
+        <td>John Doe</td>
+        <td>john@gmail.com</td>
+		<td>USA</td>
+		<td>john@gmail.com</td>
+        <td>USA</td>
+    </tr>
+    <tr>
+        <td>Michael Addison</td>
+        <td>michael@gmail.com</td>
+		<td>UK</td>
+		<td>michael@gmail.com</td>
+        <td>UK</td>
+    </tr>
+    <tr>
+        <td>Sam Farmer</td>
+        <td>sam@gmail.com</td>
+		<td>France</td>
+		<td>sam@gmail.com</td>
+        <td>France</td>
+    </tr>
+</table>
+<br>
+<!---->
+<button onclick="exportTableToExcel('tblData', 'members-data')">Export Table Data To Excel File</button>
+<button onclick="fnExcelReport();">fnExcelReport</button>
+
+<br>
+<br>
+<br>
+
+<script>
+	function exportTableToExcel(tableID, filename = ''){
+		var downloadLink;
+		var dataType = 'application/vnd.ms-excel';
+		var tableSelect = document.getElementById(tableID);
+		var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+		
+		// Specify file name
+		filename = filename?filename+'.xls':'excel_data.xls';
+		
+		// Create download link element
+		downloadLink = document.createElement("a");
+		
+		document.body.appendChild(downloadLink);
+		
+		if(navigator.msSaveOrOpenBlob){
+			var blob = new Blob(['\ufeff', tableHTML], {
+				type: dataType
+			});
+			navigator.msSaveOrOpenBlob( blob, filename);
+		}else{
+			// Create a link to the file
+			downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+		
+			// Setting the file name
+			downloadLink.download = filename;
+			
+			//triggering the function
+			downloadLink.click();
+		}
+	}
+
+	function fnExcelReport()
+	{
+		var tab_text="<table border='2px'><tr bgcolor='#87AFC6'>";
+		var textRange; var j=0;
+		tab = document.getElementById('tblData'); // id of table
+
+		for(j = 0 ; j < tab.rows.length ; j++) 
+		{     
+			tab_text=tab_text+tab.rows[j].innerHTML+"</tr>";
+			//tab_text=tab_text+"</tr>";
+		}
+
+		tab_text=tab_text+"</table>";
+		tab_text= tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+		tab_text= tab_text.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+		tab_text= tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+		var ua = window.navigator.userAgent;
+		var msie = ua.indexOf("MSIE "); 
+
+		if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+		{
+			txtArea1.document.open("txt/html","replace");
+			txtArea1.document.write(tab_text);
+			txtArea1.document.close();
+			txtArea1.focus(); 
+			sa=txtArea1.document.execCommand("SaveAs",true,"Say Thanks to Sumit.xls");
+		}  
+		else                 //other browser not tested on IE 11
+			sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));  
+
+		return (sa);
+	}
+
+	
+</script>
+
+<hr>
+<hr>
+<hr>
+
+
 </body>
 </html>
