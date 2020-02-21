@@ -266,6 +266,20 @@ var g_byunhyo_list;
 var g_ji64_list;
 var g_yyyy_mm_dd_hh = {"year":null, "month":null, "day":null, "hour":null};
 
+/**
+체질 관련 데이터
+*/
+var g_kunhwa_list = ["丙", "丁", "巳", "午"];
+var g_sanghwa_list = ["未", "戌"];
+var g_bodytype8_dict = {"태음1":"목>화>토>수>금", "태음2":"목>수>화>토>금", "소양1":"토>금>화>목>수", "소양2":"토>화>목>금>수", "태양1":"금>수>토>화>목", "태양2":"금>토>화>수>목", "소음1":"수>목>화>금>토", "소음2":"수>금>목>화>토"};
+
+var SANG_WHA = 1;
+var GUN_WHA = 2;
+var GANJI_5HAENG = {
+	"甲":"木", "乙":"木", "丙":"火", "丁":"火", "戊":"土", "己":"土", "庚":"金", "辛":"金", "壬":"水", "癸":"水",
+	"子":"水", "丑":"土", "寅":"木", "卯":"木", "辰":"土", "巳":"火", "午":"火", "未":"和", "申":"金", "酉":"金", "戌":"和", "亥":"水"
+};
+
 //필요한 한자들
 //乾 兌 離 震 巽 坎 艮 坤
 //天 澤 火 雷 風 水 山 地
@@ -2104,7 +2118,7 @@ function leap_one(y) {
 
 
 //#Solar_Day_Of_Month(y, m) = δ(m, 1) + δ(m, 2)×( Leap_One(y) - 3 ) + ( 30 + [1 + [m + 2]_5 ]_2 )
-//#음력 특정 연도, 특정 월(index)의 총일수
+//#양력 특정 연도, 특정 월(index)의 총일수
 //# i: 0~12
 function solar_day_of_month(y, m) {
     //#공식은 단순하나 성능이 낮다. 
@@ -6999,10 +7013,6 @@ var EARTH_12 = new Array("子", "丑", "寅", "卯", "辰", "巳", "午", "未",
 var MONTH_NUM = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 */
 
-var g_kunhwa_list = ["丙", "丁", "巳", "午"];
-var g_sanghwa_list = ["未", "戌"];
-var g_bodytype8_dict = {"태음1":"목>화>토>수>금", "태음2":"목>수>화>토>금", "소양1":"토>금>화>목>수", "소양2":"토>화>목>금>수", "태양1":"금>수>토>화>목", "태양2":"금>토>화>수>목", "소음1":"수>목>화>금>토", "소음2":"수>금>목>화>토"};
-
 //g_my_body_saju_list의 초기화: function getBodySaju(a_target_num) 내에서... 
 var g_my_body_saju_list = null; //변경후: [일지, 월지, 연지, 일간, 월간, 연간], 변경전: [일지, 일간, 월지, 월간, 연지, 연간]; //체질 판별 에너지 중요도 순서?
 var g_body_all_idx_list = null; //[kunhwa_idx, sanghwa_idx, mok_idx, to_idx, kum_idx, su_idx]
@@ -11369,8 +11379,11 @@ function moveSaju() {
 			var thisYear = myToday.getFullYear();
 			var my_age = getAge(my_year, my_month, my_day);
 
+			//체질과 기타 정보 리스트
+			var my_body8_type = determineBody8(day_pole_list[1], month_pole_list[1], year_pole_list[1], day_pole_list[0], month_pole_list[0], year_pole_list[0]);
+
 			var xWhoAmI = document.getElementsByName("BodyJuyeokSaju_WhoAmI");
-			xWhoAmI[ii].innerHTML = `<h1>${my_age}세<br>${my_sexHanja}</h1>`;
+			xWhoAmI[ii].innerHTML = `<font size='6'><b>${my_age}세<br>${my_sexHanja}</b></font><br><font color='red'>${my_body8_type[0]}</font>`;
 			
 			//0번째: 대운수, 1~12번째: 대운 간지
 			var my_daeun_list = getDaeUn(my_sex, year_pole_list[0], month_pole_list[0], month_pole_list[1], my_year, my_month, my_day, my_age);
@@ -14180,12 +14193,7 @@ function moveSaju() {
 
 
 	
-	var SANG_WHA = 1;
-	var GUN_WHA = 2;
-	var GANJI_5HAENG = {
-		"甲":"木", "乙":"木", "丙":"火", "丁":"火", "戊":"土", "己":"土", "庚":"金", "辛":"金", "壬":"水", "癸":"水",
-		"子":"水", "丑":"土", "寅":"木", "卯":"木", "辰":"土", "巳":"火", "午":"火", "未":"和", "申":"金", "酉":"金", "戌":"和", "亥":"水"
-	};
+	
 
 	//saju_5haeng(일지, 월지, 연지, 일간, 월간, 연간) 여섯 글자 속에서 
 	//my_5haeng이 처음 나타나는 인덱스(0~5) 리턴, 없으면 7을 리턴
@@ -14228,6 +14236,7 @@ function moveSaju() {
 
 		
 		//상화체질 혹은 군화체질 구분
+		//있으면 바뀌고 없으면 7로 유지됨.
 		sang_hwa_idx = get_5haeng_index(my_5haeng, "和");
 		gun_hwa_idx = get_5haeng_index(my_5haeng, "火");
 
@@ -14250,7 +14259,14 @@ function moveSaju() {
 		//"소양1":"토>금>화>목>수" 
 		//"소양2":"토>화>목>금>수" 
 		
+
+		//idx 값이 작을수록 에너지 강도가 더 강함.
+		
 		if (sang_hwa_idx < gun_hwa_idx) { //상화체질이라면... [태양체질 혹은 소음체질]
+			///////////////////////////////////////////////////////////////////////////
+			//상화체질
+			///////////////////////////////////////////////////////////////////////////
+			
 			if (geum_idx < su_idx) { //태양체질
 				if (to_idx < su_idx) { //태양2 체질
 					my_body8_type = "태양2";
@@ -14259,7 +14275,7 @@ function moveSaju() {
 					my_body8_type = "태양1";
 				}
 				else if (to_idx == 7 && su_idx == 7) { //[토, 수] 두 기운이 사주에 없다면
-					my_body8_type = "태양1";
+					my_body8_type = "태양1"; //상화이므로 군화가 약한 "태양1"
 				}
 
 			}
@@ -14271,20 +14287,46 @@ function moveSaju() {
 					my_body8_type = "소음1";
 				}
 				else if (geum_idx == 7 && mok_idx == 7) { //[금, 목] 두 기운이 사주에 없다면
-					my_body8_type = "소음2";
+					my_body8_type = "소음2"; //상화체질이므로 군화가 약한 "소음2"
 				}
 			}
-			else if (geum_idx == 7 && su_idx == 7) {
+			else if (geum_idx == 7 && su_idx == 7) { //금수가 없다면 목토로 따진다.
+				
 			
-				if (mok_idx < to_idx) { //확인해야 할 사항
-					my_body8_type = "소음2";
+				if (mok_idx < to_idx) { //확인해야 할 사항....???
+					if (to_idx==7) { //[토]가 없다면
+						//1905.10.2
+						//甲丙乙
+						//戌戌巳
+						my_body8_type = "소음1";
+
+					}
+					else { //[목토]가 있다면
+						my_body8_type = "소음1"; //[목]기운 계속 적용
+					}
+					
 				}
 				else if (to_idx < mok_idx) {
-					my_body8_type = "태양1";
+					my_body8_type = "태양2"; //[토]기운 계속 적용
+				}
+				else if (to_idx==7 && mok_idx==7) { //목토 또한 없다면... (금수, 목토 없는 상태)
+					//[정미 정미 정미]등의 경우임.
+					//미토는 상화 결정에 사용했음.
+					//[정화]: {화극금, 수극화} - 수>금 관계가 되어 소음체질이 됨
+					//천간에 군화가 있을 것임.
+					//소음1: 수>목>화>금>토, 소음2: 수>금>목>화>토
+					if (hwa_idx<7) { //(day_ji=="未" && month_ji=="未" && year_ji=="未" && day_gan=="丁" && month_gan=="丁" && year_gan=="丁") {
+						//군화가 존재 case1: //戌午未/丙丙丁, case2: 未未未/丁丁丁
+						my_body8_type = "소음2"; //상화체질이므로 군화가 더 약한 "소음2"
+					}
 				}
 			}
 		}
-		else if (gun_hwa_idx <= sang_hwa_idx) { //군화체질이라면... [태음체질 혹은 소양체질]
+		else if ( (gun_hwa_idx < sang_hwa_idx) ) { //군화체질이라면... [태음체질 혹은 소양체질]
+			///////////////////////////////////////////////////////////////////////////
+			//군화체질 case 1.
+			///////////////////////////////////////////////////////////////////////////
+			
 			if (mok_idx < to_idx) { //태음체질
 				if (su_idx < to_idx) { //태양2 체질
 					my_body8_type = "태음2";
@@ -14293,7 +14335,7 @@ function moveSaju() {
 					my_body8_type = "태음1";
 				}
 				else if (su_idx == 7 && to_idx == 7) { //[토, 수] 두 기운이 사주에 없다면
-					my_body8_type = "태음1";
+					my_body8_type = "태음1"; //군화체질이므로 군화가 강한 "태음1"
 				}
 
 			}
@@ -14305,20 +14347,129 @@ function moveSaju() {
 					my_body8_type = "소양1";
 				}
 				else if (geum_idx == 7 && mok_idx == 7) { //[금, 목] 두 기운이 사주에 없다면 [소양2 체질]
-					my_body8_type = "소양2";
+					my_body8_type = "소양2"; //군화체질이므로 군화가 강한 "소양2"
 				}
 			}
-			else if (to_idx == 7 && mok_idx == 7) {
+			else if (to_idx == 7 && mok_idx == 7) { //[토목]이 없으면 [금수]로 비교
+				
 				if (geum_idx < su_idx) {
-					my_body8_type = "소양1";
+					if (su_idx==7) { //[금]만 있는 경우
+						//1906.8.5
+						//辛丙丙
+						//巳申午
+						my_body8_type = "소양1";
+						
+					}
+					else { //[금수]가 같이 있는 경우
+						my_body8_type = "소양1"; //군화체질이므로 군화 강한 "소양2"
+					}
 				}
 				else if (su_idx < geum_idx) {
-					my_body8_type = "태음2";
+					if (geum_idx==7) { //[수]만 있는 경우
+						
+						if ( "壬子".indexOf(my_ganji.charAt(su_idx))>-1 ) { //[양수]
+							my_body8_type = "태음1"; 
+						}
+						else if ("癸亥".indexOf(my_ganji.charAt(su_idx))>-1) { //[음수]
+							my_body8_type = "태음2"; 
+						}
+						
+						//1906.5.2
+						//丙癸丙
+						//午巳午
+
+						
+					}
+					else { //[수금]이 있는 경우
+						//1900.5.3
+						//丙辛庚
+						//子巳子
+						my_body8_type = "태음2"; 
+					}
+					
+				}
+				else if (su_idx==7 && geum_idx==7) { //[목토] 없고 [금수]도 없는 경우
+					//[병오] 혹은 [정사]
+					//2997.6.21
+					//丁丙丁
+					//巳午巳
+					//[목토]의 약한 쪽 [금수]와 [화]의 극관계로 보자면... [수>금]이므로 태음체질
+					//그런데 실제로 [수]는 없음.
+					//더 군화가 센 쪽은 "태음1"
+					my_body8_type = "태음1"; 
+					
 				}
 			}
 		}
+		else if ( (gun_hwa_idx==7 && sang_hwa_idx==7) ) { //군화체질이라면...
+			///////////////////////////////////////////////////////////////////////////
+			//군화체질 case 2.
+			///////////////////////////////////////////////////////////////////////////
+			
+			if (mok_idx < to_idx) { //태음체질
+				if (su_idx < to_idx) { //태양2 체질
+					my_body8_type = "태음2";
+				}
+				else if (to_idx < su_idx) { //태음1 체질
+					my_body8_type = "태음1";
+				}
+				else if (su_idx == 7 && to_idx == 7) { //[토, 수] 두 기운이 사주에 없다면
+					my_body8_type = "태음1"; //군화체질이므로 군화가 강한 "태음1"
+				}
 
-		return my_body8_type;
+			}
+			else if (to_idx < mok_idx) { //소양체질
+				if (mok_idx < geum_idx) { //소양2 체질
+					my_body8_type = "소양2";
+				}
+				else if (geum_idx < mok_idx) { //소양1 체질
+					my_body8_type = "소양1";
+				}
+				else if (geum_idx == 7 && mok_idx == 7) { //[금, 목] 두 기운이 사주에 없다면 [소양2 체질]
+					my_body8_type = "소양2"; //군화체질이므로 군화가 강한 "소양2"
+				}
+			}
+			else if (to_idx == 7 && mok_idx == 7) { //[토목]이 없으면 [금수]로 비교
+			
+				if (geum_idx < su_idx) {
+					if (su_idx==7) { //[금]만 있는 경우
+						
+					}
+					else { //[금수]가 같이 있는 경우
+						my_body8_type = "소양1"; //[금] 기운을 적용
+					}
+				}
+				else if (su_idx < geum_idx) {
+					if (geum_idx==7) { //[수]만 있는 경우
+						my_body8_type = "태음2"; 
+						
+						//if ( "壬子".indexOf(my_5haeng.charAt(su_idx))>-1 ) { //[양수]
+						//	my_body8_type = "태음1"; 
+						//}
+						//else if ("癸亥".indexOf(my_5haeng.charAt(su_idx))>-1) { //[음수]
+						//	my_body8_type = "태음2"; 
+						//}
+						
+					}
+					else { //[수금]이 있는 경우
+						my_body8_type = "태음2"; 
+					}
+					
+				}
+				else if (su_idx==7 && geum_idx==7) { //[목토] 없고 [금수]도 없는 경우
+					//[병오] 혹은 [정사]
+					
+					
+				}
+			}
+
+		}
+
+
+
+
+		
+		return [my_body8_type, sang_hwa_idx, gun_hwa_idx, mok_idx, hwa_idx, to_idx, geum_idx, su_idx];
 	}
 
 	function determineBody8ByYYYYMMD(y, m, d) {
@@ -14420,7 +14571,7 @@ function moveSaju() {
 
 	//statisticBody8Type(1968, 2020);
 
-	function same3PoleYYYYMMD(y, m, d) {
+	function same3PoleByYYYYMMD(y, m, d) {
 		var year_pole_list = get60GapJaYear(y);
 		var month_pole_list = get60GapJaMonth(y, m);
 		var day_pole_list = get60GapJaDay(y, m, d);
@@ -14442,10 +14593,70 @@ function moveSaju() {
 		}
 	}
 
-	
+	//x[연간, 연지], y[월간, 월지], z[일간, 일지] 60갑자 리스트 입력 받아 그 날이 언제인지를 출력
+	function same3PoleBy60GabJa(year_pole, month_pole, day_pole, y1, y2) {
+		
+		
+		//console.log(`입력: ${year_pole[0]}${year_pole[1]}.${month_pole[0]}${month_pole[1]}.${day_pole[0]}${day_pole[1]}`);
+		for (var y=y1;y<=y2;y++) {
+			var each_year_pole = get60GapJaYear(y);
+			for (var m=1;m<=12;m++) {
+				var each_month_pole = get60GapJaMonth(y, m);
+
+				var max_day = solar_day_of_month(y, m);
+				for (var d=1;d<=max_day;d++) {
+					var each_day_pole = get60GapJaDay(y, m, d);
+
+					//[my_body8_type, sang_hwa_idx, gun_hwa_idx, mok_idx, hwa_idx, to_idx, geum_idx, su_idx]
+					var my_body8 = determineBody8(each_day_pole[1], each_month_pole[1], each_year_pole[1], each_day_pole[0], each_month_pole[0], each_year_pole[0]);
+					
+					if (my_body8[0]=="") {
+						console.log("");
+						
+						console.log(`${y}.${m}.${d}`);
+						console.log(`${each_day_pole[0]}${each_month_pole[0]}${each_year_pole[0]}`);
+						console.log(`${each_day_pole[1]}${each_month_pole[1]}${each_year_pole[1]}`);
+						
+						console.log("" + my_body8);
+						console.log("체질: XXX");
+
+						//return;
+					}
+
+					/**
+					if (year_pole[0]==each_year_pole[0] && year_pole[1]==each_year_pole[1]) {
+						if (month_pole[0]==each_month_pole[0] && month_pole[1]==each_month_pole[1]) {
+							if (day_pole[0]==each_day_pole[0] && day_pole[1]==each_day_pole[1]) {
+								console.log("");
+								
+								console.log(`${y}.${m}.${d}`);
+								console.log(`${each_day_pole[0]}${each_month_pole[0]}${each_year_pole[0]}`);
+								console.log(`${each_day_pole[1]}${each_month_pole[1]}${each_year_pole[1]}`);
+								
+								console.log("" + my_body8);
+								console.log("체질: " + my_body8[0]);
+
+								return;
+							}
+						}
+					}
+					*/
+
+				}
+			}
+		}
+
+
+		console.log("...완료");
+		
+	}
 
 </script>	
-	
+
+<form name="text">
+<input type="button" value="테스트" onclick="same3PoleBy60GabJa(['癸', '亥'], ['癸', '亥'], ['癸', '亥'], 1900, 3000)" />
+</form>	
+
 <h1>체질사주(교육용)</h1>
 <form name="EduBodySajuForm" id="EduBodySajuForm">
 	<select id="EduBodySajuSelect" name="EduBodySajuSelect" onchange="showEduBodySaju();">
