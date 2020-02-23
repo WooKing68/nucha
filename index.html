@@ -172,7 +172,7 @@
 
 	//Open IE -> Tools ->Internet Options -> Security -> Custom Level -> ActiveX controls 
 	//and plug-ins ->Enable "Initialize and script ActiveX controls not marked as safe for scripting"
-	function SaveExcel() {
+	function SaveAsExcel() {
 		
 		var encodedUri = encodeURI(csvContent);
 
@@ -193,6 +193,79 @@
 			}
 		}
 		
+	}
+
+
+	function SaveAsText() {
+		//document.getElementById("divGoods").setAttribute("my_val", "Park ChanWoo");
+
+		var xList = document.getElementsByName("body8JuyeokSajuSaveSelect"); 
+		var yList = document.getElementsByName("Family6HyoSearchSelect"); 
+
+		var myQueryString = "";
+
+		//myQueryString = myQueryString + "family_saju_body8_1=" + stringSelection(xList[0], "$") + "&";
+		myQueryString += stringSelection(xList[0], "$") + "&";
+		myQueryString += stringSelection(xList[1], "$") + "&";
+		myQueryString += stringSelection(xList[2], "$") + "&";
+		myQueryString += stringSelection(xList[3], "$") + "&";
+
+		myQueryString += stringSelection(yList[0], "$");
+
+
+		
+		// put the data in a Blob object...
+		var textFileAsBlob = new Blob([myQueryString], {type:'text/plain'}); 
+		
+		// create a hyperlink <a> element tag that will be automatically clicked below...
+		var downloadLink = document.createElement("a"); 
+		downloadLink.setAttribute('download', "saveGoodsFileName"); 
+		// set the <a> tag href as a URL to point to the Blob
+		//downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+		downloadLink.setAttribute('href', window.webkitURL.createObjectURL(textFileAsBlob));  
+		downloadLink.click();
+	}
+
+
+	function ReadFromText(event) {
+		var input = event.target;
+
+		var reader = new FileReader();
+		reader.readAsText(input.files[0]);
+		
+
+		reader.onload = function(){
+			var text = reader.result;
+			var xList = document.getElementsByName("body8JuyeokSajuSaveSelect"); 
+			var yList = document.getElementsByName("Family6HyoSearchSelect"); 
+
+			removeOptionsFromSelect(xList[0], 0);
+			removeOptionsFromSelect(xList[1], 0);
+			removeOptionsFromSelect(xList[2], 0);
+			removeOptionsFromSelect(xList[3], 0);
+
+			removeOptionsFromSelect(yList[0], 0);
+
+			
+			var selKeyValueInfo = text.split("&");
+
+			for (var j=0;j<4;j++) {
+				//0번째 사주 리스트
+				var each_family_saju_body8 = selKeyValueInfo[j].split("$");
+				for (var i=0;i<each_family_saju_body8.length;i++) {
+					//substr(start, length)
+					var s = each_family_saju_body8[i];
+					xList[j].options[i+1] = new Option(s.substr(0, 10), s);
+				}
+			}
+
+			var each_family_yukhyo = selKeyValueInfo[4].split("$");
+			for (var i=0;i<each_family_yukhyo.length;i++) {
+				//substr(start, length)
+				var s = each_family_yukhyo[i];
+				yList[0].options[i+1] = new Option(s.split("/")[0], s);
+			}
+		};
 	}
 </script>
 
@@ -259,11 +332,23 @@
 		return s_sum;
 	}
 
+	//exclusiveIDX: 남겨두고 싶은 인덱스
+	function removeOptionsFromSelect(objSelect, exclusiveIDX) {
+		var len = objSelect.options.length;
+		for (var i=0;i<len;i++) {
+			if (i==exclusiveIDX) {
+				continue;
+			}
+			//x.remove(x.selectedIndex);
+			objSelect.remove(x.i);
+		}
+	}
 
 
-var g_base64_list;
-var g_byunhyo_list;
-var g_ji64_list;
+
+var g_base64_list = ["0", "0", "0", "0", "0", "0"];
+var g_byunhyo_list = ["0", "0", "0", "0", "0", "0"];
+var g_ji64_list = ["0", "0", "0", "0", "0", "0"];
 var g_yyyy_mm_dd_hh = {"year":null, "month":null, "day":null, "hour":null};
 
 /**
@@ -10869,9 +10954,9 @@ function moveSaju() {
 <font size='6'><b>체질 사주</b></font> &nbsp;
 <form method="post" enctype="multipart/form-data">
 <label for="avatar">파일 열기</label>
-<input type="file" id="loadFamilyData" accept=".csv, .xls, .xlsx, .xlsm" name="" value="탐색" onclick="" /><!--accept=".xlsx, .xlsm"-->
-<input type="button" name="" value="열기" onclick="ReadExcel();"><!---->
-<input type="button" name="" value="저장" onclick="SaveExcel();">
+<input type="file" id="loadFamilyData" accept=".txt, .csv, .xls, .xlsx, .xlsm" name="" value="탐색" onchange="ReadFromText(event);" /><!--accept=".xlsx, .xlsm"-->
+
+<input type="button" name="" value="저장" onclick="SaveAsText();">
 </form>
 
 <div id="dvExcel"></div>
@@ -12414,8 +12499,8 @@ function moveSaju() {
 
 		var family6HyoSearchSelect = Family6HyoForm.Family6HyoSearchSelect;
 		
-		var my_key = `${my_question}/${my_year}.${my_month}.${my_day} ${my_hour}:${my_min}`;
-		var my_val = `${my_question}/${s_bon}/${s_byeon}/${s_ji}/${my_total_pole}/${my_year}/${my_month}/${my_day}/${my_hour}/${my_min}`;
+		var my_key = `${my_question} (${my_year}.${my_month}.${my_day} ${my_hour}:${my_min})`;
+		var my_val = `${my_question}/${my_year}/${my_month}/${my_day}/${my_hour}/${my_min}/${s_bon}/${s_byeon}/${s_ji}/${my_total_pole}`;
 		
 		
 		saveValueInSelection(family6HyoSearchSelect, my_val, my_key);
@@ -12426,27 +12511,26 @@ function moveSaju() {
 		var idx = x.selectedIndex;
 		var val = x.options[idx].value;
 
-		//${my_question}/${s_bon}/${s_byeon}/${s_ji}/${my_total_pole}/${my_year}/${my_month}/${my_day}/${my_hour}/${my_min}
+		
+
+		//`${my_question}/${my_year}/${my_month}/${my_day}/${my_hour}/${my_min}/${s_bon}/${s_byeon}/${s_ji}/${my_total_pole}`;
 		var s_list = val.split("/");
 
 		//목적사
 		Family6HyoForm.old6_family_question.value = s_list[0];
 		
 
-		var s_base64_list = s_list[1];
-		var s_byunhyo_list = s_list[2];
-		var s_ji64_list = s_list[3];
+		var s_base64_list = s_list[6];
+		var s_byunhyo_list = s_list[7];
+		var s_ji64_list = s_list[8];
 
-		
-
-		
 		for (var i=0;i<6;i++) {
-			g_base64_list[i] = s_base64_list[i]; //s[i]; 
-			g_byunhyo_list[i] = s_byunhyo_list[i]; //s[i+7]; 
-			g_ji64_list[i] = s_ji64_list[i]; //s[i+14]; 
+			g_base64_list[i] = s_base64_list.charAt(i); //s[i]; 
+			g_byunhyo_list[i] = s_byunhyo_list.charAt(i);; //s[i+7]; 
+			g_ji64_list[i] = s_ji64_list.charAt(i); //s[i+14]; 
 		}
 
-		var s_year_month_day_hour_12jiji = s_list[4];
+		var s_year_month_day_hour_12jiji = s_list[9];
 		//alert("s_year_month_day_hour_12jiji: " + s_year_month_day_hour_12jiji);
 
 		g_yyyy_mm_dd_hh["year"] = [s_year_month_day_hour_12jiji.charAt(0), s_year_month_day_hour_12jiji.charAt(1)];
