@@ -84,8 +84,9 @@
 		//myQueryString = myQueryString + "family_saju_body8_1=" + stringSelection(xList[0], "$") + "&";
 		var family_name = document.getElementById("family_name").value;
 		if (family_name.trim()=="") {
-			alert("<가족명>을 입력하세요.");
+			alert("<파일명>을 입력하세요.");
 			document.getElementById("family_name").focus();
+			return;
 		}
 
 		var fileName = family_name.trim() + `-${ymdhnsList[0]}.${(ymdhnsList[1]).pad(2)}.${(ymdhnsList[2]).pad(2)}_${(ymdhnsList[3]).pad(2)}.${(ymdhnsList[4]).pad(2)}.txt`;
@@ -10910,7 +10911,7 @@ function moveSaju() {
 		<tr>
 			<td colspan="7" align="center">
 				<form>
-					가족: <input type="text" name="family_name" id="family_name" value="" size="20" />
+					파일명: <input type="text" name="family_name" id="family_name" value="" size="20" />
 				</form>
 			</td>
 		</tr>
