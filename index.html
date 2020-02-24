@@ -64,6 +64,13 @@
 
 <script type="text/javascript">
 
+	//(7).pad(3);  //returns "007"
+    Number.prototype.pad = function(size) {
+        var s = String(this);
+        while (s.length < (size || 2)) {s = "0" + s;}
+        return s;
+	}
+
     function ReadExcel() {
         //Reference the FileUpload element.
         var fileUpload = document.getElementById("loadFamilyData");
@@ -198,6 +205,7 @@
 
 	function SaveAsText() {
 		//document.getElementById("divGoods").setAttribute("my_val", "Park ChanWoo");
+		var ymdhnsList = getTodayInfo();
 
 		var xList = document.getElementsByName("body8JuyeokSajuSaveSelect"); 
 		var yList = document.getElementsByName("Family6HyoSearchSelect"); 
@@ -205,12 +213,22 @@
 		var myQueryString = "";
 
 		//myQueryString = myQueryString + "family_saju_body8_1=" + stringSelection(xList[0], "$") + "&";
-		myQueryString += stringSelection(xList[0], "$") + "&";
-		myQueryString += stringSelection(xList[1], "$") + "&";
-		myQueryString += stringSelection(xList[2], "$") + "&";
-		myQueryString += stringSelection(xList[3], "$") + "&";
+		var family_name = document.getElementById("family_name").value;
+		if (family_name.trim()=="") {
+			alert("<가족명>을 입력하세요.");
+			document.getElementById("family_name").focus();
+		}
 
-		myQueryString += stringSelection(yList[0], "$");
+		var fileName = family_name.trim() + `-${ymdhnsList[0]}.${(ymdhnsList[1]).pad(2)}.${(ymdhnsList[2]).pad(2)}_${(ymdhnsList[3]).pad(2)}..${(ymdhnsList[4]).pad(2)}.txt`;
+
+		myQueryString += "family_name=" + family_name.trim() + "&";
+		
+		myQueryString += "body8JuyeokSajuSaveSelect_1=" + stringSelection(xList[0], "$") + "&";
+		myQueryString += "body8JuyeokSajuSaveSelect_2=" + stringSelection(xList[1], "$") + "&";
+		myQueryString += "body8JuyeokSajuSaveSelect_3=" + stringSelection(xList[2], "$") + "&";
+		myQueryString += "body8JuyeokSajuSaveSelect_4=" + stringSelection(xList[3], "$") + "&";
+
+		myQueryString += "Family6HyoSearchSelect=" + stringSelection(yList[0], "$");
 
 
 		
@@ -219,7 +237,7 @@
 		
 		// create a hyperlink <a> element tag that will be automatically clicked below...
 		var downloadLink = document.createElement("a"); 
-		downloadLink.setAttribute('download', "saveGoodsFileName"); 
+		downloadLink.setAttribute('download', fileName); 
 		// set the <a> tag href as a URL to point to the Blob
 		//downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
 		downloadLink.setAttribute('href', window.webkitURL.createObjectURL(textFileAsBlob));  
@@ -236,6 +254,8 @@
 
 		reader.onload = function(){
 			var text = reader.result;
+
+			var objFamilyName = document.getElementById("family_name"); 
 			var xList = document.getElementsByName("body8JuyeokSajuSaveSelect"); 
 			var yList = document.getElementsByName("Family6HyoSearchSelect"); 
 
@@ -246,39 +266,83 @@
 
 			removeOptionsFromSelect(yList[0], 0);
 
+
+			//myQueryString += "family_name=" + "family_name=" + family_name.trim() + "&";
+			//myQueryString += "body8JuyeokSajuSaveSelect_1=" + stringSelection(xList[0], "$") + "&";
+			//myQueryString += "body8JuyeokSajuSaveSelect_2=" + stringSelection(xList[1], "$") + "&";
+			//myQueryString += "body8JuyeokSajuSaveSelect_3=" + stringSelection(xList[2], "$") + "&";
+			//myQueryString += "body8JuyeokSajuSaveSelect_4=" + stringSelection(xList[3], "$") + "&";
+			//myQueryString += "Family6HyoSearchSelect=" + stringSelection(yList[0], "$");
+
 			
-			var selKeyValueInfo = text.split("&");
+			var familyKeyValueInfo = text.split("&");
 
-			for (var j=0;j<4;j++) {
-				//0번째 사주 리스트
-				var each_family_saju_body8 = selKeyValueInfo[j].split("$");
-				for (var i=0;i<each_family_saju_body8.length;i++) {
-					//substr(start, length)
-					var s = each_family_saju_body8[i];
-					xList[j].options[i+1] = new Option(s.substr(0, 10), s);
+			for (var j=0;j<familyKeyValueInfo.length;j++) {
+				var each_query_string = familyKeyValueInfo[j];
+				var each_key_val_list = each_query_string.split("=");
+				var each_key = each_key_val_list[0];
+				var each_val = each_key_val_list[1];
+
+				if (each_key=="family_name") {
+					objFamilyName.value = each_val;
+
 				}
-			}
+				else if ( each_key=="body8JuyeokSajuSaveSelect_1" ) {
+					//0번째 사주 리스트
+					var each_family_saju_body8 = each_val.split("$");
+					for (var i=0;i<each_family_saju_body8.length;i++) {
+						//substr(start, length)
+						var s = each_family_saju_body8[i];
+						xList[0].options[i+1] = new Option(s.substr(0, 10), s);
+					}
 
-			var each_family_yukhyo = selKeyValueInfo[4].split("$");
-			for (var i=0;i<each_family_yukhyo.length;i++) {
-				//substr(start, length)
-				var s = each_family_yukhyo[i];
-				var s_list = s.split("/");
-				var key = `${s_list[0]} (${s_list[1]}.${s_list[2]}.${s_list[3]} ${s_list[4]}:${s_list[5]})`;
-				yList[0].options[i+1] = new Option(key, s);
+				}
+				else if ( each_key=="body8JuyeokSajuSaveSelect_2" ) {
+					//0번째 사주 리스트
+					var each_family_saju_body8 = each_val.split("$");
+					for (var i=0;i<each_family_saju_body8.length;i++) {
+						//substr(start, length)
+						var s = each_family_saju_body8[i];
+						xList[1].options[i+1] = new Option(s.substr(0, 10), s);
+					}
+
+				}
+				else if ( each_key=="body8JuyeokSajuSaveSelect_3" ) {
+					//0번째 사주 리스트
+					var each_family_saju_body8 = each_val.split("$");
+					for (var i=0;i<each_family_saju_body8.length;i++) {
+						//substr(start, length)
+						var s = each_family_saju_body8[i];
+						xList[2].options[i+1] = new Option(s.substr(0, 10), s);
+					}
+
+				}
+				else if ( each_key=="body8JuyeokSajuSaveSelect_4" ) {
+					//0번째 사주 리스트
+					var each_family_saju_body8 = each_val.split("$");
+					for (var i=0;i<each_family_saju_body8.length;i++) {
+						//substr(start, length)
+						var s = each_family_saju_body8[i];
+						xList[3].options[i+1] = new Option(s.substr(0, 10), s);
+					}
+
+				}
+				else if (each_key=="Family6HyoSearchSelect") {
+					var each_family_yukhyo = each_val.split("$");
+					for (var i=0;i<each_family_yukhyo.length;i++) {
+						//substr(start, length)
+						var s = each_family_yukhyo[i];
+						var s_list = s.split("/");
+						var key = `${s_list[0]} (${s_list[1]}.${s_list[2]}.${s_list[3]} ${s_list[4]}:${s_list[5]})`;
+						yList[0].options[i+1] = new Option(key, s);
+					}
+				}
 			}
 		};
 	}
 </script>
 
 <script type="text/javascript">
-//(7).pad(3);  //returns "007"
-    Number.prototype.pad = function(size) {
-        var s = String(this);
-        while (s.length < (size || 2)) {s = "0" + s;}
-        return s;
-	}
-
 	function listAllProperties(o){     
 		var objectToInspect;     
 		var result = [];
@@ -344,6 +408,24 @@
 			//x.remove(x.selectedIndex);
 			objSelect.remove(x.i);
 		}
+	}
+
+
+	function getTodayInfo() {
+		var today = new Date();
+
+		//today.setTime(today.getTime() + wantDay2Miliseconds + wantHour2Miliseconds);
+
+		//year = today.getYear();
+		var myYear = today.getFullYear();
+		var myMonth = today.getMonth() +1;
+		var myDay = today.getDate();
+
+		var myHour = today.getHours();
+		var myMinute = today.getMinutes();
+		var mySecond = today.getSeconds();
+
+		return [myYear, myMonth, myDay, myHour, myMinute, mySecond];
 	}
 
 
@@ -10953,7 +11035,7 @@ function moveSaju() {
 
 
 
-<font size='6'><b>체질 사주</b></font> &nbsp;
+<font size='6'><b>체질 사주</b></font> <br>
 <form method="post" enctype="multipart/form-data">
 <label for="avatar">파일 열기</label>
 <input type="file" id="loadFamilyData" accept=".txt, .csv, .xls, .xlsx, .xlsm" name="" value="탐색" onchange="ReadFromText(event);" /><!--accept=".xlsx, .xlsm"-->
@@ -10968,7 +11050,13 @@ function moveSaju() {
 <br><br>
 <!--가족용--> 
 <table border=1>
-	
+		<tr>
+			<td colspan="6" align="center">
+				<form>
+					가족: <input type="text" name="family_name" id="family_name" value="" size="20" />
+				</form>
+			</td>
+		</tr>
 		<tr >
 			
 			<td align="center" style="vertical-align: top;">
