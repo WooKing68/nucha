@@ -71,137 +71,6 @@
         return s;
 	}
 
-    function ReadExcel() {
-        //Reference the FileUpload element.
-        var fileUpload = document.getElementById("loadFamilyData");
- 
-        //Validate whether File is valid Excel file.
-        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.xls|.xlsx)$/;
-        if (regex.test(fileUpload.value.toLowerCase())) {
-            if (typeof (FileReader) != "undefined") {
-                var reader = new FileReader();
- 
-                //For Browsers other than IE.
-                if (reader.readAsBinaryString) {
-                    reader.onload = function (e) {
-                        ProcessExcel(e.target.result);
-                    };
-                    reader.readAsBinaryString(fileUpload.files[0]);
-                } else {
-                    //For IE Browser.
-                    reader.onload = function (e) {
-                        var data = "";
-                        var bytes = new Uint8Array(e.target.result);
-                        for (var i = 0; i < bytes.byteLength; i++) {
-                            data += String.fromCharCode(bytes[i]);
-                        }
-                        ProcessExcel(data);
-                    };
-                    reader.readAsArrayBuffer(fileUpload.files[0]);
-                }
-            } else {
-                alert("This browser does not support HTML5.");
-            }
-        } else {
-            alert("Please upload a valid Excel file.");
-        }
-		
-		
-	};
-    function ProcessExcel(data) {
-        //Read the Excel File data.
-        var workbook = XLSX.read(data, {
-            type: 'binary'
-        });
- 
-        //Fetch the name of First Sheet.
-        var firstSheet = workbook.SheetNames[0];
- 
-        //Read all rows from First Sheet into an JSON array.
-        var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
- 
-        //Create a HTML Table element.
-        var table = document.createElement("table");
-        table.border = "1";
- 
-        //Add the header row.
-        var row = table.insertRow(-1);
- 
-        //Add the header cells.
-        var headerCell = document.createElement("TH");
-        headerCell.innerHTML = "Parents_Men";
-        row.appendChild(headerCell);
- 
-        headerCell = document.createElement("TH");
-        headerCell.innerHTML = "Parents_Women";
-        row.appendChild(headerCell);
- 
-        headerCell = document.createElement("TH");
-        headerCell.innerHTML = "Children_Men";
-        row.appendChild(headerCell);
-
-		headerCell = document.createElement("TH");
-        headerCell.innerHTML = "Children_Women";
-        row.appendChild(headerCell);
-
-		headerCell = document.createElement("TH");
-        headerCell.innerHTML = "YukHyo";
-        row.appendChild(headerCell);
- 
-        //Add the data rows from Excel file.
-		//Parents_Men	Parents_Women	Children_Men	Children_Women	YukHyo
-
-        for (var i = 0; i < excelRows.length; i++) {
-            //Add the data row.
-            var row = table.insertRow(-1);
- 
-            //Add the data cells.
-            var cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].Parents_Men;
- 
-            cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].Parents_Women;
- 
-            cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].Children_Men;
-
-			cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].Children_Women || "";
-
-			cell = row.insertCell(-1);
-            cell.innerHTML = excelRows[i].YukHyo || "";
-        }
- 
-        var dvExcel = document.getElementById("dvExcel");
-        dvExcel.innerHTML = "";
-        dvExcel.appendChild(table);
-    };
-
-	//Open IE -> Tools ->Internet Options -> Security -> Custom Level -> ActiveX controls 
-	//and plug-ins ->Enable "Initialize and script ActiveX controls not marked as safe for scripting"
-	function SaveAsExcel() {
-		
-		var encodedUri = encodeURI(csvContent);
-
-		var blob = new Blob([csvContent], { type: 'text/xls;charset=utf-8;' });
-		if (navigator.msSaveBlob) { // IE 10+
-			navigator.msSaveBlob(blob, filename);
-		} else {
-			var link = document.createElement("a");
-			if (link.download !== undefined) { // feature detection
-				// Browsers that support HTML5 download attribute
-				var url = URL.createObjectURL(blob);
-				link.setAttribute("href", url);
-				link.setAttribute("download", filename);
-				link.style.visibility = 'hidden';
-				document.body.appendChild(link);
-				link.click();
-				document.body.removeChild(link);
-			}
-		}
-		
-	}
-
 
 	function SaveAsText() {
 		//document.getElementById("divGoods").setAttribute("my_val", "Park ChanWoo");
@@ -219,7 +88,7 @@
 			document.getElementById("family_name").focus();
 		}
 
-		var fileName = family_name.trim() + `-${ymdhnsList[0]}.${(ymdhnsList[1]).pad(2)}.${(ymdhnsList[2]).pad(2)}_${(ymdhnsList[3]).pad(2)}..${(ymdhnsList[4]).pad(2)}.txt`;
+		var fileName = family_name.trim() + `-${ymdhnsList[0]}.${(ymdhnsList[1]).pad(2)}.${(ymdhnsList[2]).pad(2)}_${(ymdhnsList[3]).pad(2)}.${(ymdhnsList[4]).pad(2)}.txt`;
 
 		myQueryString += "family_name=" + family_name.trim() + "&";
 		
@@ -264,17 +133,9 @@
 			removeOptionsFromSelect(xList[2], 0);
 			removeOptionsFromSelect(xList[3], 0);
 
-			removeOptionsFromSelect(yList[0], 0);
+			removeOptionsFromSelect(yList[0], 0); //육효
 
 
-			//myQueryString += "family_name=" + "family_name=" + family_name.trim() + "&";
-			//myQueryString += "body8JuyeokSajuSaveSelect_1=" + stringSelection(xList[0], "$") + "&";
-			//myQueryString += "body8JuyeokSajuSaveSelect_2=" + stringSelection(xList[1], "$") + "&";
-			//myQueryString += "body8JuyeokSajuSaveSelect_3=" + stringSelection(xList[2], "$") + "&";
-			//myQueryString += "body8JuyeokSajuSaveSelect_4=" + stringSelection(xList[3], "$") + "&";
-			//myQueryString += "Family6HyoSearchSelect=" + stringSelection(yList[0], "$");
-
-			
 			var familyKeyValueInfo = text.split("&");
 
 			for (var j=0;j<familyKeyValueInfo.length;j++) {
@@ -11035,7 +10896,7 @@ function moveSaju() {
 
 
 
-<font size='6'><b>체질 사주</b></font> <br>
+<font size='6'><b>체질 사주</b></font> <br><br>
 <form method="post" enctype="multipart/form-data">
 <label for="avatar">파일 열기</label>
 <input type="file" id="loadFamilyData" accept=".txt, .csv, .xls, .xlsx, .xlsm" name="" value="탐색" onchange="ReadFromText(event);" /><!--accept=".xlsx, .xlsm"-->
@@ -11043,15 +10904,11 @@ function moveSaju() {
 <input type="button" name="" value="저장" onclick="SaveAsText();">
 </form>
 
-<div id="dvExcel"></div>
-
-
-
 <br><br>
 <!--가족용--> 
 <table border=1>
 		<tr>
-			<td colspan="6" align="center">
+			<td colspan="7" align="center">
 				<form>
 					가족: <input type="text" name="family_name" id="family_name" value="" size="20" />
 				</form>
