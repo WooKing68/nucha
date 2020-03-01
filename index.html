@@ -11521,11 +11521,14 @@ function moveSaju() {
 				}
 			}
 
+			//대운수 정하기...
+			//매월 1일까지 며칠 차이 나는 지 중요
+			//0 대운과 10 대운은 같은 것일까?
 			if (my_direction==1) {
 				my_daeun_su = q((my_max_day - my_day + 1) + 1, 3);
 			}
 			else if (my_direction==-1) {
-				my_daeun_su = q((my_day + 1) + 1, 3);
+				my_daeun_su = q((my_day - 1) + 1, 3);
 			}
 
 			var month_gan_idx = -1;
@@ -11550,7 +11553,7 @@ function moveSaju() {
 			//0번째 요소는 대운수
 			my_daeun_list.push(my_daeun_su);
 
-			if (my_daeun_su != 1) {
+			if (my_daeun_su != 1 && my_daeun_su != 0) {
 				if ( my_age <my_daeun_su ) {
 					my_daeun_list.push(` <br><h2><font color='red'>${g_6hyo_10skygan[r(month_gan_idx, 10)]}<br>${g_6hyo_12jiji[r(month_ji_idx, 12)]}</font></h2>`);
 				}
@@ -11586,66 +11589,128 @@ function moveSaju() {
 			return my_daeun_list;
 		}
 
-		//my_year: 생년, thisYear: 올해
-		function getSeUn(aDaeUnSu, my_year, thisYear, my_age) {
-			
+		//birth_year: 생년, thisYear: 올해
+		//태어난 해가 1살
+		function getSeUn(aDaeUnSu, birth_year, thisYear, my_age) {
 			var my_seun_list = [];
 
-			if (aDaeUnSu != 1) { //aDaeUnSu가 4라면... 월운 대운 관련하여 1세부터 3세까지의 세운을 따로 보관.
-				var jj = 10 - (aDaeUnSu - 1);
-
-				var t = "";
-				for (var j=1;j<=10;j++) {
+			if (aDaeUnSu==0) {
+				for (var i=1;i<=12;i++) {
+					//각 대운에 해당하는 시작 연도
+					var daeun_start_year = (birth_year-1) + 10*(i-1);
 					
-					if (j>jj) {
-						var each_year = my_year + (j - jj - 1);
-						//console.log("each_year: " + each_year);
+					var s = "";
+					for (var j=1;j<=10;j++) {
+						//0세 표시함.
+						var each_year = daeun_start_year + (j-1);
 						var year_pole_list = get60GapJaYear(each_year);
-						// (1세 <= j-jj < 대운수) 전까지의 나이라면...
-						if ( (thisYear-10 <= each_year) && (each_year < thisYear) ) { //현재 나이보다 10년 아래 내에 있다면...
-							t += `<font color='blue'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
+
+						if (thisYear-10<=each_year && each_year<thisYear) {
+							s += `<font color='blue'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
 						}
-						else if ( (thisYear < each_year ) && (each_year <= thisYear+10 ) ) { //현재 나이보다 10년 아래 내에 있다면...
-							t += `<font color='red'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
+						else if (thisYear<each_year && each_year<=thisYear+10) {
+							s += `<font color='red'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`;
 						}
 						else {
-							t += `${year_pole_list[0]}${year_pole_list[1]}<br>`; //${daeun_year + (i-1)}: 
+							s += `${year_pole_list[0]}${year_pole_list[1]}<br>`; //${daeun_year + (i-1)}: 
 						}
-						
 					}
-					else {
-						
-						t += "<br>";
-					}
+
+					my_seun_list.push(s);
 				}
 
-				my_seun_list.push(t);
 			}
-
-
-			for (var i=1;i<=12;i++) {
-				var daeun_year = (my_year + aDaeUnSu - 1) + 10*(i-1);
-				
-				var s = "";
-				for (var j=1;j<=10;j++) {
-					var each_year = daeun_year + (j-1);
-					var year_pole_list = get60GapJaYear(each_year);
-					if (thisYear-10<=each_year && each_year<thisYear) {
-						s += `<font color='blue'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
-					}
-					else if (thisYear<each_year && each_year<=thisYear+10) {
-						s += `<font color='red'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`;
-					}
-					else {
-						s += `${year_pole_list[0]}${year_pole_list[1]}<br>`; //${daeun_year + (i-1)}: 
-					}
+			else if (aDaeUnSu==10) {
+				//0세 표시 안함.
+				for (var i=1;i<=12;i++) {
+					//각 대운에 해당하는 시작 연도
+					var daeun_start_year = (birth_year-1) + 10*(i-1);
 					
-					
+					var s = "";
+					for (var j=1;j<=10;j++) {
+						var each_year = daeun_start_year + (j-1);
+
+						if (i==1 && j==1) {
+							s += "<br>";
+							continue;
+						}
+
+						
+						var year_pole_list = get60GapJaYear(each_year);
+
+						if (thisYear-10<=each_year && each_year<thisYear) {
+							s += `<font color='blue'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
+						}
+						else if (thisYear<each_year && each_year<=thisYear+10) {
+							s += `<font color='red'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`;
+						}
+						else {
+							s += `${year_pole_list[0]}${year_pole_list[1]}<br>`; //${daeun_year + (i-1)}: 
+						}
+					}
+
+					my_seun_list.push(s);
 				}
 
-				my_seun_list.push(s);
+			}
+			else if (aDaeUnSu==1) {
+				for (var i=1;i<=12;i++) {
+					//각 대운에 해당하는 시작 연도
+					var daeun_start_year = (birth_year) + 10*(i-1);
+					
+					var s = "";
+					for (var j=1;j<=10;j++) {
+						var each_year = daeun_start_year + (j-1);
+						var year_pole_list = get60GapJaYear(each_year);
+
+						if (thisYear-10<=each_year && each_year<thisYear) {
+							s += `<font color='blue'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
+						}
+						else if (thisYear<each_year && each_year<=thisYear+10) {
+							s += `<font color='red'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`;
+						}
+						else {
+							s += `${year_pole_list[0]}${year_pole_list[1]}<br>`; //${daeun_year + (i-1)}: 
+						}
+					}
+
+					my_seun_list.push(s);
+				}
 				
 			}
+			else if (2<=aDaeUnSu && aDaeUnSu<=9) {
+				for (var i=1;i<=12;i++) {
+					//각 대운에 해당하는 시작 연도
+					var daeun_start_year = (birth_year - (10 - aDaeUnSu + 1)) + 10*(i-1);
+					
+					var s = "";
+					for (var j=1;j<=10;j++) {
+						//aDaeUnSu==7이라면 1세부터 6세까지의 세운이 필요함. 공백 4개 필요
+						if (i==1 && (j<=10-aDaeUnSu+1)) {
+							s += "<br>";
+							continue;
+						}
+
+						var each_year = daeun_start_year + (j-1);
+						var year_pole_list = get60GapJaYear(each_year);
+
+						if (thisYear-10<=each_year && each_year<thisYear) {
+							s += `<font color='blue'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`; //${daeun_year + (i-1)}: 
+						}
+						else if (thisYear<each_year && each_year<=thisYear+10) {
+							s += `<font color='red'>${year_pole_list[0]}${year_pole_list[1]}</font><br>`;
+						}
+						else {
+							s += `${year_pole_list[0]}${year_pole_list[1]}<br>`; //${daeun_year + (i-1)}: 
+						}
+					}
+
+					my_seun_list.push(s);
+				}
+				
+			}
+
+			
 
 			return my_seun_list;
 		}
