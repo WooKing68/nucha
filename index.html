@@ -8367,12 +8367,13 @@ The <b>greatest error:</b><br>
 	//aWorkMenu: [NAMING_SHOW, NAMING_SAVE, NAMING_UPDATE]
 
 	
-	function comSearchHanja(aWorkMenu, a_name_given_meaning, a_name_given_sound, a_name_given_sound2, a_name_given_num, a_name1_meaning, a_name1_sound, a_name1_sound2, a_name1_num, a_name2_meaning, a_name2_sound, a_name2_sound2, a_name2_num) {
+	function comSearchHanja(aWorkMenu, radio_father_children_mother, a_name_given_meaning, a_name_given_sound, a_name_given_sound2, a_name_given_num, a_name1_meaning, a_name1_sound, a_name1_sound2, a_name1_num, a_name2_meaning, a_name2_sound, a_name2_sound2, a_name2_num) {
 		
 
 		
 		//ii: 0 (부), ii: 1 (자녀), ii: 2 (모) 
-		var ii = 1;
+		var ii = parseInt(radio_father_children_mother);
+
 		var xForm = document.getElementsByName("Type8NameForm")[ii];
 
 		console.log("a_name_given_meaning: " + a_name_given_meaning);
@@ -8554,7 +8555,7 @@ The <b>greatest error:</b><br>
 		var name2_sound2 = name_info[2].split("~")[2];
 		var name2_num = name_info[2].split("~")[3];
 
-		comSearchHanja(false, name_given_mean, name_given_sound, name_given_sound2, name_given_num, name1_mean, name1_sound, name1_sound2, name1_num, name2_mean, name2_sound, name2_sound2, name2_num);
+		comSearchHanja(false, radio_father_children_mother, name_given_mean, name_given_sound, name_given_sound2, name_given_num, name1_mean, name1_sound, name1_sound2, name1_num, name2_mean, name2_sound, name2_sound2, name2_num);
 	}
 
 </script>

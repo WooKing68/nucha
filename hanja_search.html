@@ -8048,12 +8048,18 @@ var g_hanja_list = [
     <br>
     <table>
         <tr>
-            <td>
-                <p align=center>
-                    <input type="button" value='X X X' onClick="clearAll();">&nbsp;
-                    <input type="button" value='메인화면에 추가' onClick="to_main_win_append();">&nbsp;
-                    <input type="button" value='메인화면에 수정' onClick="to_main_win_update();">
-                </p>
+            <td aling="center">
+                <label><input type="radio" name="radio_father_children_mother" value="0" />부(父)</label>
+                <label><input type="radio" name="radio_father_children_mother" value="1" checked />자녀(子女)</label>
+                <label><input type="radio" name="radio_father_children_mother" value="2" />모(母)</label>
+
+                <br>
+                <br>
+                
+                <input type="button" value='X X X' onClick="clearAll();">&nbsp;
+                <input type="button" value='메인화면에 추가' onClick="to_main_win_append();">&nbsp;
+                <input type="button" value='메인화면에 수정' onClick="to_main_win_update();">
+                
             </td>
         </tr>
     </table>
@@ -8061,7 +8067,10 @@ var g_hanja_list = [
     
 </form>
 
-
+<script>
+    var radio_father_children_mother = document.SearchHanjaForm.radio_father_children_mother.value;
+    alert("radio_father_children_mother: " + radio_father_children_mother);
+</script>
 
 <script language="javascript" type="text/javascript">
 
@@ -8077,6 +8086,7 @@ var g_hanja_list = [
     */
    
     function to_main_win_append() {
+        var radio_father_children_mother = document.SearchHanjaForm.radio_father_children_mother.value;
         var name_given_mean = document.SearchHanjaForm.txtResultGivenMeaning.value;
         var name_given_sound = document.SearchHanjaForm.txtResultGivenSound.value;
         var name_given_sound2 = document.SearchHanjaForm.txtResultGivenSound2.value;
@@ -8093,11 +8103,13 @@ var g_hanja_list = [
         var name2_num = document.SearchHanjaForm.txtResultName_2Num.value;
 
         //참이면 새로 추가 저장
-        my_opener.comSearchHanja(my_opener.NAMING_SAVE, name_given_mean, name_given_sound, name_given_sound2, name_given_num, name1_mean, name1_sound, name1_sound2, name1_num, name2_mean, name2_sound, name2_sound2, name2_num);
+        my_opener.comSearchHanja(my_opener.NAMING_SAVE, radio_father_children_mother, name_given_mean, name_given_sound, name_given_sound2, name_given_num, name1_mean, name1_sound, name1_sound2, name1_num, name2_mean, name2_sound, name2_sound2, name2_num);
     }
 
 
     function to_main_win_update() {
+        var radio_father_children_mother = document.SearchHanjaForm.radio_father_children_mother.value;
+        
         var name_given_mean = document.SearchHanjaForm.txtResultGivenMeaning.value;
         var name_given_sound = document.SearchHanjaForm.txtResultGivenSound.value;
         var name_given_sound2 = document.SearchHanjaForm.txtResultGivenSound2.value;
@@ -8116,7 +8128,7 @@ var g_hanja_list = [
         //거짓이면 기존 자료 변경
        
         
-        my_opener.comSearchHanja(my_opener.NAMING_UPDATE, name_given_mean, name_given_sound, name_given_sound2, name_given_num, name1_mean, name1_sound, name1_sound2, name1_num, name2_mean, name2_sound, name2_sound2, name2_num);
+        my_opener.comSearchHanja(my_opener.NAMING_UPDATE, radio_father_children_mother, name_given_mean, name_given_sound, name_given_sound2, name_given_num, name1_mean, name1_sound, name1_sound2, name1_num, name2_mean, name2_sound, name2_sound2, name2_num);
     }
 
     function clearZenNum81() {
