@@ -7758,7 +7758,7 @@ The <b>greatest error:</b><br>
 <div id="body8_type_chim5_dock" style="display:none"><table><tr><td></td></tr>오수혈</table></div>
 
 <br>
-
+<!--체질작명-->
 <div id="body8_type_naming_dock"><!--style="display:none"-->
 	
 	<table border="1">
@@ -7808,13 +7808,13 @@ The <b>greatest error:</b><br>
 												<option value="127.72">춘천
 											</select>지역<br>
 											담날 남중시각: &nbsp;<input type="text" name="namingSajuEOT" size="2" disabled>
-											&nbsp;<input type="button" name="namingSajuButton" value="사주" onclick="getFamilySaju(this);" />
+											&nbsp;<input type="button" name="namingSajuButton" value="사주" onclick="getNamingSaju(this);" />
 									</td>
 									<td colspan="3" valign="top">
 										<table>
 											<tr>
 												<td>
-													<select  name="namingSajuSaveSelect" onchange="searchFamilySaju(this);">
+													<select  name="namingSajuSaveSelect" onchange="searchNamingSaju(this);">
 														<option value="">
 													</select>
 												</td>
@@ -7895,12 +7895,12 @@ The <b>greatest error:</b><br>
 
 			</td>
 
-			<td>
+			<td valign="top">
 				<!--자녀-->
 				<form name="Type8NameForm">
 				<table>
 					<tr>
-						<td align="center">
+						<td align="center" >
 							<table border=1>
 								<tr>
 									<td colspan="10">
@@ -7928,14 +7928,14 @@ The <b>greatest error:</b><br>
 												<option value="127.72">춘천
 											</select>지역<br>
 											담날 남중시각: &nbsp;<input type="text" name="namingSajuEOT" size="2" disabled>
-											&nbsp;<input type="button" name="namingSajuButton" value="사주" onclick="getFamilySaju(this);" />
+											&nbsp;<input type="button" name="namingSajuButton" value="사주" onclick="getNamingSaju(this);" />
 										
 									</td>
 									<td colspan="3" valign="top">
 										<table>
 											<tr>
 												<td>
-													<select  name="namingSajuSaveSelect" onchange="searchFamilySaju(this);">
+													<select  name="namingSajuSaveSelect" onchange="searchNamingSaju(this);">
 														<option value="">
 													</select>
 												</td>
@@ -8047,13 +8047,13 @@ The <b>greatest error:</b><br>
 												<option value="127.72">춘천
 											</select>지역<br>
 											담날 남중시각: &nbsp;<input type="text" name="namingSajuEOT" size="2" disabled>
-											&nbsp;<input type="button" name="namingSajuButton" value="사주" onclick="getFamilySaju(this);" />
+											&nbsp;<input type="button" name="namingSajuButton" value="사주" onclick="getNamingSaju(this);" />
 									</td>
 									<td colspan="3" valign="top">
 										<table>
 											<tr>
 												<td>
-													<select  name="namingSajuSaveSelect" onchange="searchFamilySaju(this);">
+													<select  name="namingSajuSaveSelect" onchange="searchNamingSaju(this);">
 														<option value="">
 													</select>
 												</td>
@@ -8136,6 +8136,200 @@ The <b>greatest error:</b><br>
 		
 	</table>
 </div>
+
+<script>
+	function searchNamingSaju(aThis) {
+		var ii = -1;
+
+		var my_obj = document.getElementsByName("namingSajuSaveSelect");
+
+		for (var i=0;i<my_obj.length;i++) {
+			if (my_obj[i]==aThis) {
+				ii = i;
+				break;
+			}
+		}
+		
+		var idx = my_obj[ii].selectedIndex;
+		if (idx == 0) {
+			return;
+		}
+
+		var my_val = my_obj[ii].options[idx].value;
+		var val_list = my_val.split("/");
+
+		
+		//var save_val = `${idx_sex}/${idx_year1}/${idx_year2}/${idx_year3}/${idx_month}/${idx_day}/${idx_hour}/${idx_min}/${idx_area}`;
+		var j=1; //0:연월일
+		document.getElementsByName("namingSajuSexSelect")[ii].selectedIndex = parseInt(val_list[j+0]);
+		document.getElementsByName("namingSajuYear1Select")[ii].selectedIndex = parseInt(val_list[j+1]);
+		document.getElementsByName("namingSajuYear2Select")[ii].selectedIndex = parseInt(val_list[j+2]);
+		document.getElementsByName("namingSajuYear3Select")[ii].selectedIndex = parseInt(val_list[j+3]);
+		document.getElementsByName("namingSajuMonthSelect")[ii].selectedIndex = parseInt(val_list[j+4]);
+		document.getElementsByName("namingSajuDaySelect")[ii].selectedIndex = parseInt(val_list[j+5]);
+		document.getElementsByName("namingSajuHourSelect")[ii].selectedIndex = parseInt(val_list[j+6]);
+		document.getElementsByName("namingSajuMinSelect")[ii].selectedIndex = parseInt(val_list[j+7]);
+		document.getElementsByName("namingSajuAreaSelect")[ii].selectedIndex = parseInt(val_list[j+8]);
+
+
+		getNamingSajuByIndex(ii);
+	}
+
+	function getNamingSaju(aThis) {
+		//선택된 객체가 그 이름으로 몇 번째 객체인 지 결정
+		var ii = -1;
+
+		var my_obj = document.getElementsByName("namingSajuButton");
+
+		for (var i=0;i<my_obj.length;i++) {
+			if (my_obj[i]==aThis) {
+				ii = i;
+				break;
+			}
+		}
+
+		getNamingSajuByIndex(ii);
+	}
+
+	function getNamingSajuByIndex(ii) {
+		var myNamingSajuAreaSelect  = document.getElementsByName("namingSajuAreaSelect");
+		var idx_area = myNamingSajuAreaSelect[ii].selectedIndex;
+		var my_area_val = parseInt(myNamingSajuAreaSelect[ii].options[idx_area].value);
+
+		if (idx_area<=0) {
+			myNamingSajuAreaSelect[ii].selectedIndex = 1; //서울지역
+			idx_area = 1;
+		}
+
+		var myNamingSajuYear1Select  = document.getElementsByName("namingSajuYear1Select");
+		var myNamingSajuYear2Select  = document.getElementsByName("namingSajuYear2Select");
+		var myNamingSajuYear3Select  = document.getElementsByName("namingSajuYear3Select");
+
+		var myNamingSajuMonthSelect  = document.getElementsByName("namingSajuMonthSelect");
+		var myNamingSajuDaySelect  = document.getElementsByName("namingSajuDaySelect");
+
+		var myNamingSajuHourSelect  = document.getElementsByName("namingSajuHourSelect");
+		var myNamingSajuMinSelect  = document.getElementsByName("namingSajuMinSelect");
+
+		var namingSajuSexSelect  = document.getElementsByName("namingSajuSexSelect");
+		
+
+		var idx_sex = namingSajuSexSelect[ii].selectedIndex;
+
+		var idx_year1 = myNamingSajuYear1Select[ii].selectedIndex;
+		var idx_year2 = myNamingSajuYear2Select[ii].selectedIndex;
+		var idx_year3 = myNamingSajuYear3Select[ii].selectedIndex;
+
+		var idx_month = myNamingSajuMonthSelect[ii].selectedIndex;
+		var idx_day = myNamingSajuDaySelect[ii].selectedIndex;
+
+		var idx_hour = myNamingSajuHourSelect[ii].selectedIndex;
+		var idx_min = myNamingSajuMinSelect[ii].selectedIndex;
+
+		
+		var my_sex = parseInt(namingSajuSexSelect[ii].options[idx_sex].value);
+
+
+		var year1 = parseInt(myNamingSajuYear1Select[ii].options[idx_year1].value); //text
+		var year2 = parseInt(myNamingSajuYear2Select[ii].options[idx_year2].value);
+		var year3 = parseInt(myNamingSajuYear3Select[ii].options[idx_year3].value);
+
+		var my_year = year1 * 100 + 10*year2 + year3;
+
+		var my_month = parseInt(myNamingSajuMonthSelect[ii].options[idx_month].value);
+		var my_day = parseInt(myNamingSajuDaySelect[ii].options[idx_day].value);
+
+
+		var my_hour = parseInt(myNamingSajuHourSelect[ii].options[idx_hour].value);
+		var my_min = parseInt(myNamingSajuMinSelect[ii].options[idx_min].value);
+
+		var eot_hour_min_list = getEOT(my_year, my_month, my_day, my_area_val);
+		var yyyy_mm_dd_from_next_day_list = getYYYYMMDD_NextDay(my_year, my_month, my_day); 
+		var eot_next_hour_min_list = getEOT(yyyy_mm_dd_from_next_day_list[0] , yyyy_mm_dd_from_next_day_list[1] , yyyy_mm_dd_from_next_day_list[2] , my_area_val);
+
+		var year_pole_list = get60GapJaYear(my_year);
+		var month_pole_list = get60GapJaMonth(my_year, my_month);
+		var day_pole_list = get60GapJaDay(my_year, my_month, my_day);
+		var time_pole_list = get60GapJaTime(my_year, my_month, my_day, my_hour, my_min);
+
+
+		var xYearPole = document.getElementsByName("namingSaju_YearPole");
+		var xMonthPole = document.getElementsByName("namingSaju_MonthPole");
+		var xDayPole = document.getElementsByName("namingSaju_DayPole");
+		var xTimePole = document.getElementsByName("namingSaju_TimePole");
+
+		xYearPole[ii].innerHTML = `년<br>` + `<h1>${year_pole_list[0]}<br>${year_pole_list[1]}</h1>`;
+		xMonthPole[ii].innerHTML = `월<br>` + `<h1>${month_pole_list[0]}<br>${month_pole_list[1]}</h1>`;
+		xDayPole[ii].innerHTML = `일<br>` + `<h1>${day_pole_list[0]}<br>${day_pole_list[1]}</h1>`;
+		xTimePole[ii].innerHTML = `시<br>` + `<h1>${time_pole_list[0]}<br>${time_pole_list[1]}</h1>`;
+
+
+
+		var xYearJijangan = document.getElementsByName("namingSaju_Jijangan_1");
+		var xMonthJijangan = document.getElementsByName("namingSaju_Jijangan_2");
+		var xDayJijangan = document.getElementsByName("namingSaju_Jijangan_3");
+		var xTimeJijangan = document.getElementsByName("namingSaju_Jijangan_4");
+
+		xYearJijangan[ii].innerHTML = g_gi_jang_gan[year_pole_list[1]];
+		xMonthJijangan[ii].innerHTML = g_gi_jang_gan[month_pole_list[1]];
+		xDayJijangan[ii].innerHTML = g_gi_jang_gan[day_pole_list[1]];
+		xTimeJijangan[ii].innerHTML = g_gi_jang_gan[time_pole_list[1]];
+
+		var xEOT = document.getElementsByName("namingSajuEOT");
+		xEOT[ii].value = `${eot_next_hour_min_list[0]}:${eot_next_hour_min_list[1]}`;
+
+		var my_sexHanja = "";
+		if (my_sex==1) {
+			my_sexHanja = "男";
+		}
+		else if (my_sex==0) {
+			my_sexHanja = "女";
+		}
+
+		var myToday = new Date();
+		var thisYear = myToday.getFullYear();
+		var my_age = getAge(my_year, my_month, my_day);
+
+		//체질과 기타 정보 리스트
+		var my_body8_type = determineBody8(day_pole_list[1], month_pole_list[1], year_pole_list[1], day_pole_list[0], month_pole_list[0], year_pole_list[0]);
+
+		var xWhoAmI = document.getElementsByName("namingSaju_WhoAmI");
+		xWhoAmI[ii].innerHTML = `<font size='6'><b>${my_age}세<br>${my_sexHanja}</b></font><br><font color='red'>${my_body8_type[0]}</font>`;
+		
+		//0번째: 대운수, 1~12번째: 대운 간지
+		var my_daeun_list = getDaeUn(my_sex, year_pole_list[0], month_pole_list[0], month_pole_list[1], my_year, my_month, my_day, my_age);
+		var my_daeun_su = my_daeun_list[0];
+		//var xDaeUn_1 = document.getElementsByName("BodyJuyeokSaju_daeun_" + 1);
+		//xDaeUn_1[ii].innerHTML = "nbsp;"; 
+		for (var i=1;i<=12;i++) {//BodyJuyeokSaju_daeun_1에는 월운 대운을 대운수 없이 표시한다.
+			var xDaeUn = document.getElementsByName("namingSaju_daeun_" + i);
+			//console.log(my_daeun_list[i-1]);
+			xDaeUn[ii].innerHTML = my_daeun_list[i]; //0번째 요소는 대운수임.
+		}
+
+		//세운 처리...
+		//var my_seun_list = getSeUn(my_daeun_su, my_year, thisYear, my_age);
+		//for (var i=1;i<=12;i++) { //BodyJuyeokSaju_seun_1에는 월운 대운 관련된 세운을 표시한다.
+		//	var xSeUn = document.getElementsByName("namingSaju_seun_" + i);
+		//	//console.log(my_daeun_list[i-1]);
+		//	xSeUn[ii].innerHTML = my_seun_list[i-1];
+		//}
+		
+		
+
+
+		var namingSajuSaveSelect = document.getElementsByName("namingSajuSaveSelect");
+		var idx_save = namingSajuSaveSelect[ii].selectedIndex;
+		var save_length = namingSajuSaveSelect[ii].options.length;
+		var save_key = `${my_year}.${(my_month).pad(2)}.${(my_day).pad(2)}`;
+		var save_val = `${my_year}.${(my_month).pad(2)}.${(my_day).pad(2)}/${idx_sex}/${idx_year1}/${idx_year2}/${idx_year3}/${idx_month}/${idx_day}/${idx_hour}/${idx_min}/${idx_area}`;
+
+		if (existValueInSelection(namingSajuSaveSelect[ii], save_val)==false) {
+			namingSajuSaveSelect[ii].options[save_length] = new Option(save_key, save_val);
+			namingSajuSaveSelect[ii].selectedIndex = save_length;
+		}
+	}
+</script>
 
 	
 <script language="javascript" type="text/javascript">
