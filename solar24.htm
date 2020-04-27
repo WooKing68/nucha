@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 절기 API 호출 샘플</title>
+
+    </script>
+</head>
+
+<!--코드 자동 정렬 기능: {Shift+Alt+F}}(좋음) 혹은 Beauty 설치 후 {Ctrl+Shift+b}(별로)-->
+<!--개발자 모드: 크롬 브라우저에서 {F12}-->
+<!--찾기: 크롬 브라우저에서 {Ctrl+F}-->
+<!--jquery-3.5.0.min.js-->
+<!--jquery CDN-->
+<!--AJAX: API 호출 및 응답 관련 프로그래밍: jQuery를 이용하여 AJAX에 접근한다.-->
+
+<body>
+    <h1>24 절기 API 호출 예정</h1>
+
+<br>
+    토글 기능
+<br>    
+    <!--{토글 기능=======================================================-->
+    <yang_tag><img id="yang_id" src="yang.png" alt="yang"></yang_tag>
+    <br>
+    <um_tag><img id="um_id" src="um.png" alt="um"></um_tag>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!--태그명을 사용하여 토글-->
+    <script>
+        $(document).ready(function () {
+            $("yang_tag").click(function () {
+                $("um_tag").toggle();
+            });
+        });
+    </script>
+
+    <!--부여한 id를 사용하여 토클: id 앞에 # 필요함-->
+    <script>
+        $(document).ready(function () {
+            $("#yang_id").click(function () {
+                $("#um_id").toggle();
+            });
+        });
+    </script>
+    <!--토글 기능}=======================================================-->
+
+<br>
+<hr>
+
+    <h1>KAKAO</h1>  
+    <h3>책 검색 API Example</h3>
+
+    <!--{API 호출=======================================================-->
+    <!--https://developers.kakao.com/-->
+    <!--KAKAO 앱 키
+        네이티브 앱 키	cff2372b2caf1c1113b8c15604e3d24c
+        REST API 키	7a522a176adb240c882b199b4aae0f9a
+        JavaScript 키	0900f2a8f632cab9b58e043cf7aa2b6e
+        Admin 키	a7551e29004413cca6fe46bc3b32916d-->
+    <!--KAKAO 앱 ID	426356-->
+
+    <!--책 검색-->
+    <!--Request URL:
+        GET /v3/search/book HTTP/1.1
+        Host: dapi.kakao.com
+        Authorization: KakaoAK {app_key}-->
+    <!--Parameter:
+        Name	Type	Description	Required
+        query	String	검색을 원하는 질의어	O
+        sort	String	결과 문서 정렬 방식, accuracy(정확도순) 또는 recency(최신순), 기본 값 accuracy	X
+        page	Integer	결과 페이지 번호, 1~50 사이의 값, 기본 값 1	X
+        size	Integer	한 페이지에 보여질 문서 수, 1~50 사이의 값, 기본 값 10	X
+        target	String	검색 필드 제한
+        사용 가능한 값: title(제목), isbn (ISBN), publisher(출판사), person(인명)	X-->
+    <!--Response
+        Name	Type	Description
+        total_count	Integer	검색된 문서 수
+        pageable_count	Integer	total_count 중 노출 가능 문서 수
+        is_end	Boolean	현재 페이지가 마지막 페이지인지 여부, 값이 false면 page를 증가시켜 다음 페이지를 요청할 수 있음-->
+    <!--documents
+        Name	Type	Description
+        title	String	도서 제목
+        contents	String	도서 소개
+        url	String	도서 상세 URL
+        isbn	String	국제 표준 도서번호, ISBN10 또는 ISBN13
+        ISBN10, ISBN13 중 하나 이상 존재, 공백(' ')으로 구분
+        datetime	Datetime	도서 출판날짜, ISO 8601 형식
+        [YYYY]-[MM]-[DD]T[hh]:[mm]:[ss].000+[tz]
+        authors	String[]	도서 저자 리스트
+        publisher	String	도서 출판사
+        translators	String[]	도서 번역자 리스트
+        price	Integer	도서 정가
+        sale_price	Integer	도서 판매가
+        thumbnail	String	도서 표지 미리보기 URL
+        status	String	도서 판매 상태 정보 (정상, 품절, 절판 등)
+        상황에 따라 변동 가능성이 있으므로 문자열 처리 지양, 단순 노출 요소로 활용 권장-->
+
+
+    <!--Sample
+        Request
+        curl -v -X GET "https://dapi.kakao.com/v3/search/book?target=title" \
+        --data-urlencode "query=미움받을 용기" \
+        -H "Authorization: KakaoAK kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"-->
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+
+    <script>
+        //{REST API 키}를 사용함
+        //msg 속에 응답이 들어있음.
+        $.ajax({
+            method: "GET",
+            url: "https://dapi.kakao.com/v3/search/book?target=title",
+            data: { query: "파이썬" },
+            headers: { Authorization: "KakaoAK xxx" }
+        })
+            .done(function (msg) {
+                //Console에서 msg object와
+                //위 documents를 비교해볼 것
+                console.log(msg);
+                console.log(msg.documents[0].title);
+                console.log(msg.documents[0].thumbnail);
+
+
+                $("p").append(`<string>${msg.documents[0].title}</strong>`);
+                $("p").append(`<br>`);
+                $("p").append(`<img src='${msg.documents[0].thumbnail}'/>`);
+
+
+            });
+    </script>
+    <!--API 호출}=======================================================-->
+
+
+    <p></p>
+</body>
+
+</html>
