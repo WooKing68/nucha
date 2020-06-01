@@ -4960,6 +4960,8 @@ function get_umyang_from_dice() {
 		#        본괘를 reverse 후 1을 더한 후, 다시 reverse 하여 미래괘를 구할 수 있다.
 	*/
 	function get_mirae64_list() {
+
+		alert("미래괘 실행: get_mirae64_list");
 	
 
 		//#this.base64_list = [6효, 5효, 4효, 3효, 2효, 1효]
@@ -4973,9 +4975,7 @@ function get_umyang_from_dice() {
 			return make_64_info("미래", "000", "000");
 		}
 
-		if (g_base64_list.join("")=="000001") { // #미래괘: "000000"
-			return make_64_info("미래", "000", "000");
-		}
+		
 
 
 
