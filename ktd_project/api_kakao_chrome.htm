@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 절기 API 호출 샘플</title>
+
+    </script>
+</head>
+
+
+
+<!--코드 자동 정렬 기능: {Shift+Alt+F}}(좋음) 혹은 Beauty 설치 후 {Ctrl+Shift+b}(별로)-->
+<!--개발자 모드: 크롬 브라우저에서 {F12}-->
+<!--찾기: 크롬 브라우저에서 {Ctrl+F}-->
+<!--jquery-3.5.0.min.js-->
+<!--jquery CDN-->
+<!--AJAX: API 호출 및 응답 관련 프로그래밍: jQuery를 이용하여 AJAX에 접근한다.-->
+
+
+<body>
+    <script>
+        //var mydata = {"response":{"header":{"resultCode":"00","resultMsg":"NORMAL SERVICE."},"body":{"items":{"item":[{"dateKind":"03","dateName":"소한","isHoliday":"N","kst":"0630      ","locdate":20200106,"seq":1,"sunLongitude":285},{"dateKind":"03","dateName":"대한","isHoliday":"N","kst":"2355      ","locdate":20200120,"seq":1,"sunLongitude":300},{"dateKind":"03","dateName":"입춘","isHoliday":"N","kst":"1803      ","locdate":20200204,"seq":1,"sunLongitude":315},{"dateKind":"03","dateName":"우수","isHoliday":"N","kst":"1357      ","locdate":20200219,"seq":1,"sunLongitude":330},{"dateKind":"03","dateName":"경칩","isHoliday":"N","kst":"1157      ","locdate":20200305,"seq":1,"sunLongitude":345},{"dateKind":"03","dateName":"춘분","isHoliday":"N","locdate":20200320,"seq":1},{"dateKind":"03","dateName":"청명","isHoliday":"N","kst":"1638      ","locdate":20200404,"seq":1,"sunLongitude":15},{"dateKind":"03","dateName":"곡우","isHoliday":"N","kst":"2345      ","locdate":20200419,"seq":2,"sunLongitude":30},{"dateKind":"03","dateName":"소만","isHoliday":"N","kst":"2249      ","locdate":20200520,"seq":1,"sunLongitude":60},{"dateKind":"03","dateName":"망종","isHoliday":"N","kst":"1358      ","locdate":20200605,"seq":2,"sunLongitude":75},{"dateKind":"03","dateName":"하지","isHoliday":"N","kst":"0644      ","locdate":20200621,"seq":1,"sunLongitude":90},{"dateKind":"03","dateName":"소서","isHoliday":"N","kst":"0014      ","locdate":20200707,"seq":1,"sunLongitude":105},{"dateKind":"03","dateName":"대서","isHoliday":"N","kst":"1737      ","locdate":20200722,"seq":1,"sunLongitude":120},{"dateKind":"03","dateName":"입추","isHoliday":"N","kst":"1006      ","locdate":20200807,"seq":1,"sunLongitude":135},{"dateKind":"03","dateName":"처서","isHoliday":"N","kst":"0045      ","locdate":20200823,"seq":1,"sunLongitude":150},{"dateKind":"03","dateName":"백로","isHoliday":"N","kst":"1308      ","locdate":20200907,"seq":1,"sunLongitude":165},{"dateKind":"03","dateName":"추분","isHoliday":"N","kst":"2231      ","locdate":20200922,"seq":1,"sunLongitude":180},{"dateKind":"03","dateName":"한로","isHoliday":"N","kst":"0455      ","locdate":20201008,"seq":2,"sunLongitude":195},{"dateKind":"03","dateName":"상강","isHoliday":"N","kst":"0800      ","locdate":20201023,"seq":1,"sunLongitude":210},{"dateKind":"03","dateName":"입동","isHoliday":"N","kst":"0814      ","locdate":20201107,"seq":1,"sunLongitude":225}]},"numOfRows":20,"pageNo":1,"totalCount":23}}};
+        //alert("dateName: \n" + mydata["response"]["body"]["items"]["item"][0]["dateName"]);
+        //alert("locdate: \n" + mydata["response"]["body"]["items"]["item"][0]["locdate"]);
+        //alert("kst: \n" + mydata["response"]["body"]["items"]["item"][0]["kst"]);
+    </script>
+
+
+<script>
+    //var mystring = '{"response":{"header":{"resultCode":"00","resultMsg":"NORMAL SERVICE."},"body":{"items":{"item":[{"dateKind":"03","dateName":"소한","isHoliday":"N","kst":"0630      ","locdate":20200106,"seq":1,"sunLongitude":285},{"dateKind":"03","dateName":"대한","isHoliday":"N","kst":"2355      ","locdate":20200120,"seq":1,"sunLongitude":300},{"dateKind":"03","dateName":"입춘","isHoliday":"N","kst":"1803      ","locdate":20200204,"seq":1,"sunLongitude":315},{"dateKind":"03","dateName":"우수","isHoliday":"N","kst":"1357      ","locdate":20200219,"seq":1,"sunLongitude":330},{"dateKind":"03","dateName":"경칩","isHoliday":"N","kst":"1157      ","locdate":20200305,"seq":1,"sunLongitude":345},{"dateKind":"03","dateName":"춘분","isHoliday":"N","locdate":20200320,"seq":1},{"dateKind":"03","dateName":"청명","isHoliday":"N","kst":"1638      ","locdate":20200404,"seq":1,"sunLongitude":15},{"dateKind":"03","dateName":"곡우","isHoliday":"N","kst":"2345      ","locdate":20200419,"seq":2,"sunLongitude":30},{"dateKind":"03","dateName":"소만","isHoliday":"N","kst":"2249      ","locdate":20200520,"seq":1,"sunLongitude":60},{"dateKind":"03","dateName":"망종","isHoliday":"N","kst":"1358      ","locdate":20200605,"seq":2,"sunLongitude":75},{"dateKind":"03","dateName":"하지","isHoliday":"N","kst":"0644      ","locdate":20200621,"seq":1,"sunLongitude":90},{"dateKind":"03","dateName":"소서","isHoliday":"N","kst":"0014      ","locdate":20200707,"seq":1,"sunLongitude":105},{"dateKind":"03","dateName":"대서","isHoliday":"N","kst":"1737      ","locdate":20200722,"seq":1,"sunLongitude":120},{"dateKind":"03","dateName":"입추","isHoliday":"N","kst":"1006      ","locdate":20200807,"seq":1,"sunLongitude":135},{"dateKind":"03","dateName":"처서","isHoliday":"N","kst":"0045      ","locdate":20200823,"seq":1,"sunLongitude":150},{"dateKind":"03","dateName":"백로","isHoliday":"N","kst":"1308      ","locdate":20200907,"seq":1,"sunLongitude":165},{"dateKind":"03","dateName":"추분","isHoliday":"N","kst":"2231      ","locdate":20200922,"seq":1,"sunLongitude":180},{"dateKind":"03","dateName":"한로","isHoliday":"N","kst":"0455      ","locdate":20201008,"seq":2,"sunLongitude":195},{"dateKind":"03","dateName":"상강","isHoliday":"N","kst":"0800      ","locdate":20201023,"seq":1,"sunLongitude":210},{"dateKind":"03","dateName":"입동","isHoliday":"N","kst":"0814      ","locdate":20201107,"seq":1,"sunLongitude":225}]},"numOfRows":20,"pageNo":1,"totalCount":23}}}';
+    //var mydata = JSON.parse(mystring);
+    //alert("dateName: \n" + mydata["response"]["body"]["items"]["item"][0]["dateName"]);
+    //alert("locdate: \n" + mydata["response"]["body"]["items"]["item"][0]["locdate"]);
+    //alert("kst: \n" + mydata["response"]["body"]["items"]["item"][0]["kst"]);
+//
+//
+    //alert("trim: " + "0630      ".trim());
+</script>
+
+
+
+
+
+    <h1>24 절기 API 호출 예정</h1>
+
+
+
+
+    <br>
+    토글 기능
+    <br>
+    <!--{토글 기능=======================================================-->
+    <yang_tag><img id="yang_id" src="yang.png" alt="yang"></yang_tag>
+    <br>
+    <um_tag><img id="um_id" src="um.png" alt="um"></um_tag>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!--태그명을 사용하여 토글-->
+    <script>
+        $(document).ready(function () {
+            $("yang_tag").click(function () {
+                $("um_tag").toggle();
+            });
+        });
+    </script>
+
+    <!--부여한 id를 사용하여 토클: id 앞에 # 필요함-->
+    <script>
+        $(document).ready(function () {
+            $("#yang_id").click(function () {
+                $("#um_id").toggle();
+            });
+        });
+    </script>
+    <!--토글 기능}=======================================================-->
+
+    <br>
+    <hr>
+
+    <h1>KAKAO</h1>
+    <h3>책 검색 API Example</h3>
+
+    <!--{API 호출=======================================================-->
+    <!--https://developers.kakao.com/-->
+    <!--KAKAO 앱 키
+        네이티브 앱 키	cff2372b2caf1c1113b8c15604e3d24c
+        REST API 키	7a522a176adb240c882b199b4aae0f9a
+        JavaScript 키	0900f2a8f632cab9b58e043cf7aa2b6e
+        Admin 키	a7551e29004413cca6fe46bc3b32916d-->
+    <!--KAKAO 앱 ID	426356-->
+
+    <!--책 검색-->
+    <!--Request URL:
+        GET /v3/search/book HTTP/1.1
+        Host: dapi.kakao.com
+        Authorization: KakaoAK {app_key}-->
+    <!--Parameter:
+        Name	Type	Description	Required
+        query	String	검색을 원하는 질의어	O
+        sort	String	결과 문서 정렬 방식, accuracy(정확도순) 또는 recency(최신순), 기본 값 accuracy	X
+        page	Integer	결과 페이지 번호, 1~50 사이의 값, 기본 값 1	X
+        size	Integer	한 페이지에 보여질 문서 수, 1~50 사이의 값, 기본 값 10	X
+        target	String	검색 필드 제한
+        사용 가능한 값: title(제목), isbn (ISBN), publisher(출판사), person(인명)	X-->
+    <!--Response
+        Name	Type	Description
+        total_count	Integer	검색된 문서 수
+        pageable_count	Integer	total_count 중 노출 가능 문서 수
+        is_end	Boolean	현재 페이지가 마지막 페이지인지 여부, 값이 false면 page를 증가시켜 다음 페이지를 요청할 수 있음-->
+    <!--documents
+        Name	Type	Description
+        title	String	도서 제목
+        contents	String	도서 소개
+        url	String	도서 상세 URL
+        isbn	String	국제 표준 도서번호, ISBN10 또는 ISBN13
+        ISBN10, ISBN13 중 하나 이상 존재, 공백(' ')으로 구분
+        datetime	Datetime	도서 출판날짜, ISO 8601 형식
+        [YYYY]-[MM]-[DD]T[hh]:[mm]:[ss].000+[tz]
+        authors	String[]	도서 저자 리스트
+        publisher	String	도서 출판사
+        translators	String[]	도서 번역자 리스트
+        price	Integer	도서 정가
+        sale_price	Integer	도서 판매가
+        thumbnail	String	도서 표지 미리보기 URL
+        status	String	도서 판매 상태 정보 (정상, 품절, 절판 등)
+        상황에 따라 변동 가능성이 있으므로 문자열 처리 지양, 단순 노출 요소로 활용 권장-->
+
+
+    <!--Sample
+        Request
+        curl -v -X GET "https://dapi.kakao.com/v3/search/book?target=title" \
+        --data-urlencode "query=미움받을 용기" \
+        -H "Authorization: KakaoAK kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"-->
+
+    <!--책 검색 결과를 보여줄 Container <p> 태그-->
+    <p></p>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"
+        integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
+
+    <script>
+        //{REST API 키}를 사용함
+        //msg 속에 응답이 들어있음.
+        $.ajax({
+            method: "GET",
+            url: "https://dapi.kakao.com/v3/search/book?target=title",
+            data: { "query": "파이썬" },
+            headers: { "Authorization": "KakaoAK 7a522a176adb240c882b199b4aae0f9a" }
+        })
+            .done(function (msg) {
+                //Console에서 msg object와
+                //위 documents를 비교해볼 것
+                //console.log(msg);
+                //console.log(msg.documents[0].title);
+                //console.log(msg.documents[0].thumbnail);
+
+
+                //$("p").append(`<string>${msg.documents[0].title}</strong>`);
+                //$("p").append(`<br>`);
+                //$("p").append(`<img src='${msg.documents[0].thumbnail}'/>`);
+
+
+            });
+    </script>
+    <!--API 호출}=======================================================-->
+
+
+    <!--해결 방법 - No 'Access-Control-Allow-Origin' header is present on the requested resource.-->
+
+    <!--chrome 에 플러그인을 설치해서 간단하게 해결하자. 
+        - 개발 시 테스트를 위해 쉽게 처리하기 위한 적당한 방법이다. 
+        https://crhome.google.com/webstore 에서 Allow-Control-Allow-Origin  이라고 검색해서 나오는
+        (제공자:vitvad) 플러그인을 설치하자. http response header 에 'Allow-Control-Allow-Origin: *' 를 \
+        자동으로 추가 해 주는 것으로 해결하는 방식이다. -->
+
+    <!--JSONP 방식으로 호출하기 
+        - 서버쪽 작업을 하지 못할 경우 jsonp로 처리하자. 
+        css나 js같은 resource 파일들은 도메인이 달라도 정책에 영향을 받지 않고 로딩이 가능한 점을 이용한 방식으로 
+        외부에서 읽어온 js 파일들을 json 으로 바꿔주는 방식이다. (GET방식만 가능하다.)
+        jsonp 에 대해서는 아래 포스팅을 참고 하자. 
+        https://blog.naver.com/spdlqjdudghl/220644539375-->
+
+    <!--Server-Side 에서 처리하기 
+        - 실제 외부도메인에서의 요청을 처리하기 위한 API Server 를 만든다면 필요하다. 
+        - 모든 요청의 응답에 아래 header 를 추가 한다. 
+        . Access-Control-Allow-Origin: * (요청을 보내는 페이지의 출처(도메인)을 지정할 수 있다.)
+        . Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS (실제 요청하려는 HTTP Method를 설정할 수 있다. - 미설정 시 GET,POST만 가능하다. )
+        . Access-Control-Max-Age: 3600 (해당 시간동안은 Prelight 요청을 다시 하지 않는다.)
+        . Access-Control-Allow-Headers: Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization
+        https://spring.io/guides/gs/rest-service-cors/-->
+
+<br>
+        <hr>
+<br>
+
+<textarea id="myTextarea" cols="100" rows="30" ></textarea>
+    
+
+
+
+    <script>
+        //alert(("" + 234).trim());
+
+        function mytrim(mystr) {
+            if (mystr==undefined) {
+                return "";
+            }
+
+            try {
+                var tmp_str = "" + mystr;
+                return tmp_str.trim();
+
+            } catch (e) {
+                return "";
+            }
+        }
+
+
+        for (var my_year=1800;my_year<=1800;my_year++) {
+        
+
+            //실패 코드
+            //실패 이유:  Internet Explorer 9 이상에 최적화되었고 기타 브라우저는 사용이 불가능
+            //다음 요청은 <Internet Explorer 9>에서 작동함, <Chrom>에서는 작동 안함.
+            var xhr = new XMLHttpRequest();
+            var url = 'http://openapi.kasi.re.kr/openapi/service/SpcdeInfoService/get24DivisionsInfo'; /*URL*/
+            var queryParams = '?';
+            queryParams += encodeURIComponent('solYear') + '=' + encodeURIComponent(my_year); /**/
+            //queryParams += '&' +  encodeURIComponent('ServiceKey') + '=' + encodeURIComponent('9uOfsoDPvjkJiIw/W/ulLkEd7f7eLzc+i2nyXfFkR+WMKPRkwFzV81ZMJGTEFO1M0tVL0S0dKasuCLJ+1g2wPw=='); /*Service Key*/
+
+            //김태동
+            queryParams += '&' +  encodeURIComponent('ServiceKey') + '=' + encodeURIComponent('jb0PrsVcEqnphrCrt2ZoPXnSdItKDIDHLay2T8dVIYrGlekLtRggWe6pnsMEeH/5TEzZHS1HXpPMOvxbeea42Q=='); /*Service Key*/
+            
+            //queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent('09'); /**/
+            //queryParams += '&' + encodeURIComponent('kst') + '=' + encodeURIComponent('0120'); /**/
+            queryParams += '&' + encodeURIComponent('sunLongitude') + '=' + encodeURIComponent('285'); /**/
+            queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('24'); /**/
+            queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /**/
+            queryParams += '&' + encodeURIComponent('totalCount') + '=' + encodeURIComponent('210114'); /**/
+            queryParams += '&' + encodeURIComponent('_type') + '=' + encodeURIComponent('json'); /**/
+
+            xhr.open('GET', url + queryParams);
+
+            
+
+            
+
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    //console.log('\nStatus_1: ' + this.status);
+                    //console.log('\nnHeaders_1: ' + JSON.stringify(this.getAllResponseHeaders()));
+                    console.log('\nnBody_1: ' + this.responseText);
+                    //alert('\n\nStatus: ' + this.status + '\n\nnHeaders: ' + JSON.stringify(this.getAllResponseHeaders()) + '\n\nnBody: ' + this.responseText);
+
+                    var mystring = this.responseText;
+
+                    // '{"response":{"header":{"resultCode":"00","resultMsg":"NORMAL SERVICE."},"body":{"items":{"item":[{"dateKind":"03","dateName":"소한","isHoliday":"N","kst":"0630      ","locdate":20200106,"seq":1,"sunLongitude":285},{"dateKind":"03","dateName":"대한","isHoliday":"N","kst":"2355      ","locdate":20200120,"seq":1,"sunLongitude":300},{"dateKind":"03","dateName":"입춘","isHoliday":"N","kst":"1803      ","locdate":20200204,"seq":1,"sunLongitude":315},{"dateKind":"03","dateName":"우수","isHoliday":"N","kst":"1357      ","locdate":20200219,"seq":1,"sunLongitude":330},{"dateKind":"03","dateName":"경칩","isHoliday":"N","kst":"1157      ","locdate":20200305,"seq":1,"sunLongitude":345},{"dateKind":"03","dateName":"춘분","isHoliday":"N","locdate":20200320,"seq":1},{"dateKind":"03","dateName":"청명","isHoliday":"N","kst":"1638      ","locdate":20200404,"seq":1,"sunLongitude":15},{"dateKind":"03","dateName":"곡우","isHoliday":"N","kst":"2345      ","locdate":20200419,"seq":2,"sunLongitude":30},{"dateKind":"03","dateName":"소만","isHoliday":"N","kst":"2249      ","locdate":20200520,"seq":1,"sunLongitude":60},{"dateKind":"03","dateName":"망종","isHoliday":"N","kst":"1358      ","locdate":20200605,"seq":2,"sunLongitude":75},{"dateKind":"03","dateName":"하지","isHoliday":"N","kst":"0644      ","locdate":20200621,"seq":1,"sunLongitude":90},{"dateKind":"03","dateName":"소서","isHoliday":"N","kst":"0014      ","locdate":20200707,"seq":1,"sunLongitude":105},{"dateKind":"03","dateName":"대서","isHoliday":"N","kst":"1737      ","locdate":20200722,"seq":1,"sunLongitude":120},{"dateKind":"03","dateName":"입추","isHoliday":"N","kst":"1006      ","locdate":20200807,"seq":1,"sunLongitude":135},{"dateKind":"03","dateName":"처서","isHoliday":"N","kst":"0045      ","locdate":20200823,"seq":1,"sunLongitude":150},{"dateKind":"03","dateName":"백로","isHoliday":"N","kst":"1308      ","locdate":20200907,"seq":1,"sunLongitude":165},{"dateKind":"03","dateName":"추분","isHoliday":"N","kst":"2231      ","locdate":20200922,"seq":1,"sunLongitude":180},{"dateKind":"03","dateName":"한로","isHoliday":"N","kst":"0455      ","locdate":20201008,"seq":2,"sunLongitude":195},{"dateKind":"03","dateName":"상강","isHoliday":"N","kst":"0800      ","locdate":20201023,"seq":1,"sunLongitude":210},{"dateKind":"03","dateName":"입동","isHoliday":"N","kst":"0814      ","locdate":20201107,"seq":1,"sunLongitude":225},{"dateKind":"03","dateName":"소설","isHoliday":"N","kst":"0540      ","locdate":20201122,"seq":1,"sunLongitude":240},{"dateKind":"03","dateName":"대설","isHoliday":"N","kst":"0109      ","locdate":20201207,"seq":1,"sunLongitude":255},{"dateKind":"03","dateName":"동지","isHoliday":"N","kst":"1902      ","locdate":20201221,"seq":1,"sunLongitude":270}]},"numOfRows":30,"pageNo":1,"totalCount":23}}}'
+                    //위의 값은 json 객체를 문자열 부호로 둘러싸고 있으므로
+                    //JSON.parse()를 사용하여 문자열 값을 실제 json 객체로 변환한 후 접근해야 함 
+                    var mydata = JSON.parse(mystring);
+
+                    //alert("length: " + mydata["response"]["body"]["items"]["item"].length);
+
+                    var item_len = mydata["response"]["body"]["items"]["item"].length;
+                    //console.log("\n" + my_year + "'s data_length: " + item_len + "\n");
+
+                    var my_solar24_info = "\n\n"; //"{\n";
+                    for (var i=0;i<item_len; i++) {
+                        my_locdate = mydata["response"]["body"]["items"]["item"][i]["locdate"];
+                        my_dateName = mydata["response"]["body"]["items"]["item"][i]["dateName"];
+                        my_kst = mydata["response"]["body"]["items"]["item"][i]["kst"];
+
+                        my_solar24_info += "'" + mytrim(my_locdate) + "':'" +  mytrim(my_dateName) + " " + mytrim(my_kst)  + "',\n";
+                    }
+
+                    my_solar24_info += ""; //"};";
+
+                    //console.log("my_solar24_info: \n\n" + my_solar24_info);
+
+                    
+                    document.getElementById("myTextarea").innerHTML += "\r\n\r\nlength: " + item_len;
+                    document.getElementById("myTextarea").innerHTML += my_solar24_info;
+                    
+
+                    //alert("dateName: \n" + mydata["response"]["body"]["items"]["item"][0]["dateName"]);
+                    //alert("locdate: \n" + mydata["response"]["body"]["items"]["item"][0]["locdate"]);
+                    //alert("kst: \n" + mydata["response"]["body"]["items"]["item"][0]["kst"]);
+
+                    //console.log('dateName_1: ' + mybody.response); //["body"]["items"]["item"][0]["dateName"]);
+                    //console.log('locdate_1: ' + mybody["response"]["body"]["items"]["item"][0]["locdate"]);
+                }
+            };
+
+            xhr.send('');
+        }
+
+        
+
+    </script>
+
+    <script>
+        //{REST API 키}를 사용함
+        //msg 속에 응답이 들어있음.
+        //XMLHttpRequest 통신
+        //CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. 
+        //외부로 요청이 안되는 이유는 자바스크립트 엔진 표준 스펙에 동일 출처 보안규칙이 존재하기 때문(same-origin policy) 
+        //관련 스펙: http://www.w3.org/Security/wiki/Same_Origin_Policy
+        //쉽게 말하자면 웹페이지의 스크립트는 그 페이지와 같은 서버에 있는 주소로만 ajax 요청을 할 수 있다.
+        //REST API 등의 외부 호출이 많은 요즘에는 거추장스러운 기술임.
+        //이를 위해 만들어진 기술이 CORS(Cross-Origin Resource Sharing)
+
+        //1. 외부 요청 허용 옵션 사용: 크롬의 경우, --disable-web-security 옵션을 추가하여 크롬을 실행한다.
+        //2. 외부 요청 가능하게 하는 플로그인 설치: 크롬의 경우 cors로 검색하여 확장 프로그램 설치(일반 사용자는 불편)
+        //3. json 방식으로 요청: type에 jsonp
+        //문제해결 참조문서: https://brunch.co.kr/@adrenalinee31/1
+        // https://velog.io/@jmkim87/%EC%A7%80%EA%B8%8B%EC%A7%80%EA%B8%8B%ED%95%9C-CORS-%ED%8C%8C%ED%97%A4%EC%B3%90%EB%B3%B4%EC%9E%90
+        //https://developer.mozilla.org/ko/docs/Web/HTTP/CORS
+
+        //Allow CORS: Access-Control-Allow-Origin in Chrome
+        //https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf
+        //
+        //$.ajax({
+        //    url: "http://openapi.kasi.re.kr/openapi/service/SpcdeInfoService/get24DivisionsInfo",
+        //    type: "GET", /* or type:"GET" or type:"PUT" */
+        //    dataType: "json",
+        //    data: {
+        //        ServiceKey: "9uOfsoDPvjkJiIw/W/ulLkEd7f7eLzc+i2nyXfFkR+WMKPRkwFzV81ZMJGTEFO1M0tVL0S0dKasuCLJ+1g2wPw==",
+        //        "solYear": '20152020',
+        //        //kst:'0120',
+        //        "sunLongitude": '285',
+        //        "numOfRows": '20',
+        //        "pageNo": '1',
+        //        "access-control-allow-origin":"*"
+        //    },
+        //    headers: { 'Content-Type': 'application/json'},
+        //    success: function (result) {
+        //        console.log(result);
+        //    },
+        //    error: function () {
+        //        console.log("error");
+        //    }
+        //    
+        //})
+        //*/
+        //    
+    </script>
+
+
+</body>
+
+</html>
