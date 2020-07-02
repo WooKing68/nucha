@@ -12,7 +12,11 @@
 	<SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
-  
+	
+	<!--sheetjs create xlsx excel example(array of array)-->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<style>
@@ -356,12 +360,15 @@ var g_juyeok_0 = ["", "<img src=1.png>", "<img src=2.png>", "<img src=3.png>", "
 var g_juyeok_1 = ["", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 var g_juyeok_11 = {"":"", "1":"귀", "2":"배", "3":"발", "4":"허벅지", "5":"", "6":"머리", "7":"입", "8":"손", "9":"눈"};
 var g_juyeok_2 = ["", "감", "곤", "진", "손", "", "건", "태", "간", "리"];
+var g_juyeok_22 = ["", "☵", "☷", "☳", "☴", "", "☰", "☱", "☶", "☲"];
 var g_juyeok_3 = ["", "수", "지", "뢰", "풍", "", "천", "택", "산", "화"];
 var g_juyeok_4 = ["", "010", "000", "001", "110", "", "111", "011", "100", "101"];
 var g_juyeok_5 = {"":0, "010":1, "000":2, "001":3, "110":4, "555":"", "111":6, "011":7, "100":8, "101":9};
 var g_juyeok_8_to_9num = {
 	"乾":6, "兌":7, "離":9, "震":3, "巽":4, "坎":1, "艮":8, "坤":2
 };
+
+
 
 var g_juyeok_64 = {
 	'1.1':'天/坎爲水(04.09)/위험의 연속, 강(江) 건너 강(江)', '1.2':'火/水地比(01.08)/인화(人和)가 제일이다.', '1.3':'山/水雷屯(12.10)/(★) 움직일수록 더욱 곤란하다.', '1.4':'澤/水風井(05.25)/나누어야 변함이 없다.', '1.6':'水/水天需(07.27)/기다려야 성공한다.', '1.7':'風/水澤節(09.10)/절도(節度)를 지켜라.', '1.8':'震/水山蹇(02.23)/ 걸을 수 없으니 진퇴양난이다.', '1.9':'地/水火旣濟(10.26)/(★) 좋아하지 말라, 붕괴의 시작이다. 吉凶悔吝을 상기하라.', 
@@ -7588,21 +7595,41 @@ function quick_body_saju_right_move() {
 	   
 
     <table id="newCal" border="1"> 
+
+		<tr><td colspan="8" id="newCalToday" align="center"></td></tr>
+		<tr><td colspan="8" align="center">현재시간:&nbsp;<input type="text" name="txtTime" value="" size="10" style="text-align:center;" disabled></td></tr>
+		
 	
 	<tr><td colspan="8" align="center">
+		
+		
+		
+
 		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalendar();">
+		&nbsp;
+		<input type="button" name="newCalYear" value="" onclick="changeYear();">년
+		&nbsp;
+		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalendar();">
+
+
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
 		<input type="button" value="◁" onclick="changePrevMonth();getNewCalendar();">
-		&nbsp;&nbsp;
-		<input type="button" name="newCalYear" value="" onclick="changeYear();">년&nbsp;
+		&nbsp;
 		<input type="button" name="newCalMonth" value="" onclick="changeMonth();">월
-		&nbsp;&nbsp;
+		&nbsp;
 		<input type="button" value="▷" onclick="changeNextMonth();getNewCalendar();">
-		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalendar();"> 
+		 
 		</td>
 	</tr>
+
+	
 	
 	<tr><td align="center"><font color="red"><b>일</b></font></td><td align="center">월</td><td align="center">화</td><td align="center">수</td><td align="center">목</td><td align="center">금</td><td align="center"><font color="blue"><b>토</b></font></td></tr>
 	
+	
+
 	<tr><td <td style="width:65px"id="newCalTd_1">1</td><td <td style="width:65px"id="newCalTd_2">2</td><td <td style="width:65px"id="newCalTd_3">3</td><td <td style="width:65px"id="newCalTd_4">4</td><td <td style="width:65px"id="newCalTd_5">5</td><td <td style="width:65px"id="newCalTd_6">6</td><td <td style="width:65px"id="newCalTd_7">7</td></tr>
     <tr><td <td style="width:65px"id="newCalTd_8">1</td><td <td style="width:65px"id="newCalTd_9">2</td><td <td style="width:65px"id="newCalTd_10">3</td><td <td style="width:65px"id="newCalTd_11">4</td><td <td style="width:65px"id="newCalTd_12">5</td><td <td style="width:65px"id="newCalTd_13">6</td><td <td style="width:65px"id="newCalTd_14">7</td></tr>
     <tr><td <td style="width:65px"id="newCalTd_15">1</td><td <td style="width:65px"id="newCalTd_16">2</td><td <td style="width:65px"id="newCalTd_17">3</td><td <td style="width:65px"id="newCalTd_18">4</td><td <td style="width:65px"id="newCalTd_19">5</td><td <td style="width:65px"id="newCalTd_20">6</td><td <td style="width:65px"id="newCalTd_21">7</td></tr>
@@ -7610,8 +7637,7 @@ function quick_body_saju_right_move() {
     <tr><td <td style="width:65px"id="newCalTd_29">1</td><td <td style="width:65px"id="newCalTd_30">2</td><td <td style="width:65px"id="newCalTd_31">3</td><td <td style="width:65px"id="newCalTd_32">4</td><td <td style="width:65px"id="newCalTd_33">5</td><td <td style="width:65px"id="newCalTd_34">6</td><td <td style="width:65px"id="newCalTd_35">7</td></tr>
     <tr><td <td style="width:65px"id="newCalTd_36">1</td><td <td style="width:65px"id="newCalTd_37">2</td><td <td style="width:65px"id="newCalTd_38">3</td><td <td style="width:65px"id="newCalTd_39">4</td><td <td style="width:65px"id="newCalTd_40">5</td><td <td style="width:65px"id="newCalTd_41">6</td><td <td style="width:65px"id="newCalTd_42">7</td></tr>
 	
-	<tr><td colspan="8" align="center">현재시간:&nbsp;<input type="text" name="txtTime" value="" size="10" style="text-align:center;" disabled></td></tr>
-	<tr><td colspan="8" id="newCalToday" align="center"></td></tr>
+	
 	</table><br>
 *** [연도], [월] 버튼을 클릭 -> 빠른 이동
 <br>
@@ -14624,6 +14650,7 @@ block: 보이기
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/lZumx70VjU4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>윤하(Feat. RM of BTS): Winter Flower</option>
 
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/qRwAJI3RicM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>IZ*ONE: 환상동화</option>
+				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/2fZOl7l-b7k" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>IZ*ONE: 환상동화 (퇴근길 앚망진창)</option>
 				<option value='<iframe width="860" height="480" src="https://www.youtube.com/embed/lZumx70VjU4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'>이채연(PRODUCE 48): Shower</option>
 				
 				
@@ -15736,6 +15763,257 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 <hr>
 <hr>
 
+<br><br><br>
+
+
+
+
+
+<h1>
+	[64괘]  <br>
+	01. ䷀  중천건(重天乾)<br>
+	02. ䷁  중지곤(重地坤)<br>
+	03. ䷂  수뢰둔(水雷屯)<br>
+	04. ䷃  산수몽(山水蒙)<br>
+	05. ䷄  수천수(水天需)<br>
+	06. ䷅  천수송(天水訟)<br>
+	07. ䷆  지수사(地水師)<br>
+	08. ䷇  수지비(水地比)<br>
+	09. ䷈  풍천소축(風天小畜)<br>
+	10. ䷉  천택리(天澤履)<br>
+	11. ䷊  지천태(地天泰)<br>
+	12. ䷋  천지비(天地否)<br>
+	13. ䷌  천화동인(天火同人)<br>
+	14. ䷍  화천대유(火天大有)<br>
+	15. ䷎  지산겸(地山謙)<br>
+	16. ䷏  뇌지예(雷地豫)<br>
+	17. ䷐  택뢰수(澤雷隨)<br>
+	18. ䷑  산풍고(山風蠱)<br>
+	19. ䷒  지택림(地澤臨)<br>
+	20. ䷓  풍지관(風地觀)<br>
+	21. ䷔  화뢰서합(火雷噬嗑)<br>
+	22. ䷕  산화비(山火賁)<br>
+	23. ䷖  산지박(山地剝)<br>
+	24. ䷗  지뢰복(地雷復)<br>
+	25. ䷘  천뢰무망(天雷无妄)<br>
+	26. ䷙  산천대축(山天大畜)<br>
+	27. ䷚  산뢰이(山雷頤)<br>
+	28. ䷛  택풍대과(澤風大過)<br>
+	29. ䷜  중수감(重水坎)<br>
+	30. ䷝  중화리(重火離)<br>
+	31. ䷞  택산함(澤山咸)<br>
+	32. ䷟  뇌풍항(雷風恒)<br>
+	33. ䷠  천산둔(天山遯)<br>
+	34. ䷡  뇌천대장(雷天大壯)<br>
+	35. ䷢  화지진(火地晉)<br>
+	36. ䷣  지화명이(地火明夷)<br>
+	37. ䷤  풍화가인(風火家人)<br>
+	38. ䷥  화택규(火澤睽)<br>
+	39. ䷦  수산건(水山蹇)<br>
+	40. ䷧  뇌수해(雷水解)<br>
+	41. ䷨  산택손(山澤損)<br>
+	42. ䷩  풍뢰익(風雷益)<br>
+	43. ䷪  택천쾌(澤天夬)<br>
+	44. ䷫  천풍구(天風姤)<br>
+	45. ䷬  택지췌(澤地萃)<br>
+	46. ䷭  지풍승(地風升)<br>
+	47. ䷮  택수곤(澤水困)<br>
+	48. ䷯  수풍정(水風井)<br>
+	49. ䷰  택화혁(澤火革)<br>
+	50. ䷱  화풍정(火風鼎)<br>
+	51. ䷲  중뢰진(重雷震)<br>
+	52. ䷳  중산간(重山艮)<br>
+	53. ䷴  풍산점(風山漸)<br>
+	54. ䷵  뇌택귀매(雷澤歸妹)<br>
+	55. ䷶  뇌화풍(雷火豊)<br>
+	56. ䷷  화산려(火山旅)<br>
+	57. ䷸  중풍손(重風巽)<br>
+	58. ䷹  중택태(重澤兌)<br>
+	59. ䷺  풍수환(風水渙)<br>
+	60. ䷻  수택절(水澤節)<br>
+	61. ䷼  풍택중부(風澤中孚)<br>
+	62. ䷽  뇌산소과(雷山小過)<br>
+	63. ䷾  수화기제(水火旣濟)<br>
+	64. ䷿  화수미제(火水未濟)<br>
+</h1>	
+
+<br><br><br>
+
+<hr>
+<hr>
+<hr>
+
+<br><br><br>
+
+<h1>AOA(Array Of Array 배열형태)로 엑셀 파일 만들어 다운로드</h1>
+<br><br>
+
+<script>
+	//Excel Sheet JS
+	//공통: AOA(Array Of Array 배열형태)로 엑셀만들 만들어 다운로드
+	// 참고 출처 : https://redstapler.co/sheetjs-tutorial-create-xlsx/
+	// 참조 URL : https://eblo.tistory.com/84
+	function s2ab(s) { 
+		var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+		var view = new Uint8Array(buf);  //create uint8array as viewer
+		for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+		return buf;    
+	}
+	function exportExcel(){ 
+		// step 1. workbook 생성
+		var wb = XLSX.utils.book_new();
+	
+		// step 2. 시트 만들기 
+		var newWorksheet = excelHandler.getWorksheet();
+		
+		// step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.  
+		XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+	
+		// step 4. 엑셀 파일 만들기 
+		var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+	
+		// step 5. 엑셀 파일 내보내기 
+		saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), excelHandler.getExcelFileName());
+	}
+	$(document).ready(function() { 
+		$("#excelFileExport").click(function(){
+			exportExcel();
+		});
+	});
+</script>
+
+	<script>
+		//서기 yyyy년 mm월의 달력 관련 기타 정보 제공
+		////['양력' , '음력', '요일', '일주', '체질', '육효']	
+		// charCodeAt: 문자열중 하나를 선택하여 아스키코드 번호로 변환해주는 함수, val = "charCodeAt"; val.charCodeAt(4);
+		//fromCharCode: 아스키코드번호를 받아 문자열을 구성해주는 함수, String.fromCharCode([아스키코드값]);
+		//var uniCode = "가".charCodeAt(0); 10진수
+		//var uniCode = "가".charCodeAt(0).toString(16); 16진수 결과값: ac00
+		// '한'.charCodeAt(0).toString(16); \d55c
+		// '글'.charCodeAt(0).toString(16); \ae00
+		// 문자 하나 하나 해석 하는 함수 작성: charToUnicode('한글'); "\d55c\ae00"
+		// String.fromCharCode(parseInt('\d55c',16)); '한'
+		// String.fromCharCode(parseInt('\ae00',16)); '글'
+		// 8괘(16진수): 2630 ~ 2637 
+		// 8괘(10진수): 9776 ~ 9783
+		// "☰".charCodeAt(0).toString(10); 건괘("☰")의 10진수 아스키코드 값 알아내기, 결과값: 9776
+		// var sJuYeok8 = String.fromCharCode(9776); 십진수 아스키코드 9776에 해당하는 문자, 결과값: "☰"
+		// var sJuYeok8 = String.fromCharCode("☰".charCodeAt(0).toString(10)); //9776
+		
+
+
+		//☰ : 건(乾) = 天
+		//☱ : 태(兌) = 澤
+		//☲ : 이(離) = 火
+		//☳ : 진(震) = 雷
+		//☴ : 손(巽) = 風
+		//☵ : 감(坎) = 水
+		//☶ : 간(艮) = 山
+		//☷ : 곤(坤) = 地
+
+		//(7).pad(3);  //returns "007"
+
+
+
+​
+		function makeExcelCalendar(yyyy, mm) {
+			
+
+
+			var nextYYYY;
+			var nextMM;
+
+			//다음 달 정보...
+			if (mm==12) {
+				nextYYYY = yyyy + 1;
+				nextMM = 1;    
+			} else {
+				nextYYYY = yyyy;
+				nextMM = mm + 1;
+			}
+
+			var thisNuchaNumber = getNuchaNumber(yyyy, mm, 1);
+			var nextNuchaNumber = getNuchaNumber(nextYYYY, nextMM, 1);
+
+			//yyyy년 mm월의 총일수
+			var totalDD = nextNuchaNumber - thisNuchaNumber;
+
+			//yyyy년 mm월 1일의 요일(0:일요일~6:토요일)
+			var FIRST_DAY_OF_WEEK = r(thisNuchaNumber, 7);
+
+			var um_start_nucha_number = getNuchaNumber(1881, 1, 30);
+			var um_end_nucha_number = getNuchaNumber(2050, 11, 30);
+
+			for (var j=1; j<=42; j++) {
+				document.getElementById('newCalTd_' + j).innerHTML = "";
+				document.getElementById('newCalTd_' + j).setAttribute("align", "center");
+			}
+
+			for (var j=1; j<=totalDD; j++) {
+				//음력 정보는 양력 1881년 1월 30일부터 제공한다.
+				var lunar_info = "";
+				if ( (um_start_nucha_number <= getNuchaNumber(yyyy, mm, j)) && (getNuchaNumber(yyyy, mm, j) <= um_end_nucha_number) ) {
+					var tmp_lunar_info = makeSolarToLunar(yyyy, mm, j); //2020.윤04.01
+					lunar_info = `(${tmp_lunar_info.substr(5, tmp_lunar_info.length - 5)})`;
+				}
+				
+				
+				var sky_jiji_info = get60GapJaDay(yyyy, mm, j);
+				var sky_jiji = sky_jiji_info[0] + sky_jiji_info[1]; 
+				if (r(j+FIRST_DAY_OF_WEEK,7)==0) {
+					//토요일이면...
+					document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='blue'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+				} else if (r(j+FIRST_DAY_OF_WEEK,7)==1) {
+					//일요일이면...
+					document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='red'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+				} else {
+					//평일이면...
+					document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='black'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+				}
+			} 
+		}
+	</script>
+	
+	<script>
+		
+		var excelHandler = {
+			
+			getExcelFileName : function(){
+				return 'aoa-test.xlsx';
+			},
+			getSheetName : function(){
+				return 'AOA Test Sheet';
+			},
+			getExcelData : function(){
+				
+				// "☰".charCodeAt(0).toString(16); 결과값: 2630 (16진수)
+				// "☰".charCodeAt(0); 결과값: 9776 (10진수)
+				var sJuYeok8 = String.fromCharCode("☰".charCodeAt(0).toString(10)); //9776
+				
+
+				
+				console.log("8괘: " + sJuYeok8);
+				console.log("(7).pad(3): " + (7).pad(3));
+				console.log("('7').pad(3): " + ('7').pad(3));
+				
+				
+
+				//['양력' , '음력', '요일', '일주', '체질', '육효']	
+				return [['도사원' , '21', '인사팀'],['김부장' , '27', '비서실' + sJuYeok8],['엄전무' , '45', '기획실' + String.fromCharCode(10) + '비서실']];
+				
+			},
+			getWorksheet : function(){
+				
+				return XLSX.utils.aoa_to_sheet(this.getExcelData());
+			}
+
+				
+		}
+	</script>
+
+파일 내보내기(배열) : <input type="button" id="excelFileExport" value="엑셀 파일 다운로드(배열)" />
+
+<br><br><br>
 
 </body>
 </html>
