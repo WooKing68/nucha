@@ -5899,10 +5899,22 @@ ____시: <input type="text" name="YourBirthTime">
 
 var ARR_DAY_OF_WEEK = new Array("일", "월", "화", "수", "목", "금", "토");
 
+function removeComma(str) {
+	str = String(str);
+    return str.replace(",", "");
+}
+
+
+
+
 function setNewCalendar() {
     var yyyy = eval(newCalendarForm.newCalYear.value);
     var mm = eval(newCalendarForm.newCalMonth.value);
 
+
+	document.getElementById("saju_yyyy").innerHTML = removeComma(get60GapJaYear(yyyy));
+	document.getElementById("saju_mm").innerHTML = removeComma(get60GapJaMonth(yyyy, mm));
+	
 
     var nextYYYY;
     var nextMM;
@@ -5926,7 +5938,7 @@ function setNewCalendar() {
     var FIRST_DAY_OF_WEEK = r(thisNuchaNumber, 7);
 
 	var um_start_nucha_number = getNuchaNumber(1881, 1, 30);
-	var um_end_nucha_number = getNuchaNumber(2050, 11, 30);
+	var um_end_nucha_number = getNuchaNumber(2050, 12, 31); //getNuchaNumber(2050, 11, 30)
 
     for (var j=1; j<=42; j++) {
         document.getElementById('newCalTd_' + j).innerHTML = "";
@@ -9202,9 +9214,10 @@ function quick_body_saju_right_move() {
 
 		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalendar();">
 		&nbsp;
-		<input type="button" name="newCalYear" value="" onclick="changeYear();">년
+		<input type="button" name="newCalYear" value="" onclick="changeYear();">
 		&nbsp;
 		<input type="button" value="▶▶" onclick="changeNextYear();getNewCalendar();">
+		&nbsp;<span id="saju_yyyy"></span>년
 
 
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -9212,9 +9225,10 @@ function quick_body_saju_right_move() {
 
 		<input type="button" value="◁" onclick="changePrevMonth();getNewCalendar();">
 		&nbsp;
-		<input type="button" name="newCalMonth" value="" onclick="changeMonth();">월
+		<input type="button" name="newCalMonth" value="" onclick="changeMonth();">
 		&nbsp;
 		<input type="button" value="▷" onclick="changeNextMonth();getNewCalendar();">
+		&nbsp;<span id="saju_mm"></span>월
 		 
 		</td>
 	</tr>
@@ -9234,6 +9248,14 @@ function quick_body_saju_right_move() {
 	
 	<tr>
 		<td colspan="8" align="right" id="div24">
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="8" align="left">
+			* <박찬우 - 그레고리력>에 기반한 달력입니다. <br>
+			* 음력은 <서기 1881년 1월 30일 부터 2050년 12월 31일 까지> 제공됩니다.
+			
 		</td>
 	</tr>
 	
