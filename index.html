@@ -1,7 +1,7 @@
 ﻿﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="ko">
  <head>
-	<title> 육효 </title>
+	<title> ☯ 육효 ☯ </title>
 	<meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
 	<meta name="Generator" content="Visual Studio Code">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,8 +10,8 @@
 	<meta name="Description" content="구성, 주역, 사주, 체질">
 
 	<SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+	<!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script-->
+	<!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script-->
 	
 	<!--sheetjs create xlsx excel example(array of array)-->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -2867,7 +2867,7 @@ function get_juyeok_384_hyosa(a_hyosa_key) {
 		var WW = 360 / 365.2422;
 
 		// DD is the date, in days starting at zero on 1 January (i.e. the days part of the ordinal date ?1).
-    		var dd = getNuchaNumber(year, month, day) - getNuchaNumber(year, 1, 1);
+			var dd = getNuchaNumber(year, month, day) - getNuchaNumber(year, 1, 1);
 
 
 		// AA is the angle the earth would move on its orbit at its average speed from the December solstice to date D.
@@ -5970,6 +5970,7 @@ function setNewCalendar() {
 
 	
 	if (typeof g_div24[yyyy + "" + mm.pad(2)] != "undefined") {
+		
 		var my_div24 = g_div24[yyyy + "" + mm.pad(2)];
 
 		var jul_name = my_div24.substring(0, 0+2);
@@ -5986,6 +5987,10 @@ function setNewCalendar() {
 		var ki_info = ki_name + " : " + ki_day + "일 " + ki_hh + "시 " + ki_mm + "분 ";
 		document.getElementById("div24").innerHTML = jul_info + "<br>" + ki_info;
 	}
+	else {
+		document.getElementById("div24").innerHTML = "";
+	}
+	
 	
 }
 
@@ -9208,9 +9213,7 @@ function quick_body_saju_right_move() {
 		<tr><td colspan="8" align="center"></td></tr>
 		
 	<tr><td colspan="8" align="center">
-		
-		
-		
+		<br>
 
 		<input type="button" value="◀◀" onclick="changePrevYear();getNewCalendar();">
 		&nbsp;
@@ -9230,6 +9233,8 @@ function quick_body_saju_right_move() {
 		<input type="button" value="▷" onclick="changeNextMonth();getNewCalendar();">
 		&nbsp;<span id="saju_mm"></span>월
 		 
+		<br>
+		<br>
 		</td>
 	</tr>
 
@@ -9272,19 +9277,19 @@ function quick_body_saju_right_move() {
 	<input type="text" name="eotDay" size="5" style="text-align:right;">일<br>
 	<br> <!--this.options[this.selectedIndex].value-->
 	<select onchange="javascript:getEquationOfTime()" id="eotSelect" name="eotSelect"> 
-				<option value="126.92">서울
-				<option value="128.89">강릉
-				<option value="126.92">광주
-				<option value="128.63">대구
-				<option value="127.41">대전
-				<option value="129.10">부산
-				<option value="130.89">울릉도
-				<option value="127.14">전주
-				<option value="126.50">제주
-				<option value="128.69">창원
-				<option value="128.48">청주
-				<option value="127.72">춘천
-			</select>지역<br>
+		<option value="126.92">서울
+		<option value="128.89">강릉
+		<option value="126.92">광주
+		<option value="128.63">대구
+		<option value="127.41">대전
+		<option value="129.10">부산
+		<option value="130.89">울릉도
+		<option value="127.14">전주
+		<option value="126.50">제주
+		<option value="128.69">창원
+		<option value="128.48">청주
+		<option value="127.72">춘천
+	</select>지역<br>
 	<input type="button" value="남중시각" onclick="getEquationOfTime();"><br>
 	<input type="text" name="eotResult" size="16">
 </form>
@@ -16353,10 +16358,12 @@ block: 보이기
 
 
 <BR>
+<BR>
+
 	<table id=NineStarTable border=1><caption></caption>
 		<tr>
 			<td>
-				<table id=table_0 border=1><caption>절기(음)력 1(寅)월</caption>
+				<table id=table_0 border=1><caption>절기력 1(寅)월 (양력 2월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16375,7 +16382,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_1 border=1><caption>절기(음)력 2(卯)월</caption>
+				<table id=table_1 border=1><caption>절기력 2(卯)월 (양력 3월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16394,7 +16401,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_2 border=1><caption>절기(음)력 3(辰)월</caption>
+				<table id=table_2 border=1><caption>절기력 3(辰)월 (양력 4월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16414,7 +16421,7 @@ block: 보이기
 			</td>
 			<td>
 				<table id=table_3 border=1>
-					<caption>절기(음)력 4(巳)월</caption>
+					<caption>절기력 4(巳)월 (양력 5월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16435,7 +16442,7 @@ block: 보이기
 		</tr>
 		<tr>
 			<td>
-				<table id=table_4 border=1><caption>절기(음)력 5(午)월</caption>
+				<table id=table_4 border=1><caption>절기력 5(午)월 (양력 6월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16454,7 +16461,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_5 border=1><caption>절기(음)력 6(未)월</caption>
+				<table id=table_5 border=1><caption>절기력 6(未)월 (양력 7월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16473,7 +16480,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_6 border=1><caption>절기(음)력 7(申)월</caption>
+				<table id=table_6 border=1><caption>절기력 7(申)월 (양력 8월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16492,7 +16499,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_7 border=1><caption>절기(음)력 8(酉)월</caption>
+				<table id=table_7 border=1><caption>절기력 8(酉)월 (양력 9)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16513,7 +16520,7 @@ block: 보이기
 		</tr>
 		<tr>
 			<td>
-				<table id=table_8 border=1><caption>절기(음)력 9(戌)월</caption>
+				<table id=table_8 border=1><caption>절기력 9(戌)월 (양력 10월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16532,7 +16539,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_9 border=1><caption>절기(음)력 10(亥)월</caption>
+				<table id=table_9 border=1><caption>절기력 10(亥)월 (양력 11월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16551,7 +16558,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_10 border=1><caption>절기(음)력 11(子)월</caption>
+				<table id=table_10 border=1><caption>절기력 11(子)월 (양력 12월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -16570,7 +16577,7 @@ block: 보이기
 				</table>
 			</td>
 			<td>
-				<table id=table_11 border=1><caption>절기(음)력 12(丑)월</caption>
+				<table id=table_11 border=1><caption>절기력 12(丑)월 (양력 1월)</caption>
 					<tr>
 						<td align=center>4444</td>
 						<td align=center>999999999</td>
@@ -17504,98 +17511,6 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 </script>
 
 	<script>
-		//서기 yyyy년 mm월의 달력 관련 기타 정보 제공
-		////['양력' , '음력', '요일', '일주', '체질', '육효']	
-		// charCodeAt: 문자열중 하나를 선택하여 아스키코드 번호로 변환해주는 함수, val = "charCodeAt"; val.charCodeAt(4);
-		//fromCharCode: 아스키코드번호를 받아 문자열을 구성해주는 함수, String.fromCharCode([아스키코드값]);
-		//var uniCode = "가".charCodeAt(0); 10진수
-		//var uniCode = "가".charCodeAt(0).toString(16); 16진수 결과값: ac00
-		// '한'.charCodeAt(0).toString(16); \d55c
-		// '글'.charCodeAt(0).toString(16); \ae00
-		// 문자 하나 하나 해석 하는 함수 작성: charToUnicode('한글'); "\d55c\ae00"
-		// String.fromCharCode(parseInt('\d55c',16)); '한'
-		// String.fromCharCode(parseInt('\ae00',16)); '글'
-		// 8괘(16진수): 2630 ~ 2637 
-		// 8괘(10진수): 9776 ~ 9783
-		// "☰".charCodeAt(0).toString(10); 건괘("☰")의 10진수 아스키코드 값 알아내기, 결과값: 9776
-		// var sJuYeok8 = String.fromCharCode(9776); 십진수 아스키코드 9776에 해당하는 문자, 결과값: "☰"
-		// var sJuYeok8 = String.fromCharCode("☰".charCodeAt(0).toString(10)); //9776
-		
-
-
-		//☰ : 건(乾) = 天
-		//☱ : 태(兌) = 澤
-		//☲ : 이(離) = 火
-		//☳ : 진(震) = 雷
-		//☴ : 손(巽) = 風
-		//☵ : 감(坎) = 水
-		//☶ : 간(艮) = 山
-		//☷ : 곤(坤) = 地
-
-		//(7).pad(3);  //returns "007"
-
-
-
-​
-		function makeExcelCalendar(yyyy, mm) {
-			
-
-
-			var nextYYYY;
-			var nextMM;
-
-			//다음 달 정보...
-			if (mm==12) {
-				nextYYYY = yyyy + 1;
-				nextMM = 1;    
-			} else {
-				nextYYYY = yyyy;
-				nextMM = mm + 1;
-			}
-
-			var thisNuchaNumber = getNuchaNumber(yyyy, mm, 1);
-			var nextNuchaNumber = getNuchaNumber(nextYYYY, nextMM, 1);
-
-			//yyyy년 mm월의 총일수
-			var totalDD = nextNuchaNumber - thisNuchaNumber;
-
-			//yyyy년 mm월 1일의 요일(0:일요일~6:토요일)
-			var FIRST_DAY_OF_WEEK = r(thisNuchaNumber, 7);
-
-			var um_start_nucha_number = getNuchaNumber(1881, 1, 30);
-			var um_end_nucha_number = getNuchaNumber(2050, 11, 30);
-
-			for (var j=1; j<=42; j++) {
-				document.getElementById('newCalTd_' + j).innerHTML = "";
-				document.getElementById('newCalTd_' + j).setAttribute("align", "center");
-			}
-
-			for (var j=1; j<=totalDD; j++) {
-				//음력 정보는 양력 1881년 1월 30일부터 제공한다.
-				var lunar_info = "";
-				if ( (um_start_nucha_number <= getNuchaNumber(yyyy, mm, j)) && (getNuchaNumber(yyyy, mm, j) <= um_end_nucha_number) ) {
-					var tmp_lunar_info = makeSolarToLunar(yyyy, mm, j); //2020.윤04.01
-					lunar_info = `(${tmp_lunar_info.substr(5, tmp_lunar_info.length - 5)})`;
-				}
-				
-				
-				var sky_jiji_info = get60GapJaDay(yyyy, mm, j);
-				var sky_jiji = sky_jiji_info[0] + sky_jiji_info[1]; 
-				if (r(j+FIRST_DAY_OF_WEEK,7)==0) {
-					//토요일이면...
-					document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='blue'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
-				} else if (r(j+FIRST_DAY_OF_WEEK,7)==1) {
-					//일요일이면...
-					document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='red'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
-				} else {
-					//평일이면...
-					document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='black'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
-				}
-			} 
-		}
-	</script>
-	
-	<script>
 		
 		var excelHandler = {
 			
@@ -17615,7 +17530,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 				
 				console.log("8괘: " + sJuYeok8);
 				console.log("(7).pad(3): " + (7).pad(3));
-				console.log("('7').pad(3): " + ('7').pad(3));
+				
 				
 				
 
@@ -17635,6 +17550,109 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 파일 내보내기(배열) : <input type="button" id="excelFileExport" value="엑셀 파일 다운로드(배열)" />
 
 <br><br><br>
+
+<hr>
+<hr>
+<hr>
+
+<br><br><br>
+
+<h1>만세력</h1>
+
+<br><br>
+
+<script>
+	//서기 yyyy년 mm월의 달력 관련 기타 정보 제공
+	////['양력' , '음력', '요일', '일주', '체질', '육효']	
+	// charCodeAt: 문자열중 하나를 선택하여 아스키코드 번호로 변환해주는 함수, val = "charCodeAt"; val.charCodeAt(4);
+	//fromCharCode: 아스키코드번호를 받아 문자열을 구성해주는 함수, String.fromCharCode([아스키코드값]);
+	//var uniCode = "가".charCodeAt(0); 10진수
+	//var uniCode = "가".charCodeAt(0).toString(16); 16진수 결과값: ac00
+	// '한'.charCodeAt(0).toString(16); \d55c
+	// '글'.charCodeAt(0).toString(16); \ae00
+	// 문자 하나 하나 해석 하는 함수 작성: charToUnicode('한글'); "\d55c\ae00"
+	// String.fromCharCode(parseInt('\d55c',16)); '한'
+	// String.fromCharCode(parseInt('\ae00',16)); '글'
+	// 8괘(16진수): 2630 ~ 2637 
+	// 8괘(10진수): 9776 ~ 9783
+	// "☰".charCodeAt(0).toString(10); 건괘("☰")의 10진수 아스키코드 값 알아내기, 결과값: 9776
+	// var sJuYeok8 = String.fromCharCode(9776); 십진수 아스키코드 9776에 해당하는 문자, 결과값: "☰"
+	// var sJuYeok8 = String.fromCharCode("☰".charCodeAt(0).toString(10)); //9776
+	
+
+
+	//☰ : 건(乾) = 天
+	//☱ : 태(兌) = 澤
+	//☲ : 이(離) = 火
+	//☳ : 진(震) = 雷
+	//☴ : 손(巽) = 風
+	//☵ : 감(坎) = 水
+	//☶ : 간(艮) = 山
+	//☷ : 곤(坤) = 地
+
+	//(7).pad(3);  //returns "007"
+
+
+
+​
+	function makeExcelCalendar(yyyy, mm) {
+		
+
+
+		var nextYYYY;
+		var nextMM;
+
+		//다음 달 정보...
+		if (mm==12) {
+			nextYYYY = yyyy + 1;
+			nextMM = 1;    
+		} else {
+			nextYYYY = yyyy;
+			nextMM = mm + 1;
+		}
+
+		var thisNuchaNumber = getNuchaNumber(yyyy, mm, 1);
+		var nextNuchaNumber = getNuchaNumber(nextYYYY, nextMM, 1);
+
+		//yyyy년 mm월의 총일수
+		var totalDD = nextNuchaNumber - thisNuchaNumber;
+
+		//yyyy년 mm월 1일의 요일(0:일요일~6:토요일)
+		var FIRST_DAY_OF_WEEK = r(thisNuchaNumber, 7);
+
+		var um_start_nucha_number = getNuchaNumber(1881, 1, 30);
+		var um_end_nucha_number = getNuchaNumber(2050, 11, 30);
+
+		for (var j=1; j<=42; j++) {
+			document.getElementById('newCalTd_' + j).innerHTML = "";
+			document.getElementById('newCalTd_' + j).setAttribute("align", "center");
+		}
+
+		for (var j=1; j<=totalDD; j++) {
+			//음력 정보는 양력 1881년 1월 30일부터 제공한다.
+			var lunar_info = "";
+			if ( (um_start_nucha_number <= getNuchaNumber(yyyy, mm, j)) && (getNuchaNumber(yyyy, mm, j) <= um_end_nucha_number) ) {
+				var tmp_lunar_info = makeSolarToLunar(yyyy, mm, j); //2020.윤04.01
+				lunar_info = `(${tmp_lunar_info.substr(5, tmp_lunar_info.length - 5)})`;
+			}
+			
+			
+			var sky_jiji_info = get60GapJaDay(yyyy, mm, j);
+			var sky_jiji = sky_jiji_info[0] + sky_jiji_info[1]; 
+			if (r(j+FIRST_DAY_OF_WEEK,7)==0) {
+				//토요일이면...
+				document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='blue'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+			} else if (r(j+FIRST_DAY_OF_WEEK,7)==1) {
+				//일요일이면...
+				document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='red'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+			} else {
+				//평일이면...
+				document.getElementById('newCalTd_' + (j+FIRST_DAY_OF_WEEK)).innerHTML = "<font color='black'><b>" + j + "</b></font><br>" + lunar_info + "<br>" + sky_jiji;
+			}
+		} 
+	}
+</script>
+
 
 </body>
 </html>
