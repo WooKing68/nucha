@@ -16035,7 +16035,7 @@ block: 보이기
 		document.getElementById("eduJuyeokSajuMinSelect").selectedIndex = eval(min);
 
 		//지역
-		document.getElementById("eduJuyeokSajuSelect").selectedIndex = 1;
+		document.getElementById("eduJuyeokSajuAreaSelect").selectedIndex = 1;
 		
 
 		
@@ -17532,10 +17532,18 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 				console.log("(7).pad(3): " + (7).pad(3));
 				
 				
+				//["양력", ["음력", "일주", "체질", "괘상", "대운수(남)", "대운수(여)"]]
+				//6개 필요: ["음력", "일주", "체질", "괘상", "대운수(남)", "대운수(여)"]
+
+				var yyyy = 2020;
+				var mm = 7;
+				var dd = 20;
+
 				
 
+
 				//['양력' , '음력', '요일', '일주', '체질', '육효']	
-				return [['도사원' , '21', '인사팀'],['김부장' , '27', '비서실' + sJuYeok8],['엄전무' , '45', '기획실' + String.fromCharCode(10) + '비서실']];
+				return [['이름' , '나이', '부서'], ['도사원' , '21', '인사팀'],['김부장' , '27', '비서실' + sJuYeok8],['엄전무' , '45', '기획실' + String.fromCharCode(10) + '비서실']];
 				
 			},
 			getWorksheet : function(){
