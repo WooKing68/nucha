@@ -5797,7 +5797,7 @@ function setNineStarTable(aTableName, aBoardArray) {
 	<a href="#menu_monthun9sung"><u>구성월운</u></a>
 	<a href="#menu_saju8body"><u>체질사주</u></a>
 	<a href="#menu_saju8match">체질궁합</a>
-	<a href="#menu_name8body"><u>체질작명</u></a> <!--onclick="popup_win('./hanja_search.html');"-->
+	<a href="#menu_name8body"><u>체질작명</u></a> <!--onclick="popup_win('./naming.html');"-->
 	<a href="#menu_6hyo"><u>육효주역</u></a>
 	<!--href 값을 언급하는 순간 페이지가 리로딩 됨. 왜?-->
 	<a onclick="controlStaticMenu();">음력 ↔ 양력</a>
@@ -11817,10 +11817,10 @@ The <b>greatest error:</b><br>
 	<input type="button" name="" value="체질음식" onclick="getBody8Food();">
 	<input type="button" name="" value="체질보약" onclick="getBody8Medi();"> / 
 	<input type="button" name="" value="체질궁합" onclick="alert('준비중입니다.');">
-	<!--window.showModalDialog('./hanja_search.html', '', 'dialogHeight:600px;dialogWidth:990px;resizable:no;status:no;');-->
-		<!--popup_win('./hanja_search.html');-->
+	<!--window.showModalDialog('./naming.html', '', 'dialogHeight:600px;dialogWidth:990px;resizable:no;status:no;');-->
+		<!--popup_win('./naming.html');-->
 		
-	<input type="button" name="" value="체질작명" onclick="popup_win('./hanja_search.html');");>
+	<input type="button" name="" value="체질작명" onclick="popup_win('./naming.html');");>
 	<input type="hidden" name="" id="HiddenBtn"> 
 	
 	
@@ -12023,7 +12023,7 @@ The <b>greatest error:</b><br>
 							<table border=1>
 								<tr>
 									<td align=center colspan=4 name="id_type8_name"><h1>성명(姓名)</h1>한글자모분해</td>
-									<td valign=top align=center>작명 리스트<br><select name="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();" ondblclick="popup_win('./hanja_search.html');"></select></td>
+									<td valign=top align=center>작명 리스트<br><select name="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();" ondblclick="popup_win('./naming.html');"></select></td>
 								</tr>
 								<tr>
 									<td align=center></td><td align=center>성씨(L)</td><td align=center>가운데 이름(F1)</td><td align=center>끝 이름(F2)</td><td align=center>비고</td>
@@ -12149,7 +12149,7 @@ The <b>greatest error:</b><br>
 							<table border=1>
 								<tr>
 									<td align=center colspan=4 name="id_type8_name"><h1>성명(姓名)</h1>한글자모분해</td>
-									<td valign=top align=center>작명 리스트<br><select name="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();" ondblclick="popup_win('./hanja_search.html');"></select></td>
+									<td valign=top align=center>작명 리스트<br><select name="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();" ondblclick="popup_win('./naming.html');"></select></td>
 								</tr>
 								<tr>
 									<td align=center></td><td align=center>성씨(L)</td><td align=center>가운데 이름(F1)</td><td align=center>끝 이름(F2)</td><td align=center>비고</td>
@@ -12274,7 +12274,7 @@ The <b>greatest error:</b><br>
 							<table border=1>
 								<tr>
 									<td align=center colspan=4 name="id_type8_name"><h1>성명(姓名)</h1>한글자모분해</td>
-									<td valign=top align=center>작명 리스트<br><select name="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();" ondblclick="popup_win('./hanja_search.html');"></select></td>
+									<td valign=top align=center>작명 리스트<br><select name="id_save_name_list" name="id_save_name_list" size=5 onchange="showSaveName();" ondblclick="popup_win('./naming.html');"></select></td>
 								</tr>
 								<tr>
 									<td align=center></td><td align=center>성씨(L)</td><td align=center>가운데 이름(F1)</td><td align=center>끝 이름(F2)</td><td align=center>비고</td>
@@ -17473,7 +17473,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 <br><br><br>
 
-<h1>AOA(Array Of Array 배열형태)로 엑셀 파일 만들어 다운로드</h1>
+<h1>만세력 (Array Of Array)</h1>
 <br><br>
 
 <script>
@@ -17511,43 +17511,243 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 </script>
 
 	<script>
+
+		function getJuyeokSaju64(year_pole_list, month_pole_list, day_pole_list) {
+				
+
+			//일지: 상효
+			my_juyeok64_list= ["0", "0", "0", "0", "0", "0"];
+			if ("亥子寅卯巳午".indexOf(day_pole_list[1])>-1) {
+				my_juyeok64_list[0] = "0";
+			} else {
+				my_juyeok64_list[0] = "1";
+			}
+	
+			//월지: 5효
+			if ("亥子寅卯巳午".indexOf(month_pole_list[1])>-1) {
+				my_juyeok64_list[1] = "0";
+			} else {
+				my_juyeok64_list[1] = "1";
+			}
+	
+			//연지: 4효
+			if ("亥子寅卯巳午".indexOf(year_pole_list[1])>-1) {
+				my_juyeok64_list[2] = "0";
+			} else {
+				my_juyeok64_list[2] = "1";
+			}
+	
+			//일간: 3효
+			if ("壬癸甲乙丙丁".indexOf(day_pole_list[0])>-1) {
+				my_juyeok64_list[3] = "0";
+			} else {
+				my_juyeok64_list[3] = "1";
+			}
+	
+			//월간: 2효
+			if ("壬癸甲乙丙丁".indexOf(month_pole_list[0])>-1) {
+				my_juyeok64_list[4] = "0";
+			} else {
+				my_juyeok64_list[4] = "1";
+			}
+	
+			//연간: 2효
+			if ("壬癸甲乙丙丁".indexOf(year_pole_list[0])>-1) {
+				my_juyeok64_list[5] = "0";
+			} else {
+				my_juyeok64_list[5] = "1";
+			}
+
+			var up8 = `${my_juyeok64_list[0]}${my_juyeok64_list[1]}${my_juyeok64_list[2]}`;
+			var dn8 = `${my_juyeok64_list[3]}${my_juyeok64_list[4]}${my_juyeok64_list[5]}`;
+
+			var juyeok_up8 = "";
+			for(var i=1;i<=9;i++) {
+				if (up8 == g_juyeok_4[i]) {
+					juyeok_up8 = g_juyeok_22[i];
+					break;
+				}
+			}
+
+			var juyeok_dn8 = "";
+			for(var i=1;i<=9;i++) {
+				if (dn8 == g_juyeok_4[i]) {
+					juyeok_dn8 = g_juyeok_22[i];
+					break;
+				}
+			}
+
+
+			return [juyeok_up8, juyeok_dn8];
+		}
+
+		//양력 : yyyy, mm, dd
+		function get10000YearCalendarByYYYYMMDD(yyyy, mm, dd) {
+
+			//dd가 yyyy년 mm월의 최대 일수보다 크면
+			var real_max_day = solar_day_of_month(yyyy, mm); 
+			if (dd>real_max_day) {
+				return ["", "", "", ""];
+			}
+
+
+			//음력
+			var my_um_yyyy_mm_dd = makeSolarToLunar(yyyy, mm, dd);
+			//console.log(`양력: ${yyyy}.${mm}.${dd}`);
+			//console.log(`음력: ${my_um_yyyy_mm_dd}`);
+
+			var my_um = ""; //substr(start, length)
+			if (my_um_yyyy_mm_dd.length == 10) {
+				//my_um = "" + String.fromCharCode(10) + my_um_yyyy_mm_dd.substr(5, 2) + String.fromCharCode(10) + my_um_yyyy_mm_dd.substr(8, 2);
+				my_um = my_um_yyyy_mm_dd.substr(5, 2) + String.fromCharCode(10) + my_um_yyyy_mm_dd.substr(8, 2);
+			}
+			else {
+				my_um = "윤" + String.fromCharCode(10) + my_um_yyyy_mm_dd.substr(6, 2) + String.fromCharCode(10) + my_um_yyyy_mm_dd.substr(9, 2);
+			}
+
+
+			var year_pole_list = get60GapJaYear(yyyy);
+			var month_pole_list = get60GapJaMonth(yyyy, mm);
+			var day_pole_list = get60GapJaDay(yyyy, mm, dd);
+
+			var body8_type = determineBody8(day_pole_list[1], month_pole_list[1], year_pole_list[1], day_pole_list[0], month_pole_list[0], year_pole_list[0]);
+			var my_body8_type = body8_type[0][0] + String.fromCharCode(10) + body8_type[0][1] + String.fromCharCode(10) + body8_type[0][2];
+			//var my_body8_type = body8_type[0][0] + "/" + body8_type[0][1] + "/" + body8_type[0][2];
+
+			//console.log(`체질: ${my_body8_type}`);
+
+			var sky_jiji_info = get60GapJaDay(yyyy, mm, dd);
+			var sky_jiji = sky_jiji_info[0] + sky_jiji_info[1]; 
+			var my_sky_jiji = sky_jiji[0] + String.fromCharCode(10) + sky_jiji[1];
+			//var my_sky_jiji = sky_jiji[0] + "/" + sky_jiji[1];
+			//console.log(`일주: ${my_sky_jiji}`);
+
+
+			var juyeokSaju64_list = getJuyeokSaju64(year_pole_list, month_pole_list, day_pole_list);
+			//console.log(`괘상: ${juyeokSaju64_list}`);
+
+			var my_juyeok64 = juyeokSaju64_list[0] + String.fromCharCode(10) + juyeokSaju64_list[1];
+			//var my_juyeok64 = juyeokSaju64_list[0] + "/" + juyeokSaju64_list[1];
+
+
+			//['양력' , '음력', '일주', '체질', '괘상', '남대운수', '여대운수']	
+			//6개: ['음력', '일주', '체질', '괘상', '남대운수', '여대운수']
+
+
+			return [`${my_um}`, `${my_sky_jiji}`, `${my_body8_type}`, `${my_juyeok64}`];
+			
+		}
+
+
+
+		//a_list에 b_list 요소들을 추가
+		function push10000(a_list, b_list) {
+			for(var i=0;i<b_list.length;i++) {
+				a_list.push(b_list[i]);
+			}
+		}
+
+		//aYYYY ~ bYYYY
+		function get10000YearCalendarByYYYY(yyyy) {
+
+			var my_total_10000_list = [];
+			var my_title_list = [`양력(${yyyy})`];
+
+			for(var i=1;i<=6;i++) {
+				my_title_list.push("음력");
+				my_title_list.push("일주");
+				my_title_list.push("체질");
+				my_title_list.push("괘상");
+			}
+			my_total_10000_list.push(my_title_list);
+
+			
+			
+			
+
+			for(var dd=1;dd<=31;dd++) {
+				var my_row_10000_list = [`${dd.pad(2)}`];
+				for(var mm=1;mm<=6;mm++) {
+					
+
+					var my_each_1000_list = get10000YearCalendarByYYYYMMDD(yyyy, mm, dd);
+					push10000(my_row_10000_list, my_each_1000_list);
+				}
+
+				my_total_10000_list.push(my_row_10000_list);
+			}
+
+			for(var dd=1;dd<=31;dd++) {
+				var my_row_10000_list = [`${dd.pad(2)}`];
+				for(var mm=7;mm<=12;mm++) {
+					
+
+					var my_each_1000_list = get10000YearCalendarByYYYYMMDD(yyyy, mm, dd);
+					push10000(my_row_10000_list, my_each_1000_list);
+				}
+
+
+				//['양력' , '음력', '일주', '체질', '괘상', '남대운수', '여대운수']	
+				//6개: ['음력', '일주', '체질', '괘상', '남대운수', '여대운수']
+
+				my_total_10000_list.push(my_row_10000_list);
+			}
+			
+			
+
+			return my_total_10000_list;
+		}
+
+		function getYearPole(startYYYY, endYYYY) {
+			var my_yearpole_list = [];
+			my_yearpole_list.push(["연도", "연주"]);
+			for (var yyyy=startYYYY;yyyy<=endYYYY;yyyy++) {
+				var year_pole_list = get60GapJaYear(yyyy);
+				my_yearpole_list.push([yyyy, `${year_pole_list[0]}${year_pole_list[1]}`]);
+			}
+
+			return my_yearpole_list;
+			
+		}
+
+		function getMonthPole(startYYYY, endYYYY) {
+			var my_monthpole_list = [];
+			my_monthpole_list.push(["연", "월", "월주"]);
+			for (var yyyy=startYYYY;yyyy<=endYYYY;yyyy++) {
+				var year_pole_list = get60GapJaYear(yyyy);
+
+				for(var mm=1;mm<=12;mm++) {
+					var month_pole_list = get60GapJaMonth(yyyy, mm);
+
+					my_monthpole_list.push([`${yyyy}`, `${mm}`, `${month_pole_list[0]}${month_pole_list[1]}`]);
+				}
+				
+			}
+
+			return my_monthpole_list;
+			
+		}
+		
 		
 		var excelHandler = {
 			
+			
 			getExcelFileName : function(){
-				return 'aoa-test.xlsx';
+				return '10000YearCalendar.xlsx';
 			},
 			getSheetName : function(){
 				return 'AOA Test Sheet';
 			},
+			//doSomething()
 			getExcelData : function(){
-				
-				// "☰".charCodeAt(0).toString(16); 결과값: 2630 (16진수)
-				// "☰".charCodeAt(0); 결과값: 9776 (10진수)
-				var sJuYeok8 = String.fromCharCode("☰".charCodeAt(0).toString(10)); //9776
-				
-
-				
-				console.log("8괘: " + sJuYeok8);
-				console.log("(7).pad(3): " + (7).pad(3));
-				
-				
-				//["양력", ["음력", "일주", "체질", "괘상", "대운수(남)", "대운수(여)"]]
-				//6개 필요: ["음력", "일주", "체질", "괘상", "대운수(남)", "대운수(여)"]
-
-				var yyyy = 2020;
-				var mm = 7;
-				var dd = 20;
-
-				var my_um_yyyy_mm_dd = makeSolarToLunar(yyyy, mm, dd);
-				console.log(`양력: ${yyyy}.${mm}.${dd}`);
-				console.log(`음력: ${my_um_yyyy_mm_dd}`);
 
 				
 
+				//return getYearPole(1921, 2050);
+				//return getMonthPole(1921, 2050);
 
-				//['양력' , '음력', '요일', '일주', '체질', '육효']	
-				return [['이름' , '나이', '부서'], ['도사원' , '21', '인사팀'],['김부장' , '27', '비서실' + sJuYeok8],['엄전무' , '45', '기획실' + String.fromCharCode(10) + '비서실']];
+
+				return get10000YearCalendarByYYYY(1921);
 				
 			},
 			getWorksheet : function(){
@@ -17559,7 +17759,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 		}
 	</script>
 
-파일 내보내기(배열) : <input type="button" id="excelFileExport" value="엑셀 파일 다운로드(배열)" />
+파일 내보내기(배열) : <input type="button" id="excelFileExport" value="만세력(배열)-엑셀" />
 
 <br><br><br>
 
@@ -17569,7 +17769,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 <br><br><br>
 
-<h1>만세력</h1>
+
 
 <br><br>
 
