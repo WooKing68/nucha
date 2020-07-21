@@ -328,8 +328,13 @@ var g_yyyy_mm_dd_hh = {"year":"year", "month":null, "day":null, "hour":null};
 대한: 20일 22시 55분
 
 */
+
+//오류 데이터: 
+//"201203":"경칩05130춘분201414",
+//"203605":"입하05068소만201943",
 var g_div24 = 
 {
+	"192012":"대설071830동지221217",
 	"192101":"소한060534대한202255",
 	"192102":"입춘041721우수191320",
 	"192103":"경칩061146춘분211251",
@@ -1424,7 +1429,7 @@ var g_div24 =
 	"201112":"대설072028동지221429",
 	"201201":"소한060743대한210109",
 	"201202":"입춘041922우수191517",
-	"201203":"경칩05130춘분201414",
+	"201203":"경칩051320춘분201414",
 	"201204":"청명041805곡우200111",
 	"201205":"입하081119소만210015",
 	"201206":"망종051525하지210808",
@@ -1714,7 +1719,7 @@ var g_div24 =
 	"203602":"입춘041519우수191113",
 	"203603":"경칩050910춘분201001",
 	"203604":"청명041345곡우192049",
-	"203605":"입하05068소만201943",
+	"203605":"입하050648소만201943",
 	"203606":"망종051046하지210331",
 	"203607":"소서062056대서221421",
 	"203608":"입추070648처서222131",
@@ -1889,7 +1894,8 @@ var g_div24 =
 	"205009":"백로071859추분230427",
 	"205010":"한로081059상강231410",
 	"205011":"입동071432소설221205",
-	"205012":"대설070740동지220137"
+	"205012":"대설070740동지220137",
+	"205101":"소한061827대한201147" 
 };
 
 /**
@@ -17477,6 +17483,16 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 <br><br>
 
 <script>
+	function sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	function sleepFor( sleepDuration ){
+		var now = new Date().getTime();
+		while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+	}
+
+
 	//Excel Sheet JS
 	//공통: AOA(Array Of Array 배열형태)로 엑셀만들 만들어 다운로드
 	// 참고 출처 : https://redstapler.co/sheetjs-tutorial-create-xlsx/
@@ -17487,21 +17503,49 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 		for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
 		return buf;    
 	}
+
+	var g_filename_year = 0;
 	function exportExcel(){ 
-		// step 1. workbook 생성
-		var wb = XLSX.utils.book_new();
-	
-		// step 2. 시트 만들기 
-		var newWorksheet = excelHandler.getWorksheet();
+		console.log();
+		console.log(`시작......${startYear}~${endYear}`);
+		console.log();
+
+		var startYear = eval(document.getElementById("10000_start_year").value);
+		var endYear = eval(document.getElementById("10000_end_year").value);
+
+		for (var y=startYear;y<=endYear;y++) {
+			console.log(`start... ${y}`);
+			g_filename_year = y;
+			// step 1. workbook 생성
+			var wb = XLSX.utils.book_new();
+			
+			// step 2. 시트 만들기 
+			var newWorksheet = excelHandler.getWorksheet();
+			
+			// step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.  
+			XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+
+			// step 4. 엑셀 파일 만들기 
+			var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
+
+			// step 5. 엑셀 파일 내보내기 
+			saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), excelHandler.getExcelFileName());
+
+			
+			console.log(`...end ${y}`);
+
+			//await only pauses the current async function
+			//await sleep(500);
+			sleepFor(500);
+		}
+
+		console.log();
+		console.log(`${startYear}~${endYear}..........완료`);
+		console.log();
+		console.log();
+
 		
-		// step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.  
-		XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
-	
-		// step 4. 엑셀 파일 만들기 
-		var wbout = XLSX.write(wb, {bookType:'xlsx',  type: 'binary'});
-	
-		// step 5. 엑셀 파일 내보내기 
-		saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), excelHandler.getExcelFileName());
+
 	}
 	$(document).ready(function() { 
 		$("#excelFileExport").click(function(){
@@ -17511,6 +17555,133 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 </script>
 
 	<script>
+		//서기 yyyy년 mm월 dd일 hh시 nn분
+		//디폴트값: hh=12, nn=30
+		//리턴값: [남자대운수, 여자대운수]
+		function getDaeunNum(yyyy, mm, dd, hh=-1, nn=-1) {
+			//console.log(`start... ${yyyy}, ${mm}, ${dd}`);
+
+			//yyyy년 mm월: 12절 정보
+			var div12_dd = eval(g_div24[`${yyyy}${mm.pad(2)}`].substr(2, 2));
+			var div12_hh = eval(g_div24[`${yyyy}${mm.pad(2)}`].substr(4, 2));
+			var div12_nn = eval(g_div24[`${yyyy}${mm.pad(2)}`].substr(6, 2));
+
+			if (dd==div12_dd) {
+				return ["", ""];
+			}
+
+			//yyyy년 2월의 절입일시
+			var mm_2 = 2;
+			var div12_dd_2 = eval(g_div24[`${yyyy}${mm_2.pad(2)}`].substr(2, 2));
+			var div12_hh_2 = eval(g_div24[`${yyyy}${mm_2.pad(2)}`].substr(4, 2));
+			var div12_nn_2 = eval(g_div24[`${yyyy}${mm_2.pad(2)}`].substr(6, 2));
+
+			//이전 달: 연도 및 달 수, 절입일시
+			var yyyy_prev = -1;
+			var mm_prev = -1;
+			var div12_dd_prev = -1;
+			var div12_hh_prev = -1;
+			var div12_nn_prev = -1;
+			if (mm==1) {
+				yyyy_prev = yyyy - 1;
+				mm_prev = 12;
+				
+				div12_dd_prev = eval(g_div24[`${yyyy_prev}${mm_prev.pad(2)}`].substr(2, 2));
+				div12_hh_prev = eval(g_div24[`${yyyy_prev}${mm_prev.pad(2)}`].substr(4, 2));
+				div12_nn_prev = eval(g_div24[`${yyyy_prev}${mm_prev.pad(2)}`].substr(6, 2));
+			}
+			else {
+				yyyy_prev = yyyy;
+				mm_prev = mm - 1;
+				div12_dd_prev = eval(g_div24[`${yyyy_prev}${mm_prev.pad(2)}`].substr(2, 2));
+				div12_hh_prev = eval(g_div24[`${yyyy_prev}${mm_prev.pad(2)}`].substr(4, 2));
+				div12_nn_prev = eval(g_div24[`${yyyy_prev}${mm_prev.pad(2)}`].substr(6, 2));
+			}
+
+			//다음 달: 연도 및 달 수, 절입일시
+			var yyyy_next = -1; 
+			var mm_next = -1;
+			var div12_dd_next = -1;
+			var div12_hh_next = -1;
+			var div12_nn_next = -1;
+			if (mm==12) {
+				yyyy_next = yyyy + 1;
+				mm_next = 1;
+
+				div12_dd_next = eval(g_div24[`${yyyy_next}${mm_next.pad(2)}`].substr(2, 2));
+				div12_hh_next = eval(g_div24[`${yyyy_next}${mm_next.pad(2)}`].substr(4, 2));
+				div12_nn_next = eval(g_div24[`${yyyy_next}${mm_next.pad(2)}`].substr(6, 2));
+			}
+			else {
+				yyyy_next = yyyy;
+				mm_next = mm + 1;
+				div12_dd_next = eval(g_div24[`${yyyy_next}${mm_next.pad(2)}`].substr(2, 2));
+				div12_hh_next = eval(g_div24[`${yyyy_next}${mm_next.pad(2)}`].substr(4, 2));
+				div12_nn_next = eval(g_div24[`${yyyy_next}${mm_next.pad(2)}`].substr(6, 2));
+			}
+
+			
+
+
+			//그해 2월 입춘 절입 기준
+			var div12_nucha_num_2 = getNuchaNumber(yyyy, mm_2, div12_dd_2);
+
+			//같은 달
+			var nucha_num = getNuchaNumber(yyyy, mm, dd);
+			var div12_nucha_num = getNuchaNumber(yyyy, mm, div12_dd);
+
+			//이전 달
+			var div12_nucha_num_prev = getNuchaNumber(yyyy_prev, mm_prev, div12_dd_prev);
+
+			//다음 달
+			var div12_nucha_num_next = getNuchaNumber(yyyy_next, mm_next, div12_dd_next);
+
+			var yyyy_pole = -1;
+			if (nucha_num < div12_nucha_num_2) {
+				yyyy_pole = yyyy - 1;
+			}
+			else {
+				yyyy_pole = yyyy;
+			}
+
+			//yyyy_pole: 짝수이면 남자 순행, 여자 역행 (2020년 경자년)
+			//yyyy_pole: 홀수이면 남자 역행, 여자 순행
+			var male_daeun_num = -1;
+			var female_daeun_num = -1;
+			if ( r(yyyy_pole, 2)==0 ) {//남자 순행, 여자 역행
+				if (nucha_num < div12_nucha_num) {
+					male_daeun_num = q(Math.abs(nucha_num - div12_nucha_num) + 1, 3);
+					female_daeun_num = q(Math.abs(nucha_num - div12_nucha_num_prev) + 1, 3);
+
+				}
+				else {
+					male_daeun_num = q(Math.abs(nucha_num - div12_nucha_num_next) + 1, 3);
+					female_daeun_num = q(Math.abs(nucha_num - div12_nucha_num) + 1, 3);
+				}
+			}
+			else { //남자 역행, 여자 순행
+				if (nucha_num < div12_nucha_num) {
+					female_daeun_num = q(Math.abs(nucha_num - div12_nucha_num) + 1, 3);
+					male_daeun_num = q(Math.abs(nucha_num - div12_nucha_num_prev) + 1, 3);
+
+				}
+				else {
+					female_daeun_num = q(Math.abs(nucha_num - div12_nucha_num_next) + 1, 3);
+					male_daeun_num = q(Math.abs(nucha_num - div12_nucha_num) + 1, 3);
+				}
+			}
+
+			if (male_daeun_num==0) {
+				male_daeun_num = 1;
+			}
+
+			if (female_daeun_num==0) {
+				female_daeun_num = 1;
+			}
+
+			return [male_daeun_num, female_daeun_num];
+			
+		}
 
 		function getJuyeokSaju64(year_pole_list, month_pole_list, day_pole_list) {
 				
@@ -17587,7 +17758,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 			//dd가 yyyy년 mm월의 최대 일수보다 크면
 			var real_max_day = solar_day_of_month(yyyy, mm); 
 			if (dd>real_max_day) {
-				return ["", "", "", ""];
+				return ["", "", "", "", "", ""];
 			}
 
 
@@ -17633,8 +17804,11 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 			//['양력' , '음력', '일주', '체질', '괘상', '남대운수', '여대운수']	
 			//6개: ['음력', '일주', '체질', '괘상', '남대운수', '여대운수']
 
+			var daeun_num_list = getDaeunNum(yyyy, mm, dd, hh=-1, nn=-1);
+					
 
-			return [`${my_um}`, `${my_sky_jiji}`, `${my_body8_type}`, `${my_juyeok64}`];
+
+			return [`${my_um}`, `${my_sky_jiji}`, `${my_body8_type}`, `${my_juyeok64}`, `${daeun_num_list[0]}`, `${daeun_num_list[1]}`];
 			
 		}
 
@@ -17658,6 +17832,8 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 				my_title_list.push("일주");
 				my_title_list.push("체질");
 				my_title_list.push("괘상");
+				my_title_list.push("남대운수");
+				my_title_list.push("여대운수");
 			}
 			my_total_10000_list.push(my_title_list);
 
@@ -17684,6 +17860,8 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 					var my_each_1000_list = get10000YearCalendarByYYYYMMDD(yyyy, mm, dd);
 					push10000(my_row_10000_list, my_each_1000_list);
+
+					
 				}
 
 
@@ -17727,13 +17905,19 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 			return my_monthpole_list;
 			
 		}
+
+		
 		
 		
 		var excelHandler = {
 			
 			
 			getExcelFileName : function(){
-				return '10000YearCalendar.xlsx';
+				//var my_year = document.getElementById("10000year").value;
+				//var my_filename = `10000_${my_year}.xlsx`;
+				var my_filename = `10000_${g_filename_year}.xlsx`;
+				
+				return my_filename;
 			},
 			getSheetName : function(){
 				return 'AOA Test Sheet';
@@ -17746,8 +17930,8 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 				//return getYearPole(1921, 2050);
 				//return getMonthPole(1921, 2050);
 
-
-				return get10000YearCalendarByYYYY(1921);
+				//var my_year = eval(document.getElementById("10000year").value); 
+				return get10000YearCalendarByYYYY(g_filename_year);
 				
 			},
 			getWorksheet : function(){
@@ -17759,7 +17943,10 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 		}
 	</script>
 
-파일 내보내기(배열) : <input type="button" id="excelFileExport" value="만세력(배열)-엑셀" />
+엑셀 파일 만들기(배열) : <br><br>
+시작 연도: <input type="text" id="10000_start_year" value="1921" /> <br>
+종료 연도: <input type="text" id="10000_end_year" value="2050" /><br><br>
+출판: <input type="button" id="excelFileExport" value="만세력(배열)-엑셀" />
 
 <br><br><br>
 
