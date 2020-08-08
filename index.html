@@ -10386,48 +10386,55 @@ The <b>greatest error:</b><br>
 			//var g_base64_list;
 			//var g_byunhyo_list;
 			//var g_ji64_list;
+
+			//2020.08.08-변경
+			//천간: 상효로 변경
+			//지지: 하효로 변경
+
+			//0번째가 6효
+			//1번째가 5효 
 	
-			//일지: 상효
+			//일간: 상효
 			g_base64_list = ["0", "0", "0", "0", "0", "0"];
-			if ("亥子寅卯巳午".indexOf(day_pole_list[1])>-1) {
-				g_base64_list[0] = "0";
+			if ("亥子寅卯巳午".indexOf(day_pole_list[0])>-1) {
+				g_base64_list[6-6] = "0";
 			} else {
-				g_base64_list[0] = "1";
+				g_base64_list[6-6] = "1";
 			}
 	
-			//월지: 5효
-			if ("亥子寅卯巳午".indexOf(month_pole_list[1])>-1) {
-				g_base64_list[1] = "0";
+			//월간: 5효
+			if ("亥子寅卯巳午".indexOf(month_pole_list[0])>-1) {
+				g_base64_list[6-5] = "0";
 			} else {
-				g_base64_list[1] = "1";
+				g_base64_list[6-5] = "1";
 			}
 	
-			//연지: 4효
-			if ("亥子寅卯巳午".indexOf(year_pole_list[1])>-1) {
-				g_base64_list[2] = "0";
+			//연간: 4효
+			if ("亥子寅卯巳午".indexOf(year_pole_list[0])>-1) {
+				g_base64_list[6-4] = "0";
 			} else {
-				g_base64_list[2] = "1";
+				g_base64_list[6-4] = "1";
 			}
 	
-			//일간: 3효
-			if ("壬癸甲乙丙丁".indexOf(day_pole_list[0])>-1) {
-				g_base64_list[3] = "0";
+			//일지: 3효
+			if ("壬癸甲乙丙丁".indexOf(day_pole_list[1])>-1) {
+				g_base64_list[6-3] = "0";
 			} else {
-				g_base64_list[3] = "1";
+				g_base64_list[6-3] = "1";
 			}
 	
-			//월간: 2효
-			if ("壬癸甲乙丙丁".indexOf(month_pole_list[0])>-1) {
-				g_base64_list[4] = "0";
+			//월지: 2효
+			if ("壬癸甲乙丙丁".indexOf(month_pole_list[1])>-1) {
+				g_base64_list[6-2] = "0";
 			} else {
-				g_base64_list[4] = "1";
+				g_base64_list[6-2] = "1";
 			}
 	
-			//연간: 2효
-			if ("壬癸甲乙丙丁".indexOf(year_pole_list[0])>-1) {
-				g_base64_list[5] = "0";
+			//연지: 2효
+			if ("壬癸甲乙丙丁".indexOf(year_pole_list[1])>-1) {
+				g_base64_list[6-1] = "0";
 			} else {
-				g_base64_list[5] = "1";
+				g_base64_list[6-1] = "1";
 			}
 	
 			//변효
