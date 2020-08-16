@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <p><br></p><table align="center" class="txc-table" width="700" cellspacing="0" cellpadding="0" border="0" style="border:none;border-collapse:collapse;;font-family:gulim;font-size:13.3333px"><tbody><tr><td style="width: 349px; height: 24px; border-width: 1px; border-style: solid; border-color: rgb(204, 204, 204);"><p style="text-align: center;"><span style="font-size: 18pt;"><b><span style="font-family: Gungsuh, 궁서, serif;">군화체질</span></b></span><span style="font-size: 18pt;">&nbsp;</span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">//태음: 목&gt;금</span><br></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">"태음1":"목&gt;화&gt;토&gt;수&gt;금"&nbsp;</span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">"태음2":"목&gt;수&gt;화&gt;토&gt;금"&nbsp;</span></p>
+        <p style="text-align: left;"><span style="font-size: 14pt;"><br></span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">//소양: 토&gt;수</span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">"소양1":"토&gt;금&gt;화&gt;목&gt;수"&nbsp;</span></p>
+        <p style="text-align: left;"><span style="font-size:12pt;">"소양2":"토&gt;화&gt;목&gt;금&gt;수"</span>&nbsp;</p></td><td style="width: 350px; height: 24px; border-bottom: 1px solid rgb(204, 204, 204); border-right: 1px solid rgb(204, 204, 204); border-top: 1px solid rgb(204, 204, 204); text-align: center;"><p><span style="font-size: 18pt; font-family: Gungsuh, 궁서, serif;"><b>상화체질</b></span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">//태양: 금&gt;목</span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">"태양1":"금&gt;수&gt;토&gt;화&gt;목"&nbsp;</span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">"태양2":"금&gt;토&gt;화&gt;수&gt;목"</span></p>
+        <p style="text-align: left;"><span style="font-size: 14pt;"><br></span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">//소음: 수&gt;토</span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">"소음1":"수&gt;목&gt;화&gt;금&gt;토"&nbsp;</span></p>
+        <p style="text-align: left;"><span style="font-size: 12pt;">"소음2":"수&gt;금&gt;목&gt;화&gt;토"</span></p></td></tr><tr><td style="width: 349px; height: 24px; border-bottom: 1px solid rgb(204, 204, 204); border-right: 1px solid rgb(204, 204, 204); border-left: 1px solid rgb(204, 204, 204);"><p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">if 군화체질이라면 (상화=0 혹은 군화&gt;상화)</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp;<b> <span style="color: rgb(255, 0, 0);">if 목토 없다면:&nbsp;</span></b></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; 가장 강한 기운(목토) 없다면 가장 약한 기운(금수)으로 판별</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp;<b> <span style="color: rgb(9, 0, 255);">if 금수 없다면</span></b></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //군화 강:태음1(목&gt;화&gt;토&gt;수&gt;금) 혹은 소양2(토&gt;화&gt;목&gt;금&gt;수)</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //화극금: 금이 약함 -&gt; 태음1 체질</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: rgb(9, 0, 255);"><b>else if 금&gt;수</b></span>: 수가 약하면 소양1 혹은 소양2</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"소양1":"토&gt;금&gt;화&gt;목&gt;수"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"소양2":"토&gt;화&gt;목&gt;금&gt;수"</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if 목금 없다면</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음: 금 있으므로 금 없다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 금&gt;목</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 소양1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 목&gt;금</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음: 목 없으므로 목 있다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: rgb(9, 0, 255);"><b>else if 수&gt;금</b></span>: 금 약하면 태음1 혹은 태음2&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"태음1":"목&gt;화&gt;토&gt;수&gt;금"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"태음2":"목&gt;수&gt;화&gt;토&gt;금"</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if 태음체질은 수토 없다면</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음: 수 있으므로 수 없다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 토&gt;수</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음 : 토 없으므로 토 있다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 수&gt;토</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 태음2:</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; <span style="color: rgb(255, 0, 0);"><b>else if 목&gt;토:</b> </span>태음1 혹은 태음2</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; //"태음1":"목&gt;화&gt;토&gt;수&gt;금"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; //"태음2":"목&gt;수&gt;화&gt;토&gt;금"</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; if 토수가 없다면:</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 군화: 강화 - 태음1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; else if 토&gt;수:</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 태음1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; else if 수&gt;토:&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 태음2</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; <span style="color: rgb(255, 0, 0);"><b>else if 토&gt;목:</b> </span>소양1 혹은 소양2&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; //"소양1":"토&gt;금&gt;화&gt;목&gt;수"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; //"소양2":"토&gt;화&gt;목&gt;금&gt;수"</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; if 금목이 없다면:</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 군화: 강화 -&gt; 소양2</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; else if 금&gt;목</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 소양1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; else if 목&gt;금</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 소양2</span></p>
+        <p><span style="font-size: 13.3333px;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span>&nbsp;</p></td><td style="width:350px;height:24px;border-bottom:1px solid #ccc;border-right:1px solid #ccc;;"><p><span style="font-size: 8pt;">else if 상화체질이라면 (상화&gt;군화)</span><br></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp;<span style="color: rgb(255, 0, 0);"><b> if 금수 없다면:</b></span>&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; 가장 강한 기운(금수) 없다면 가장 약한 기운(목토)으로 판별</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: rgb(9, 0, 255);"><b>if 목토 없다면</b></span></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp;&nbsp;</span><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; //군화 약:태양1(금&gt;수&gt;토&gt;화&gt;목) 혹은 소음2(수&gt;금&gt;목&gt;화&gt;토)</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //화약 수극화: 수가 강함 -&gt; 소음2</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: rgb(9, 0, 255);"><b>else if 목&gt;토:</b></span> 토가 약하면 소음1 혹은 소음2</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"소음1":"수&gt;목&gt;화&gt;금&gt;토"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"소음2":"수&gt;금&gt;목&gt;화&gt;토"</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if 목금 없다면</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음: 목 있으므로 목 없다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 목&gt;금</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 소음1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 금&gt;목</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음: 금이 없으므로 금 있다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; <span style="color: rgb(9, 0, 255);"><b>else if 토&gt;목:</b></span> 목 약하면 태양1 혹은 태양2&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"태양1":"금&gt;수&gt;토&gt;화&gt;목"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"태양2":"금&gt;토&gt;화&gt;수&gt;목"</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if 태양체질은 수토 없다면</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음: 토 있으므로 토 없다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 수&gt;토</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 없음: 수 없으므로 수 있다면 모순</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 토&gt;수</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 태양2</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; <span style="color: rgb(255, 0, 0);"><b>else if 금&gt;수: </b></span>태양1 혹은 태양2</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"태양1":"금&gt;수&gt;토&gt;화&gt;목"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; //"태양2":"금&gt;토&gt;화&gt;수&gt;목"</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if 수토가 없다면:</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 상화 강, 군화 약: 태양1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 수&gt;토:</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 태양1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; else if 토&gt;수:&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 태양2</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; <span style="color: rgb(255, 0, 0);"><b>else if 수&gt;금: </b></span>소음1 혹은 소음2&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; //"소음1":"수&gt;목&gt;화&gt;금&gt;토"&nbsp;</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; //"소음2":"수&gt;금&gt;목&gt;화&gt;토"</span></p>
+        <p><span style="font-size: 13.3333px;"><br></span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; if 목금이 없다면:</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 상화 강, 군화 약: 소음2</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; else if 목&gt;금</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 소음1</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; else if 금&gt;목</span></p>
+        <p><span style="font-size: 8pt;">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 소음2</span></p></td></tr></tbody></table><p><br></p>    
+    
+</body>
+</html>
