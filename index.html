@@ -18002,6 +18002,8 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 		}
 
+		
+
 		function getSortJoinFrom5haeng(day_ji, month_ji, year_ji, day_gan, month_gan, year_gan) {
 			var my_ganji = `${day_ji}${month_ji}${year_ji}${day_gan}${month_gan}${year_gan}`;
 			var my_5haeng = `${GANJI_5HAENG[day_ji]}${GANJI_5HAENG[month_ji]}${GANJI_5HAENG[year_ji]}${GANJI_5HAENG[day_gan]}${GANJI_5HAENG[month_gan]}${GANJI_5HAENG[year_gan]}`;
@@ -18040,6 +18042,10 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 			return my_5haeng_list.join();
 
 		}
+
+
+
+
 
 		function getBody8Excel(day_ji, month_ji, year_ji, day_gan, month_gan, year_gan) {
 
@@ -18333,9 +18339,6 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 	//(7).pad(3);  //returns "007"
 
-
-
-​
 	function makeExcelCalendar(yyyy, mm) {
 		
 
@@ -18481,6 +18484,44 @@ a: <input type="text" id="a_input" value="2050" /><br><br><br>
 	//	var n = 1+r(6*i-5*j, 60);
 	//	console.log(`(${i}, ${j}) = 제${n}항 : ${k==n}`);
 	//}
+
+
+	function testPole(aYear) {
+		
+		var month_2_day =  isLeapYear(aYear);
+		g_MONTH_DAY[2] = 28 + month_2_day;
+
+		var y = aYear;
+
+		for(var mm=1;mm<=12;mm++) {
+			for(var dd=1;dd<=g_MONTH_DAY[mm];dd++) {
+				var year_pole_list = get60GapJaYear(y);
+				var month_pole_list = get60GapJaMonth(y, mm);
+				var day_pole_list = get60GapJaDay(y, mm, dd);
+
+				var day_ji = day_pole_list[1];
+				var month_ji = month_pole_list[1];
+				var year_ji = year_pole_list[1]; 
+				var day_gan = day_pole_list[0]; 
+				var month_gan = month_pole_list[0]; 
+				var year_gan = year_pole_list[0];
+
+				var year_pole = `${year_gan}${year_ji}`;
+				var month_pole = `${month_gan}${month_ji}`;
+				var day_pole = `${day_gan}${day_ji}`;
+
+				if (year_pole==month_pole && month_pole==day_pole) {
+					console.log(`${aYear}.${mm.pad(2)}.${dd.pad(2)} : ${year_pole}년 ${month_pole}월 ${day_pole}일`);
+				}
+			}
+		}
+
+	}
+
+	//for(var yyyy=1900; yyyy<=2050; yyyy++) {
+	//	testPole(yyyy);
+	//}
+	
 </script>
 <br><br><br>
 </body>
