@@ -129,6 +129,16 @@
 		return result;
 	}
 
+	function getJuliusNumber(aYear, aMonth, aDay) {
+		var result = 0;
+		
+		result = 365 * ( aYear + q(aMonth - 3, 12) )
+                + q( aYear + q(aMonth - 3, 12), 4) 
+				+ q(153 * (aMonth -12 * q(aMonth - 3, 12) ) - 1987, 5) + aDay; 
+		
+		return result;
+	}
+
 	
 	
 	
@@ -3411,19 +3421,19 @@ function get_juyeok_384_hyosa(a_hyosa_key) {
 <SCRIPT language=javascript>
 
 
-    /**
-	* 양력 - 음력 변환 스크립트
-	* 
-    * 양력: 1881.01.30 = 음력: 1881.01.01 (기준 첫째날)
-    * 음력만년달력: "1212122322121"에서 1월, 2월, 3월... 순이고 
-    *                홀수(1, 3)이면 29일, 짝수(2, 4)이면 30일까지 있다. 
-    *                '1' 혹은 '2'가 아니면 윤달(월)이다. 
-    *                이 경우 '3'은 '윤7월'이며, 그 후 8월, 9월, ... 등으로 기록된다. 
-	* 1212122322121": 
-	* 1월(1: 29일), 2월(2: 30일), 3월(1: 29일), 4월, 5월, 6월, 7월(2: 30일), 윤7월(3: 29일), 8월, 9월, 10월, 11월, 12월
-    */
+/**
+* 양력 - 음력 변환 스크립트
+* 
+* 양력: 1881.01.30 = 음력: 1881.01.01 (기준 첫째날)
+* 음력만년달력: "1212122322121"에서 1월, 2월, 3월... 순이고 
+*                홀수(1, 3)이면 29일, 짝수(2, 4)이면 30일까지 있다. 
+*                '1' 혹은 '2'가 아니면 윤달(월)이다. 
+*                이 경우 '3'은 '윤7월'이며, 그 후 8월, 9월, ... 등으로 기록된다. 
+* 1212122322121": 
+* 1월(1: 29일), 2월(2: 30일), 3월(1: 29일), 4월, 5월, 6월, 7월(2: 30일), 윤7월(3: 29일), 8월, 9월, 10월, 11월, 12월
+*/
 
-    // 소위 '만년 데이타'라 불리움.
+// 소위 '만년 데이타'라 불리움.
 var g_lunar_data = {
 1881:"1212122322121",  
 1882:"1212121221220",
@@ -3790,6 +3800,12 @@ var g_lunar_data = {
     //서기 년도 yyyy는 윤년인가?
     function isLeapYear(yyyy) {
         var my_num = (q(yyyy, 4) - q(yyyy - 1, 4)) - (q(yyyy, 100) - q(yyyy - 1, 100)) + (q(yyyy, 400) - q(yyyy - 1, 400));
+
+        return (my_num == 1);
+    }
+
+	function isJuliusLeapYear(yyyy) {
+        var my_num = (q(yyyy, 4) - q(yyyy - 1, 4));
 
         return (my_num == 1);
     }
@@ -5641,7 +5657,7 @@ function setNineStarTable(aTableName, aBoardArray) {
 
 </head>
 
- <body id="NSN" onload="InitializeDynamicMenu();showTime();resizwWindow();">
+ <body id="NSN" onload="InitializeDynamicMenu();showTime();resizWindow();">
 <div id="menu_home"></div>
 <script>
 	function changeLunarToSolar() {
@@ -17173,16 +17189,21 @@ block: 보이기
 <br>
 
 <Form name="mathForm">
-b=<input type="text" name="bMath" size="1" value="1" style="text-align:right;">, c=<input type="text" name="cMath" size="1" value="-1" style="text-align:right;">, a=<input type="text" name="aMath" value="3" size="1" style="text-align:right;"><br>
+b=<input type="text" name="bMath" size="1" value="1" style="text-align:right;">, 
+c=<input type="text" name="cMath" size="1" value="-1" style="text-align:right;">, 
+a=<input type="text" name="aMath" value="3" size="1" style="text-align:right;">,
+항의 개수: <input type="text" name="nMath" value="" size="1" style="text-align:right;">
+<br>
 <table id="tbl_math_seq"><tr>
   <td><input type="button" name="btnMath" value="결과보기" onclick="nuchaSequence();"></td><td></td><td><input type="text" name="txtMathResult" size="130"></td>
 </tr></table>
 </Form>
 <script>
 function nuchaSequence() {
-    	var b = eval(mathForm.bMath.value);
+	var b = eval(mathForm.bMath.value);
 	var c = eval(mathForm.cMath.value);
 	var a = eval(mathForm.aMath.value);
+	var nn = eval(mathForm.nMath.value);
 
 	var my_buho = "";
 	if (c<0) {
@@ -17198,7 +17219,7 @@ function nuchaSequence() {
 
 	
 	var s=""; 
-	for(var n=1; n<=50; n++) {
+	for(var n=1; n<=nn; n++) {
 		s = s + q(b*n+c, a) + ", ";
 	}
 
@@ -17444,73 +17465,152 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 
 
-<h1>
-	[64괘]  <br>
-	01. ䷀  중천건(重天乾)<br>
-	02. ䷁  중지곤(重地坤)<br>
-	03. ䷂  수뢰둔(水雷屯)<br>
-	04. ䷃  산수몽(山水蒙)<br>
-	05. ䷄  수천수(水天需)<br>
-	06. ䷅  천수송(天水訟)<br>
-	07. ䷆  지수사(地水師)<br>
-	08. ䷇  수지비(水地比)<br>
-	09. ䷈  풍천소축(風天小畜)<br>
-	10. ䷉  천택리(天澤履)<br>
-	11. ䷊  지천태(地天泰)<br>
-	12. ䷋  천지비(天地否)<br>
-	13. ䷌  천화동인(天火同人)<br>
-	14. ䷍  화천대유(火天大有)<br>
-	15. ䷎  지산겸(地山謙)<br>
-	16. ䷏  뇌지예(雷地豫)<br>
-	17. ䷐  택뢰수(澤雷隨)<br>
-	18. ䷑  산풍고(山風蠱)<br>
-	19. ䷒  지택림(地澤臨)<br>
-	20. ䷓  풍지관(風地觀)<br>
-	21. ䷔  화뢰서합(火雷噬嗑)<br>
-	22. ䷕  산화비(山火賁)<br>
-	23. ䷖  산지박(山地剝)<br>
-	24. ䷗  지뢰복(地雷復)<br>
-	25. ䷘  천뢰무망(天雷无妄)<br>
-	26. ䷙  산천대축(山天大畜)<br>
-	27. ䷚  산뢰이(山雷頤)<br>
-	28. ䷛  택풍대과(澤風大過)<br>
-	29. ䷜  중수감(重水坎)<br>
-	30. ䷝  중화리(重火離)<br>
-	31. ䷞  택산함(澤山咸)<br>
-	32. ䷟  뇌풍항(雷風恒)<br>
-	33. ䷠  천산둔(天山遯)<br>
-	34. ䷡  뇌천대장(雷天大壯)<br>
-	35. ䷢  화지진(火地晉)<br>
-	36. ䷣  지화명이(地火明夷)<br>
-	37. ䷤  풍화가인(風火家人)<br>
-	38. ䷥  화택규(火澤睽)<br>
-	39. ䷦  수산건(水山蹇)<br>
-	40. ䷧  뇌수해(雷水解)<br>
-	41. ䷨  산택손(山澤損)<br>
-	42. ䷩  풍뢰익(風雷益)<br>
-	43. ䷪  택천쾌(澤天夬)<br>
-	44. ䷫  천풍구(天風姤)<br>
-	45. ䷬  택지췌(澤地萃)<br>
-	46. ䷭  지풍승(地風升)<br>
-	47. ䷮  택수곤(澤水困)<br>
-	48. ䷯  수풍정(水風井)<br>
-	49. ䷰  택화혁(澤火革)<br>
-	50. ䷱  화풍정(火風鼎)<br>
-	51. ䷲  중뢰진(重雷震)<br>
-	52. ䷳  중산간(重山艮)<br>
-	53. ䷴  풍산점(風山漸)<br>
-	54. ䷵  뇌택귀매(雷澤歸妹)<br>
-	55. ䷶  뇌화풍(雷火豊)<br>
-	56. ䷷  화산려(火山旅)<br>
-	57. ䷸  중풍손(重風巽)<br>
-	58. ䷹  중택태(重澤兌)<br>
-	59. ䷺  풍수환(風水渙)<br>
-	60. ䷻  수택절(水澤節)<br>
-	61. ䷼  풍택중부(風澤中孚)<br>
-	62. ䷽  뇌산소과(雷山小過)<br>
-	63. ䷾  수화기제(水火旣濟)<br>
-	64. ䷿  화수미제(火水未濟)<br>
-</h1>	
+
+	<table>
+		<tr>
+			<td>
+				<h1>
+					[64괘]  <br>
+					01. ䷀  중천<br>
+					02. ䷁  중지<br>
+					03. ䷂  수뢰<br>
+					04. ䷃  산수<br>
+					05. ䷄  수천<br>
+					06. ䷅  천수<br>
+					07. ䷆  지수<br>
+					08. ䷇  수지<br>
+					09. ䷈  풍천<br>
+					10. ䷉  천택<br>
+					11. ䷊  지천<br>
+					12. ䷋  천지<br>
+					13. ䷌  천화<br>
+					14. ䷍  화천<br>
+					15. ䷎  지산<br>
+					16. ䷏  뇌지<br>
+					17. ䷐  택뢰<br>
+					18. ䷑  산풍<br>
+					19. ䷒  지택<br>
+					20. ䷓  풍지<br>
+					21. ䷔  화뢰<br>
+					22. ䷕  산화<br>
+					23. ䷖  산지<br>
+					24. ䷗  지뢰<br>
+					25. ䷘  천뢰<br>
+					26. ䷙  산천<br>
+					27. ䷚  산뢰<br>
+					28. ䷛  택풍<br>
+					29. ䷜  중수<br>
+					30. ䷝  중화<br>
+					31. ䷞  택산<br>
+					32. ䷟  뇌풍<br>
+					33. ䷠  천산<br>
+					34. ䷡  뇌천<br>
+					35. ䷢  화지<br>
+					36. ䷣  지화<br>
+					37. ䷤  풍화<br>
+					38. ䷥  화택<br>
+					39. ䷦  수산<br>
+					40. ䷧  뇌수<br>
+					41. ䷨  산택<br>
+					42. ䷩  풍뢰<br>
+					43. ䷪  택천<br>
+					44. ䷫  천풍<br>
+					45. ䷬  택지<br>
+					46. ䷭  지풍<br>
+					47. ䷮  택수<br>
+					48. ䷯  수풍<br>
+					49. ䷰  택화<br>
+					50. ䷱  화풍<br>
+					51. ䷲  중뢰<br>
+					52. ䷳  중산<br>
+					53. ䷴  풍산<br>
+					54. ䷵  뇌택<br>
+					55. ䷶  뇌화<br>
+					56. ䷷  화산<br>
+					57. ䷸  중풍<br>
+					58. ䷹  중택<br>
+					59. ䷺  풍수<br>
+					60. ䷻  수택<br>
+					61. ䷼  풍택<br>
+					62. ䷽  뇌산<br>
+					63. ䷾  수화<br>
+					64. ䷿  화수<br>
+				</h1>	
+			</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>
+				<h1>
+					<br>
+					[64괘]  <br>
+					01. ䷀  중천건(重天乾)<br>
+					02. ䷁  중지곤(重地坤)<br>
+					03. ䷂  수뢰둔(水雷屯)<br>
+					04. ䷃  산수몽(山水蒙)<br>
+					05. ䷄  수천수(水天需)<br>
+					06. ䷅  천수송(天水訟)<br>
+					07. ䷆  지수사(地水師)<br>
+					08. ䷇  수지비(水地比)<br>
+					09. ䷈  풍천소축(風天小畜)<br>
+					10. ䷉  천택리(天澤履)<br>
+					11. ䷊  지천태(地天泰)<br>
+					12. ䷋  천지비(天地否)<br>
+					13. ䷌  천화동인(天火同人)<br>
+					14. ䷍  화천대유(火天大有)<br>
+					15. ䷎  지산겸(地山謙)<br>
+					16. ䷏  뇌지예(雷地豫)<br>
+					17. ䷐  택뢰수(澤雷隨)<br>
+					18. ䷑  산풍고(山風蠱)<br>
+					19. ䷒  지택림(地澤臨)<br>
+					20. ䷓  풍지관(風地觀)<br>
+					21. ䷔  화뢰서합(火雷噬嗑)<br>
+					22. ䷕  산화비(山火賁)<br>
+					23. ䷖  산지박(山地剝)<br>
+					24. ䷗  지뢰복(地雷復)<br>
+					25. ䷘  천뢰무망(天雷无妄)<br>
+					26. ䷙  산천대축(山天大畜)<br>
+					27. ䷚  산뢰이(山雷頤)<br>
+					28. ䷛  택풍대과(澤風大過)<br>
+					29. ䷜  중수감(重水坎)<br>
+					30. ䷝  중화리(重火離)<br>
+					31. ䷞  택산함(澤山咸)<br>
+					32. ䷟  뇌풍항(雷風恒)<br>
+					33. ䷠  천산둔(天山遯)<br>
+					34. ䷡  뇌천대장(雷天大壯)<br>
+					35. ䷢  화지진(火地晉)<br>
+					36. ䷣  지화명이(地火明夷)<br>
+					37. ䷤  풍화가인(風火家人)<br>
+					38. ䷥  화택규(火澤睽)<br>
+					39. ䷦  수산건(水山蹇)<br>
+					40. ䷧  뇌수해(雷水解)<br>
+					41. ䷨  산택손(山澤損)<br>
+					42. ䷩  풍뢰익(風雷益)<br>
+					43. ䷪  택천쾌(澤天夬)<br>
+					44. ䷫  천풍구(天風姤)<br>
+					45. ䷬  택지췌(澤地萃)<br>
+					46. ䷭  지풍승(地風升)<br>
+					47. ䷮  택수곤(澤水困)<br>
+					48. ䷯  수풍정(水風井)<br>
+					49. ䷰  택화혁(澤火革)<br>
+					50. ䷱  화풍정(火風鼎)<br>
+					51. ䷲  중뢰진(重雷震)<br>
+					52. ䷳  중산간(重山艮)<br>
+					53. ䷴  풍산점(風山漸)<br>
+					54. ䷵  뇌택귀매(雷澤歸妹)<br>
+					55. ䷶  뇌화풍(雷火豊)<br>
+					56. ䷷  화산려(火山旅)<br>
+					57. ䷸  중풍손(重風巽)<br>
+					58. ䷹  중택태(重澤兌)<br>
+					59. ䷺  풍수환(風水渙)<br>
+					60. ䷻  수택절(水澤節)<br>
+					61. ䷼  풍택중부(風澤中孚)<br>
+					62. ䷽  뇌산소과(雷山小過)<br>
+					63. ䷾  수화기제(水火旣濟)<br>
+					64. ䷿  화수미제(火水未濟)<br>
+				</h1>
+			</td>
+		</tr>
+	</table>
+	
 
 <br><br><br>
 
@@ -18423,6 +18523,14 @@ a: <input type="text" id="a_input" value="2050" /><br><br><br>
 <input type="button" value="계산(누차수)" onclick="calc_nucha_number();"><br>
 <input type="text" id="nucha_number_output" value="" /><br><br>
 
+
+율리우스수:<br>
+<input type="text" id="yyyy_julius_input" value="" />년<br>
+<input type="text" id="mm_julius_input" value="" />월<br>
+<input type="text" id="dd_julius_input" value="" />일<br><br>
+<input type="button" value="계산(율리우스수)" onclick="calc_julius_number();"><br>
+<input type="text" id="julius_number_output" value="" /><br><br>
+
 누차수 차이:<br>
 <input type="text" id="yyyy_input_1" value="" />년<br>
 <input type="text" id="mm_input_1" value="" />월<br>
@@ -18436,6 +18544,8 @@ a: <input type="text" id="a_input" value="2050" /><br><br><br>
 
 
 </form>
+
+
 
 
 <script>
@@ -18453,6 +18563,15 @@ a: <input type="text" id="a_input" value="2050" /><br><br><br>
 		var my_dd = eval(document.getElementById("dd_input").value);
 
 		document.getElementById("nucha_number_output").value = `${getNuchaNumber(my_yyyy, my_mm, my_dd)}`;
+
+	}
+
+	function calc_julius_number() {
+		var my_yyyy = eval(document.getElementById("yyyy_julius_input").value);
+		var my_mm = eval(document.getElementById("mm_julius_input").value);
+		var my_dd = eval(document.getElementById("dd_julius_input").value);
+
+		document.getElementById("julius_number_output").value = `${getJuliusNumber(my_yyyy, my_mm, my_dd)}`;
 
 	}
 
