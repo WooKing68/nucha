@@ -9672,7 +9672,28 @@ The <b>greatest error:</b><br>
 							</td>
 						</tr>
 					</table>
-					<br><br>
+					<br>
+					<br>
+					괘설정&nbsp;&nbsp;&nbsp;&nbsp;본괘: <input type="text" id="text_eduJuyeokSaju8bon" name="text_eduJuyeokSaju8bon" value="000111" size="10"></input> &nbsp;&nbsp;
+					변효: <input type="text" id="text_eduJuyeokSaju8byeonhyo" name="text_eduJuyeokSaju8byeonhyo" value="100010" size="10"></input> &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+					<br>
+					검색: 
+					<select id="EduMonthGanJiSelect" name="EduMonthGanJiSelect"> 
+						<option value="">
+					</select>월
+					<select id="EduDayGanSelect" name="EduDayGanSelect"> 
+						<option value="">
+					</select>
+					<select id="EduDayJiSelect" name="EduDayJiSelect"> 
+						<option value="">
+					</select>일
+					<input type="button" value="간지 → 연월일(양력)" onclick="selectYearMonDay();" />
+					<select id="EduYearMonDayByGanJiSelect" name="EduYearMonDayByGanJiSelect"> 
+						<option value="">
+					</select>
+					<input type="button" value="적용" onclick="useEduMonthDayGanJi();" />
+					<br>
+					<br>
 					양력:
 					<select id="eduJuyeokSajuYear1Select" name="eduJuyeokSajuYear1Select"><option value='-1'><option value='19'>19<option value='20'>20</select><select id="eduJuyeokSajuYear2Select" name="eduJuyeokSajuYear2Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select><select id="eduJuyeokSajuYear3Select" name="eduJuyeokSajuYear3Select"><option value='-1'><option value='0'>0<option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9</select>년
 					<select id="eduJuyeokSajuMonthSelect" name="eduJuyeokSajuMonthSelect"><option value='0'><option value='1'>1<option value='2'>2<option value='3'>3<option value='4'>4<option value='5'>5<option value='6'>6<option value='7'>7<option value='8'>8<option value='9'>9<option value='10'>10<option value='11'>11<option value='12'>12</select>월
@@ -9696,26 +9717,6 @@ The <b>greatest error:</b><br>
 						<option value="127.72">춘천
 					</select>지역 &nbsp;&nbsp;
 					담날 남중시각: &nbsp;<input type="text" name="eduJuyeokSajuEOT" size="2" disabled>
-					<br>
-					본괘: <input type="text" id="text_eduJuyeokSaju8bon" name="text_eduJuyeokSaju8bon" value="000111"></input> &nbsp;&nbsp;
-					변효: <input type="text" id="text_eduJuyeokSaju8byeonhyo" name="text_eduJuyeokSaju8byeonhyo" value="100010"></input> &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-					
-					<br>
-					
-					<select id="EduMonthGanJiSelect" name="EduMonthGanJiSelect"> 
-						<option value="">
-					</select>월
-					<select id="EduDayGanSelect" name="EduDayGanSelect"> 
-						<option value="">
-					</select>
-					<select id="EduDayJiSelect" name="EduDayJiSelect"> 
-						<option value="">
-					</select>일
-					<input type="button" value="간지 → 연월일(양력)" onclick="selectYearMonDay();" />
-					<select id="EduYearMonDayByGanJiSelect" name="EduYearMonDayByGanJiSelect"> 
-						<option value="">
-					</select>
-					<input type="button" value="적용" onclick="useEduMonthDayGanJi();" />
 					<br>
 					<br>
 					목적사: <input type="text" name="old6_edu_question" size="50" />
