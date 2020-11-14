@@ -1,8 +1,8 @@
 <html>
 
 <head>
-<meta http-equiv="content-type" content="text/html; charset=euc-kr">
-<title>ÀÎÅÍ³İ °è»ê±â</title>
+<meta http-equiv="content-type" content="text/html; charset=utf8">
+<title>ì¸í„°ë„· ê³„ì‚°ê¸°</title>
 <meta name="generator" content="">
 <script language="JavaScript">
 //-----------------------------------------------------------------------------------------------------------
@@ -36,14 +36,14 @@ function isNumeric(str) {
 
 <script language="JavaScript">
 <!--
-//push ¸Ş¼­µå : »õ·Î¿î ¿ä¼Ò¸¦ Ãß°¡, º¯°æµÈ ¹è¿­ÀÇ ±æÀÌ¸¦ ¸®ÅÏ.
-//pop ¸Ş¼­µå : ¹è¿­ÀÇ ¸¶Áö¸· ¿ä¼Ò¸¦ Á¦°Å. Á¦°ÅÇÑ ¿ä¼Ò¸¦ ¸®ÅÏ.
+//push ë©”ì„œë“œ : ìƒˆë¡œìš´ ìš”ì†Œë¥¼ ì¶”ê°€, ë³€ê²½ëœ ë°°ì—´ì˜ ê¸¸ì´ë¥¼ ë¦¬í„´.
+//pop ë©”ì„œë“œ : ë°°ì—´ì˜ ë§ˆì§€ë§‰ ìš”ì†Œë¥¼ ì œê±°. ì œê±°í•œ ìš”ì†Œë¥¼ ë¦¬í„´.
 
 
-// ¿¬»êÀÚ ¿ì¼±¼øÀ§: »¬¼À, µ¡¼À < ³ª¸ÓÁö¿¬»êÀÚ, ³ª´°¼À, °ö¼À < °ÅµìÁ¦°ö
+// ì—°ì‚°ì ìš°ì„ ìˆœìœ„: ëº„ì…ˆ, ë§ì…ˆ < ë‚˜ë¨¸ì§€ì—°ì‚°ì, ë‚˜ëˆ—ì…ˆ, ê³±ì…ˆ < ê±°ë“­ì œê³±
 var gOperatorPriority = ['(,)', '-,+', '%,/,*', '^'];
 
-//¿¬»êÀÚ ¿ì¼± ¼øÀ§ ¸®ÅÏ
+//ì—°ì‚°ì ìš°ì„  ìˆœìœ„ ë¦¬í„´
 function getOperatorPriority(aOperator) {
 	for(var i=0;i<gOperatorPriority.length;i++) {
 		if (gOperatorPriority[i].includes(aOperator)) {
@@ -51,10 +51,10 @@ function getOperatorPriority(aOperator) {
 		}
 	}
 	
-	return -1; //¿ì¼±¼øÀ§°¡ Á¤ÀÇµÇÁö ¾ÊÀº °ÍÀÌ µé¾î¿È.
+	return -1; //ìš°ì„ ìˆœìœ„ê°€ ì •ì˜ë˜ì§€ ì•Šì€ ê²ƒì´ ë“¤ì–´ì˜´.
 }
 
-//°¡Àå À§¿¡ ÀÖ´Â ¿ä¼Ò¸¦ Á¶È¸. popÀº ¿ä¼Ò¸¦ Á¦°ÅÇÏÁö¸¸ peek´Â Á¶È¸¸¸ ÇÑ´Ù.
+//ê°€ì¥ ìœ„ì— ìˆëŠ” ìš”ì†Œë¥¼ ì¡°íšŒ. popì€ ìš”ì†Œë¥¼ ì œê±°í•˜ì§€ë§Œ peekëŠ” ì¡°íšŒë§Œ í•œë‹¤.
 function peek(aList) {
 	if (aList.length==0) return '';
 	
@@ -62,10 +62,10 @@ function peek(aList) {
 }
 
 
-//ÁßÀ§Ç¥±â¹ıÀ» ÈÄÀ§Ç¥±â¹ıÀ¸·Î º¯È¯ÇÏ±â À§ÇØ »ç¿ëÇÏ´Â ½ºÅÃ.
-//gRightCenterStack ³»¿ëÀ» total_input_after <textarea>¿¡ º¸¿©ÁÖ°Ô µÊ.
-//¹®Á¦Á¡: ÁßÀ§½Ä '7-(-2)'ÀÇ °æ¿ì, ÈÄÀ§½ÄÀ¸·Î °íÄ¥ ¶§, ÀúÀå µÇ´Â ¼ıÀÚ´Â 2°¡ ¾Æ´Ï¶ó -2 ÀÌ¾î¾ß ÇÔ. 
-//ÀĞ¾îµéÀÎ ÁßÀ§½Ä ¹®ÀÚ¿­ÀÇ - ¿ŞÂÊ¿¡ ¿ŞÂÊ °ıÈ£ '('°¡ ÀÖÀ¸¸é '-'´Â ¼ıÀÚÀÇ ÀÏºÎ·Î º»´Ù.
+//ì¤‘ìœ„í‘œê¸°ë²•ì„ í›„ìœ„í‘œê¸°ë²•ìœ¼ë¡œ ë³€í™˜í•˜ê¸° ìœ„í•´ ì‚¬ìš©í•˜ëŠ” ìŠ¤íƒ.
+//gRightCenterStack ë‚´ìš©ì„ total_input_after <textarea>ì— ë³´ì—¬ì£¼ê²Œ ë¨.
+//ë¬¸ì œì : ì¤‘ìœ„ì‹ '7-(-2)'ì˜ ê²½ìš°, í›„ìœ„ì‹ìœ¼ë¡œ ê³ ì¹  ë•Œ, ì €ì¥ ë˜ëŠ” ìˆ«ìëŠ” 2ê°€ ì•„ë‹ˆë¼ -2 ì´ì–´ì•¼ í•¨. 
+//ì½ì–´ë“¤ì¸ ì¤‘ìœ„ì‹ ë¬¸ìì—´ì˜ - ì™¼ìª½ì— ì™¼ìª½ ê´„í˜¸ '('ê°€ ìˆìœ¼ë©´ '-'ëŠ” ìˆ«ìì˜ ì¼ë¶€ë¡œ ë³¸ë‹¤.
 var gLeftCenterStack = null; 
 var gRightCenterStack = null; 
 function change_center2after() {
@@ -77,9 +77,9 @@ function change_center2after() {
 	var sNUM = '';
 	
 	var total_input_center = document.getElementById('total_input_center').value;
-	//ºĞ¼® °úÁ¤¿¡¼­ gLeftCenterStack ¹× gRightCenterStack »ç¿ë.
+	//ë¶„ì„ ê³¼ì •ì—ì„œ gLeftCenterStack ë° gRightCenterStack ì‚¬ìš©.
 	
-	//UTF-16 ±âÁØ ¹®ÀÚ¿­ ±æÀÌ
+	//UTF-16 ê¸°ì¤€ ë¬¸ìì—´ ê¸¸ì´
 	
 	for (var i=0; i<total_input_center.length;i++) {
 		var my_char = total_input_center.charAt(i);
@@ -87,30 +87,30 @@ function change_center2after() {
 		if (my_char==' ') continue;
 		
 		
-		//Áß°ıÈ£, ´ë°ıÈ£´Â ¼Ò°ıÈ£·Î ´ëÄ¡ÇÑ´Ù.
+		//ì¤‘ê´„í˜¸, ëŒ€ê´„í˜¸ëŠ” ì†Œê´„í˜¸ë¡œ ëŒ€ì¹˜í•œë‹¤.
 		if (my_char=='{' || my_char=='[') my_char = '(';
 		if (my_char=='}' || my_char==']') my_char = ')';
 		
 		
-		var IS_MINUS_NUMBER = false; //'-'¸¦ ¼ıÀÚÀÇ ÀÏºÎ·Î º¼ °ÍÀÎ°¡?
+		var IS_MINUS_NUMBER = false; //'-'ë¥¼ ìˆ«ìì˜ ì¼ë¶€ë¡œ ë³¼ ê²ƒì¸ê°€?
 		var IS_OPERATOR = true;
 		
-		//ÇöÀç ¹®ÀÚ°¡ '-'ÀÏ °æ¿ì:
-		//¿ŞÂÊ ¹®ÀÚ°¡ ºñ¾î ÀÖ°Å³ª ¿ŞÂÊ ¹®ÀÚ°¡ '('ÀÏ °æ¿ì, ¿¬»êÀÚ·Î º¸Áö ¾Ê°í À½¼ö ¼ıÀÚÀÇ ÀÏºÎ·Î °£ÁÖÇÑ´Ù. 
+		//í˜„ì¬ ë¬¸ìê°€ '-'ì¼ ê²½ìš°:
+		//ì™¼ìª½ ë¬¸ìê°€ ë¹„ì–´ ìˆê±°ë‚˜ ì™¼ìª½ ë¬¸ìê°€ '('ì¼ ê²½ìš°, ì—°ì‚°ìë¡œ ë³´ì§€ ì•Šê³  ìŒìˆ˜ ìˆ«ìì˜ ì¼ë¶€ë¡œ ê°„ì£¼í•œë‹¤. 
 		if (my_char=='-' && ( before_char == '(' || before_char == '' ) ) {
-			//my_char=='-'¸¦ ¿¬»êÀÚ°¡ ¾Æ´Ñ ¼ıÀÚÀÇ ÀÏºÎ·Î º»´Ù.
+			//my_char=='-'ë¥¼ ì—°ì‚°ìê°€ ì•„ë‹Œ ìˆ«ìì˜ ì¼ë¶€ë¡œ ë³¸ë‹¤.
 			IS_MINUS_NUMBER = true;
 			
 		}
 		
-		//-¸¦ ¿¬»êÀÚ·Î º¸Áö ¾Ê°í ¼ıÀÚÀÇ ÀÏºÎ·Î °£ÁÖ: -(-3)ÀÇ °æ¿ì Ã¹ ¹øÂ° -´Â ¿¬»êÀÚ, µÎ ¹øÂ° -´Â ¼ıÀÚ¸¦ ±¸¼ºÇÏ´Â ÀÏºÎ·Î º»´Ù.
+		//-ë¥¼ ì—°ì‚°ìë¡œ ë³´ì§€ ì•Šê³  ìˆ«ìì˜ ì¼ë¶€ë¡œ ê°„ì£¼: -(-3)ì˜ ê²½ìš° ì²« ë²ˆì§¸ -ëŠ” ì—°ì‚°ì, ë‘ ë²ˆì§¸ -ëŠ” ìˆ«ìë¥¼ êµ¬ì„±í•˜ëŠ” ì¼ë¶€ë¡œ ë³¸ë‹¤.
 		if (isNumeric(my_char) || my_char=='.' || IS_MINUS_NUMBER) {
 			sNUM += my_char;
 			IS_OPERATOR = false;
 			
 		}
 		
-		//'234': '2', '3', '4'¸¦ ¸ğ¾Æ '234'·Î ¸¸µé¾î ¿ìÃø ¸®½ºÆ®¿¡ ÀúÀåÇÑ´Ù. 
+		//'234': '2', '3', '4'ë¥¼ ëª¨ì•„ '234'ë¡œ ë§Œë“¤ì–´ ìš°ì¸¡ ë¦¬ìŠ¤íŠ¸ì— ì €ì¥í•œë‹¤. 
 		if (IS_OPERATOR && getOperatorPriority(my_char)>-1) {
 			if (sNUM != '') {
 				gRightCenterStack.push(sNUM);
@@ -140,17 +140,17 @@ function change_center2after() {
 			}
 		
 		}
-		//°ıÈ£°¡ ¾Æ´Ñ... ±âÅ¸ ¿¬»êÀÚ¸¦ ¸¸³µ´Ù¸é...
+		//ê´„í˜¸ê°€ ì•„ë‹Œ... ê¸°íƒ€ ì—°ì‚°ìë¥¼ ë§Œë‚¬ë‹¤ë©´...
 		else if (IS_OPERATOR && getOperatorPriority(my_char)>-1) {
 			var current_operator_priority = getOperatorPriority(my_char);
 			var top_operator = gLeftCenterStack[gLeftCenterStack.length-1];
 			var top_operator_priority = getOperatorPriority(top_operator);
 			
-			if (gLeftCenterStack.length==0) { //ºñ¾îÀÖ´Ù¸é ¹«Á¶°Ç push
+			if (gLeftCenterStack.length==0) { //ë¹„ì–´ìˆë‹¤ë©´ ë¬´ì¡°ê±´ push
 				gLeftCenterStack.push(my_char);
 			}
 			else if (current_operator_priority > top_operator_priority) {
-				//pop ¾øÀÌ push
+				//pop ì—†ì´ push
 				gLeftCenterStack.push(my_char);
 			}
 			else if (current_operator_priority <= top_operator_priority) {
@@ -159,7 +159,7 @@ function change_center2after() {
 			}
 		}
 		
-		//¹®ÀÚ¿­À» ³¡±îÁö °Ë»öÇß´Ù¸é...
+		//ë¬¸ìì—´ì„ ëê¹Œì§€ ê²€ìƒ‰í–ˆë‹¤ë©´...
 		if (i==(total_input_center.length - 1)) {
 			
 			if (sNUM != '') {
@@ -196,7 +196,7 @@ function change_center2after() {
 }
 
 
-//ÈÄÀ§Ç¥±â¹ıÀ» °¡Áö°í °è»êÇÏ±â À§ÇØ ÇÊ¿äÇÑ ½ºÅÃ.
+//í›„ìœ„í‘œê¸°ë²•ì„ ê°€ì§€ê³  ê³„ì‚°í•˜ê¸° ìœ„í•´ í•„ìš”í•œ ìŠ¤íƒ.
 var gLeftAfterStack = null;  
 var gRightAfterStack = null;
 function calc_after() {
@@ -207,22 +207,22 @@ function calc_after() {
 	
 	var LEN = gLeftAfterStack.length;
 	if (LEN==0) return '';
-	if (LEN==1) return gLeftAfterStack[0]; //¼ıÀÚ ÇÏ³ª µé¾îÀÖ´Â °æ¿ì
+	if (LEN==1) return gLeftAfterStack[0]; //ìˆ«ì í•˜ë‚˜ ë“¤ì–´ìˆëŠ” ê²½ìš°
 
 	
-	//»ç¶÷¿¡°Ô´Â document.getElementById('total_input_after').value
-	//ÇÁ·Î±×·¥Àº gLeftAfterStack(È¤Àº gRightCenterStack)¿¡ Á¢±Ù
-	//gLeftAfterStack[0]ºÎÅÍ Á¢±ÙÇÏ¸é¼­ ºĞ¼®: Áß°£ Áß°£ °è»ê °á°ú´Â gRightAfterStack »ç¿ë.
+	//ì‚¬ëŒì—ê²ŒëŠ” document.getElementById('total_input_after').value
+	//í”„ë¡œê·¸ë¨ì€ gLeftAfterStack(í˜¹ì€ gRightCenterStack)ì— ì ‘ê·¼
+	//gLeftAfterStack[0]ë¶€í„° ì ‘ê·¼í•˜ë©´ì„œ ë¶„ì„: ì¤‘ê°„ ì¤‘ê°„ ê³„ì‚° ê²°ê³¼ëŠ” gRightAfterStack ì‚¬ìš©.
 	
 	
 	for (var i=0;i<LEN;i++) {
 		var each_element = gLeftAfterStack[i];
 		
-		//ÇÇ¿¬»êÀÚ´Â push
+		//í”¼ì—°ì‚°ìëŠ” push
 		if (isNumeric(each_element)) {
 			gRightAfterStack.push(each_element);
 		}
-		//¿¬»êÀÚÀÌ¸é µÎ °³ÀÇ ¼ıÀÚ¸¦ ²¨³½´Ù.
+		//ì—°ì‚°ìì´ë©´ ë‘ ê°œì˜ ìˆ«ìë¥¼ êº¼ë‚¸ë‹¤.
 		else if (getOperatorPriority(each_element)>-1) { 
 			if (gRightAfterStack.length == 1) {
 				//Unary Operator
@@ -237,9 +237,9 @@ function calc_after() {
 				var aNum = gRightAfterStack.pop();
 				var bNum = gRightAfterStack.pop();
 				
-				//»¬¼ÀÀ» Çß´Ù¸é µé¾îÀÖ´Â ¼ıÀÚ°¡ À½¼öÀÏ ¼ö ÀÖÀ½.
+				//ëº„ì…ˆì„ í–ˆë‹¤ë©´ ë“¤ì–´ìˆëŠ” ìˆ«ìê°€ ìŒìˆ˜ì¼ ìˆ˜ ìˆìŒ.
 				if (eval(aNum) < 0) aNum = `(${aNum})`;
-				//²¨³½ µÎ ¼ö¸¦ ¿¬»êÀÚ¸¦ »ç¿ëÇÏ¿© °è»ê ÈÄ, push: °è»ê ¼ø¼­ Áß¿ä(»¬¼À, ³ª´°¼À)
+				//êº¼ë‚¸ ë‘ ìˆ˜ë¥¼ ì—°ì‚°ìë¥¼ ì‚¬ìš©í•˜ì—¬ ê³„ì‚° í›„, push: ê³„ì‚° ìˆœì„œ ì¤‘ìš”(ëº„ì…ˆ, ë‚˜ëˆ—ì…ˆ)
 				gRightAfterStack.push( eval( `(${bNum})${my_operator}(${aNum})` ) );  //(-2) - (-5)
 			}
 		}
@@ -255,7 +255,7 @@ function calc_after() {
 }
 
 
-//ÁßÀ§½ÄÀ» ÈÄÀ§½ÄÀ¸·Î º¯È¯ÇÏ°í ±× °è»ê°ªÀ» Ãâ·ÂÇÑ´Ù.
+//ì¤‘ìœ„ì‹ì„ í›„ìœ„ì‹ìœ¼ë¡œ ë³€í™˜í•˜ê³  ê·¸ ê³„ì‚°ê°’ì„ ì¶œë ¥í•œë‹¤.
 function show_calc_from_total_input_after() {
 	var user_output = document.getElementById('user_output');
 
@@ -306,7 +306,7 @@ function user_test() {
 
 <body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
 <script>
-//NuchaClub.js Å×½ºÆ®
+//NuchaClub.js í…ŒìŠ¤íŠ¸
 <!--
 //my_alert();
 -->
@@ -321,7 +321,7 @@ function user_test() {
 		<td width="681" align="right">
 			
 			<textarea id='total_input_center' cols="52" style="font-size:20pt;text-align:right;" rows="5">2 * (( 3 + 5) + ((6 - 7) * (1 + 2))) + 6/2</textarea>
-			<!--<textarea>vaue: ÁßÀ§½Ä</textarea>-->
+			<!--<textarea>vaue: ì¤‘ìœ„ì‹</textarea>-->
 			
 		</td>
 	</tr>
@@ -329,7 +329,7 @@ function user_test() {
 		<td width="681" align="right">
 			
 			<textarea id='total_input_after' cols="52" style="font-size:20pt;text-align:right;" rows="5" disabled></textarea>
-			<!--<textarea>vaue: ÈÄÀ§½Ä</textarea>-->
+			<!--<textarea>vaue: í›„ìœ„ì‹</textarea>-->
 			
 		</td>
 	</tr>
@@ -337,7 +337,7 @@ function user_test() {
 		<td width="681" align="right">
 			
 			<textarea id='user_output' cols="48" rows='5' style="font-size:20pt;text-align: right;font-weight: bold;"></textarea>
-			<!--<textarea>vaue: °á°ú°ª</textarea>-->
+			<!--<textarea>vaue: ê²°ê³¼ê°’</textarea>-->
 			
 		</td>
 	</tr>
