@@ -1,0 +1,682 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=euc-kr">
+<title>제목 없음</title>
+<meta name="generator" content="Namo WebEditor v6.0">
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+<p align="center">&nbsp;</p>
+<p align="center"><font size="7">계산기 제작 이론</font></p>
+<p align="center">&nbsp;</p>
+<p align="center"><b>자료 구조 스택(LIFO)을 이용한 계산기 제작 원리</b></p>
+<p align="center"><b>연산자 우선 순위</b>: <font color="red"><b>['-,+', '%,/,*', '^']</b></font>: 뺄셈, 덧셈 &lt; 나머지연산자, 나눗셈, 곱셈 &lt; 거듭제곱</p>
+<p align="center">&nbsp;</p>
+<p align="center">수식은 사람이 보통 사용하는 중위식 표현이 있고, </p>
+<p align="center">컴퓨터가 계산하는데 용이도록&nbsp;연산자&nbsp;우선&nbsp;순위를&nbsp;고려한 후위식이 있다.</p>
+<p align="center">&nbsp;</p>
+<p align="center">계산기를 만들려면 입력받은 중위식을 후위식으로 변환해야 한다.</p>
+<p align="center">&nbsp;</p>
+<p align="center">수식 예)</p>
+<p align="center"><b>중위식</b>: 중위식은 연산자가 피연산자들 중간에 위치한다.<br>2 * ( 3 + 5 )</p>
+<table border="1" align="center">
+    <tr>
+        <td width="185">
+
+            <p align="center"><b><font color="red">2</font></b></p>
+</td>
+        <td width="185">
+
+            <p align="center"><b><font color="red">*</font></b></p>
+</td>
+        <td width="185">
+
+            <p align="center"><b><font color="red">(</font></b></p>
+</td>
+        <td width="185">
+
+            <p align="center"><b><font color="red">3</font></b></p>
+</td>
+        <td width="185">
+
+            <p align="center"><b><font color="red">+</font></b></p>
+</td>
+        <td width="185">
+
+            <p align="center"><b><font color="red">5</font></b></p>
+</td>
+        <td width="185">
+
+            <p align="center"><b><font color="red">)</font></b></p>
+</td>
+    </tr>
+</table>
+<p align="center">&nbsp;</p>
+<p align="center">&nbsp;</p>
+<p align="center">&nbsp;</p>
+<p align="center">후위식으로 변환 원리 3가지: <br>괄호는 출력하지 않는다.<br>먼저 기본적으로 기억할 것은 피연산자는 스택에 넣지 않고 출력하며<br>(가 들어오면 무조건 스택에 push,<br>연산자는 스택이 비어있을 경우 무조건 push,<br>연산자는 스택이 비어있지 않을 경우, 스택에 있는 연산자와 우선 순위 비교가 필요하다.<br><font color="red"><b>만약 현재 연산자 우선 순위가 크다면 pop 없이 push한다.</b></font><br><font color="blue"><b>만약 스택에 들어있는 연산자의 우선 순위가 같거나 높다면 스택에 있는 연산자는 pop하여 출력하고<br>현재 연산자를 push</b></font>해야 한다. <br>수식이 끝나면 스택이 빌 때까지 pop 하여 출력한다.</p>
+<ol>
+    <li><div align="center">높은 연산자는 push, 낮은 연산자는 높은 연산자를 pop한 후 push, 피연산자는 출력.</div></li>
+    <li><div align="center">'(' 연산자가 들어오면 무조건 push</div></li>
+    <li><div align="center">')' 연산자가 들어오면 맞는 쌍의 '('를 찾기 위해 '(' 나올 때까지 스택 데이터를 계속 pop...</div></li>
+</ol>
+<p align="center">피연산자 2는 출력: 2<br>연산자 *는 push<br>연산자 (는 push<br>피연산자 3은 출력: 2 3<br>연산자 +는 </p>
+<p align="center">&nbsp;</p>
+<p align="center"><b>후위식</b>: 후위식은 연산자가 피연산자들 뒤에 위치한다.<br>2 3 5 + *</p>
+<table border="1" align="center">
+    <tr>
+        <td width="262">
+
+            <p align="center"><b><font color="red">2</font></b></p>
+</td>
+        <td width="262">
+
+            <p align="center"><b><font color="red">3</font></b></p>
+</td>
+        <td width="262">
+
+            <p align="center"><b><font color="red">5</font></b></p>
+</td>
+        <td width="262">
+
+            <p align="center"><b><font color="red">+</font></b></p>
+</td>
+        <td width="262">
+
+            <p align="center"><b><font color="red">*</font></b></p>
+</td>
+    </tr>
+</table>
+<p align="center">&nbsp;</p>
+<p align="center">후위식을 계산하는 원리 2가지: 만약 연산자일 경우 피연산자 2개를 pop 해야 함.</p>
+<ol>
+    <li><div align="center">피연산자가 들어오면 push</div></li>
+    <li><div align="center">연산자가 들어오면 스택에 들어있는 피연산자 2개를 pop 수행하여 스택에 push. <br>첫 번째 데이터가 두 번째 피연산자가 되고, 두 번째 데이터가 첫 번째 피연산자가 된다.<br>연산 마친 뒤, 스택에 남아있는 하나의 피연산자가 연산결과 수행.<br></div></li>
+</ol>
+<p align="center">즉, <br>피연산자 2를 push<br>피연산자 3을 push<br>피연산자 5를 push<br>연산자 +를 만나면 스택에 들어있는 2개의 피연산자 5, 3을 pop<br>3+5를 계산: 8<br>연산자 *를 만나면 스택에 들어있는 2개의 피연산자 8, 2를 pop<br>2*8을 계산: 16</p>
+<p align="center">계산 결과값: 16</p>
+<p align="center">&nbsp;</p>
+<p align="center">&nbsp;</p>
+<hr>
+<p align="center">중위식: A+B*C</p>
+<p align="center"><img src="A+B곱C.jpg" width="820" height="478" border="0"></p>
+<p align="center"><br>&nbsp;후위식: ABC*+</p>
+<hr>
+<p align="center">&nbsp;</p>
+<p align="center">중위식: (A+B)*(C+D)</p>
+<p align="center">&nbsp;</p>
+<p align="center"><img src="(A+B)곱(C+D).jpg" width="1196" height="569" border="1"></p>
+<p align="center"><img src="(A+B)곱(C+D)_01.png" width="820" height="425" border="0"></p>
+<p align="center"><img src="(A+B)곱(C+D)_02.png" width="1014" height="668" border="0"></p>
+<p align="center">후위식: AB+CD+*</p>
+<hr>
+<p align="left">중위식: A+B*C</p>
+<p align="left">후위식: ABC*+</p>
+<p align="left">&nbsp;</p>
+<p align="left">중위식: (A+B)*(C+D)</p>
+<p align="left">후위식: AB+CD+*</p>
+<p align="left">&nbsp;</p>
+<p align="left">중위식: A*B+C</p>
+<p align="left">후위식: AB*C+</p>
+<p align="left">&nbsp;</p>
+<p align="left">중위식: A*(B+C)</p>
+<p align="left">후위식: ABC+*</p>
+<p align="left">&nbsp;</p>
+<p align="left">중위식: (A*(B+C))-D</p>
+<p align="left">후위식: ABC+*D-</p>
+<hr>
+<p align="center"><img src="calc_after.jpg" width="1546" height="756" border="1"></p>
+<hr>
+<p align="center">&nbsp;</p>
+<p align="center"><b>연산자 우선 순위</b></p>
+<table style="margin: 0px 0px 20px; padding: 0px; border: 1px solid rgba(212, 221, 228, 0.5); box-sizing: border-box; width: 959.2px; max-width: 100%; border-collapse: collapse; background: rgb(255, 255, 255); color: rgb(51, 51, 51); font-family: Arial, x-locale-body, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: -0.04448px; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;" align="center">
+    <tbody style="margin: 0px; padding: 0px; border: 0px;">
+
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <th style="margin: 0px; padding: 5px; border: 1px solid rgb(212, 221, 228); font-style: inherit; font-weight: inherit; text-align: left; background: rgba(212, 221, 228, 0.5);">
+            <p align="center">우선순위</p>
+</th>
+        <th style="margin: 0px; padding: 5px; border: 1px solid rgb(212, 221, 228); font-style: inherit; font-weight: inherit; text-align: left; background: rgba(212, 221, 228, 0.5);">
+            <p align="center">연산자 유형</p>
+</th>
+        <th style="margin: 0px; padding: 5px; border: 1px solid rgb(212, 221, 228); font-style: inherit; font-weight: inherit; text-align: left; background: rgba(212, 221, 228, 0.5);">
+            <p align="center">결합성</p>
+</th>
+        <th style="margin: 0px; padding: 5px; border: 1px solid rgb(212, 221, 228); font-style: inherit; font-weight: inherit; text-align: left; background: rgba(212, 221, 228, 0.5);">
+            <p align="center">연산자</p>
+</th></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">21</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Grouping" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">그룹</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">없음</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">( … )</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td colspan="1" rowspan="5" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">20</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Property_Accessors#%EC%A0%90_%ED%91%9C%EA%B8%B0%EB%B2%95" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">멤버 접근</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… . …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Property_Accessors#%EA%B4%84%ED%98%B8_%ED%91%9C%EA%B8%B0%EB%B2%95" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">계산된 멤버 접근</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… [ … ]</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/new" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">new</code></a><span>&nbsp;</span>(매개변수 리스트 존재)</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">없음</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">new … ( … )</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+
+            <p style="margin: 0px 0px 24px; padding: 0px; border: 0px; box-sizing: border-box; max-width: 100%;" align="center"><a class="new" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Functions" rel="nofollow" style="margin: 0px; padding: 0px; border: 0px; color: rgb(153, 0, 0); text-decoration: none;">함수 호출</a></p></td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… (<span>&nbsp;</span><var style="margin: 0px; padding: 0px; border: 0px; font-style: italic; font-weight: inherit;">…<span>&nbsp;</span></var>)</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Optional_chaining" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">Optional chaining</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">?.</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="1" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">19</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/new" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">new</code></a><span>&nbsp;</span>(매개변수 리스트 생략)</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">우결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">new …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="2" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">18</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Increment" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">후위 증가</a></p>
+</td>
+        <td colspan="1" rowspan="2" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">없음</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… ++</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Decrement" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">후위 감소</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… --</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td colspan="1" rowspan="10" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">17</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a class="new" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Logical_Operators#Logical_NOT" rel="nofollow" style="margin: 0px; padding: 0px; border: 0px; color: rgb(153, 0, 0); text-decoration: none;">논리 NOT</a></p>
+</td>
+        <td colspan="1" rowspan="10" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">우결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">! …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_NOT" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">비트 NOT</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">~ …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Unary_plus" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">단항 양부호</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">+ …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Unary_negation" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">단항 부정</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">- …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Increment" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">전위 증가</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">++ …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Decrement" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">전위 감소</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">-- …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/typeof" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">typeof</code></a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">typeof …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/void" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">void</code></a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">void …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/delete" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">delete</code></a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">delete …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/await" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">await</code></a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">await …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">16</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Exponentiation" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">거듭제곱</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">우결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… ** …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="3" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">15</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Multiplication" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">곱셈</a></p>
+</td>
+        <td colspan="1" rowspan="3" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… * …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Division" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">나눗셈</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… / …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Remainder" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">나머지</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… % …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="2" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">14</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Addition" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">덧셈</a></p>
+</td>
+        <td colspan="1" rowspan="2" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… + …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Subtraction" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">뺄셈</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… - …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="3" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">13</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">비트 왼쪽 시프트</a></p>
+</td>
+        <td colspan="1" rowspan="3" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &lt;&lt; …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">비트 오른쪽 시프트</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &gt;&gt; …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">비트 부호 없는 오른쪽 시프트</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &gt;&gt;&gt; …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="6" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">12</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Less_than_operator" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">미만</a></p>
+</td>
+        <td colspan="1" rowspan="6" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &lt; …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Less_than__or_equal_operator" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">이하</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &lt;= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Greater_than_operator" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">초과</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &gt; …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Greater_than_or_equal_operator" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">이상</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &gt;= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/in" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">in</code></a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… in …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/instanceof" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">instanceof</code></a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… instanceof …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="4" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">11</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Equality" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">동등</a></p>
+</td>
+        <td colspan="1" rowspan="4" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… == …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Inequality" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">부등</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… != …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Identity" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">일치</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… === …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comparison_Operators#Nonidentity" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">불일치</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… !== …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">10</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_AND" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">비트 AND</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &amp; …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">9</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_XOR" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">비트 XOR</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… ^ …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">8</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Bitwise_OR" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">비트 OR</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… | …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">7</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a class="external" href="https://wiki.developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator" rel="noopener" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">널 병합 연산자</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… ?? …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">6</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a class="new" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Logical_Operators#Logical_AND" rel="nofollow" style="margin: 0px; padding: 0px; border: 0px; color: rgb(153, 0, 0); text-decoration: none;">논리 AND</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &amp;&amp; …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">5</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a class="new" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Logical_Operators#Logical_OR" rel="nofollow" style="margin: 0px; padding: 0px; border: 0px; color: rgb(153, 0, 0); text-decoration: none;">논리 OR</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… || …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">4</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Conditional_Operator" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">조건</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">우결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… ? … : …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="13" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">3</p>
+</td>
+        <td rowspan="13" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Assignment_Operators" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">할당</a></p>
+</td>
+        <td rowspan="13" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">우결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… = …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… += …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… -= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… **= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… *= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… /= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… %= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &lt;&lt;= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &gt;&gt;= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &gt;&gt;&gt;= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… &amp;= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… ^= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… |= …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td rowspan="2" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">2</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/yield" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">yield</code></a></p>
+</td>
+        <td colspan="1" rowspan="2" style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">우결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">yield …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/yield*" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">yield*</code></a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">yield* …</code></p>
+</td></tr>
+    <tr style="margin: 0px; padding: 0px; border: 0px;">
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">1</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Comma_Operator" style="margin: 0px; padding: 0px; border: 0px; color: rgb(61, 126, 154); text-decoration: none;">쉼표 / 시퀀스</a></p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center">좌결합성</p>
+</td>
+        <td style="margin: 0px; padding: 5px; border: 1px solid rgb(204, 204, 204); text-align: left; vertical-align: top;">
+            <p align="center"><code style="margin: 0px; padding: 0px 2px; border: 0px; font-style: inherit; font-weight: inherit; background-color: rgba(220, 220, 220, 0.5); border-radius: 2px; font-family: consolas, &quot;Liberation Mono&quot;, courier, monospace; overflow-wrap: break-word;">… , …</code></p>
+</td></tr></tbody></table>
+<p align="center">&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+
+</html>

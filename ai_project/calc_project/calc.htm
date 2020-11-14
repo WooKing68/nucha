@@ -1,0 +1,412 @@
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=euc-kr">
+<title>계산기 ( NuchaClub4AI )</title>
+<script type="text/javascript" src="NuchaClub.js"></script>
+<meta name="generator" content="Namo WebEditor v6.0">
+<script language="JavaScript">
+
+//push 메서드 : 새로운 요소를 추가, 변경된 배열의 길이를 리턴.
+//pop 메서드 : 배열의 마지막 요소를 제거. 제거한 요소를 리턴.
+
+
+// 연산자 우선순위: 뺄셈, 덧셈 < 나머지연산자, 나눗셈, 곱셈 < 거듭제곱
+var gOperatorPriority = ['(,)', '-,+', '%,/,*', '^'];
+
+//연산자 우선 순위 리턴
+function getOperatorPriority(aOperator) {
+	for(var i=0;i<gOperatorPriority.length;i++) {
+		if (gOperatorPriority[i].includes(aOperator)) {
+			return i;
+		}
+	}
+	
+	return -1; //우선순위가 정의되지 않은 것이 들어옴.
+}
+
+//가장 위에 있는 요소를 조회. pop은 요소를 제거하지만 peek는 조회만 한다.
+function peek(aList) {
+	if (aList.length==0) return '';
+	
+	return aList[aList.length - 1];
+}
+
+
+//중위표기법을 후위표기법으로 변환하기 위해 사용하는 스택.
+//gRightCenterStack 내용을 total_input_after <textarea>에 보여주게 됨.
+//문제점: 중위식 '7-(-2)'의 경우, 후위식으로 고칠 때, 저장 되는 숫자는 2가 아니라 -2 이어야 함. 
+//읽어들인 중위식 문자열의 - 왼쪽에 왼쪽 괄호 '('가 있으면 '-'는 숫자의 일부로 본다.
+var gLeftCenterStack = null; 
+var gRightCenterStack = null; 
+function change_center2after() {
+	
+	gLeftCenterStack = [];
+	gRightCenterStack = [];
+	
+	var before_char = '';
+	var sNUM = '';
+	
+	var total_input_center = document.getElementById('total_input_center').value;
+	//분석 과정에서 gLeftCenterStack 및 gRightCenterStack 사용.
+	
+	//UTF-16 기준 문자열 길이
+	
+	for (var i=0; i<total_input_center.length;i++) {
+		var my_char = total_input_center.charAt(i);
+		
+		if (my_char==' ') continue;
+		
+		
+		//중괄호, 대괄호는 소괄호로 대치한다.
+		if (my_char=='{' || my_char=='[') my_char = '(';
+		if (my_char=='}' || my_char==']') my_char = ')';
+		
+		
+		var IS_MINUS_NUMBER = false; //'-'를 숫자의 일부로 볼 것인가?
+		var IS_OPERATOR = true;
+		
+		//현재 문자가 '-'일 경우:
+		//왼쪽 문자가 비어 있거나 왼쪽 문자가 '('일 경우, 연산자로 보지 않고 음수 숫자의 일부로 간주한다. 
+		if (my_char=='-' && ( before_char == '(' || before_char == '' ) ) {
+			//my_char=='-'를 연산자가 아닌 숫자의 일부로 본다.
+			IS_MINUS_NUMBER = true;
+			
+		}
+		
+		//-를 연산자로 보지 않고 숫자의 일부로 간주: -(-3)의 경우 첫 번째 -는 연산자, 두 번째 -는 숫자를 구성하는 일부로 본다.
+		if (isNumeric(my_char) || my_char=='.' || IS_MINUS_NUMBER) {
+			sNUM += my_char;
+			IS_OPERATOR = false;
+			
+		}
+
+		//현재 문자가 +이고 그 전 문자가 여는 괄호 혹은 empty string이라면 처리하지 않고 통과(skip)
+		//예: +2+5에서 2 앞의 +
+		//예: (+5+2)에서 괄호 안 5 앞의 +
+		if (my_char=='+' && ( before_char == '(' || before_char == '' ) ) {
+			continue;
+		}
+
+		
+		
+		
+		//'234': '2', '3', '4'를 모아 '234'로 만들어 우측 리스트에 저장한다. 
+		if (IS_OPERATOR && getOperatorPriority(my_char)>-1) {
+			if (sNUM != '') {
+				gRightCenterStack.push(sNUM);
+				sNUM = '';
+			}
+		}
+		
+		if (my_char=='(') {
+			gLeftCenterStack.push(my_char);
+		}
+		else if (my_char==')') {
+			while (true) {
+				//console.log('while_1');
+				
+				var my_pop = gLeftCenterStack.pop();
+				if (my_pop != '(') {
+					gRightCenterStack.push(my_pop);
+				}
+				
+				if (my_pop == '(') {
+					break;
+				}
+				
+				if (gLeftCenterStack.length == 0) {
+					break;
+				}
+			}
+		
+		}
+		//괄호가 아닌... 기타 연산자를 만났다면...
+		else if (IS_OPERATOR && getOperatorPriority(my_char)>-1) {
+			var current_operator_priority = getOperatorPriority(my_char);
+			var top_operator = gLeftCenterStack[gLeftCenterStack.length-1];
+			var top_operator_priority = getOperatorPriority(top_operator);
+			
+			if (gLeftCenterStack.length==0) { //비어있다면 무조건 push
+				gLeftCenterStack.push(my_char);
+			}
+			else if (current_operator_priority > top_operator_priority) {
+				//pop 없이 push
+				gLeftCenterStack.push(my_char);
+			}
+			else if (current_operator_priority <= top_operator_priority) {
+				//현재 연산자보다 우선순위가 높거나 같은 연산자를 왼쪽에서 꺼내서 옮긴다.
+				while (true) {
+					gRightCenterStack.push(gLeftCenterStack.pop());
+
+					top_operator = gLeftCenterStack[gLeftCenterStack.length-1];
+					if (gLeftCenterStack.length==0 || current_operator_priority > top_operator_priority) {
+						gLeftCenterStack.push(my_char);
+						break;
+					}
+				}
+			}
+		}
+		
+		//문자열을 끝까지 검색했다면...
+		if (i==(total_input_center.length - 1)) {
+			
+			if (sNUM != '') {
+				gRightCenterStack.push(sNUM);
+				sNUM = '';
+			}
+			
+			while (true) {
+				//console.log('while_2');
+				
+				if (gLeftCenterStack.length == 0) {
+					break;
+				}
+				else {
+					var my_pop = gLeftCenterStack.pop();
+					gRightCenterStack.push(my_pop);
+				}
+			}
+			
+			//console.log("Right: " + gRightCenterStack);
+			//console.log("");
+		}
+		
+		//console.log(i+": " + my_char);
+		//console.log("Left: " + gLeftCenterStack);
+		//console.log("Right: " + gRightCenterStack);
+		//console.log("");
+		
+		before_char = my_char;
+		
+	}
+	
+	document.getElementById('total_input_after').value = gRightCenterStack;
+}
+
+
+//후위표기법을 가지고 계산하기 위해 필요한 스택.
+var gLeftAfterStack = null;  
+var gRightAfterStack = null;
+function calc_after() {
+
+	gLeftAfterStack = gRightCenterStack;
+	gRightAfterStack = [];
+	
+	
+	var LEN = gLeftAfterStack.length;
+	if (LEN==0) return '';
+	if (LEN==1) return gLeftAfterStack[0]; //숫자 하나 들어있는 경우
+
+	
+	//사람에게는 document.getElementById('total_input_after').value
+	//프로그램은 gLeftAfterStack(혹은 gRightCenterStack)에 접근
+	//gLeftAfterStack[0]부터 접근하면서 분석: 중간 중간 계산 결과는 gRightAfterStack 사용.
+	
+	
+	for (var i=0;i<LEN;i++) {
+		var each_element = gLeftAfterStack[i];
+		
+		//피연산자는 push
+		if (isNumeric(each_element)) {
+			gRightAfterStack.push(each_element);
+		}
+		//연산자이면 두 개의 숫자를 꺼낸다.
+		else if (getOperatorPriority(each_element)>-1) { 
+			if (each_element=='^') { //거듭제곱: 실제 사용 가능한 거듭제곱 연산자로 바꿔준다.
+				each_element = "**"; //2^3 = 2**3 = 8
+			}
+
+			if (gRightAfterStack.length == 1) {
+				//Unary Operator
+				var my_operator = each_element;
+				var aNum = gRightAfterStack.pop();
+				
+				gRightAfterStack.push( eval(my_operator + `(${aNum})`) );
+				
+			}
+			else {
+				var my_operator = each_element;
+				var aNum = gRightAfterStack.pop();
+				var bNum = gRightAfterStack.pop();
+				
+				//뺄셈을 했다면 들어있는 숫자가 음수일 수 있음.
+				if (eval(aNum) < 0) aNum = `(${aNum})`;
+				//꺼낸 두 수를 연산자를 사용하여 계산 후, push: 계산 순서 중요(뺄셈, 나눗셈)
+				gRightAfterStack.push( eval( `(${bNum})${my_operator}(${aNum})` ) );  //(-2) - (-5)
+			}
+		}
+		
+		//console.log(i+": " + each_element);
+		//console.log("Left: " + gLeftAfterStack);
+		//console.log("Right: " + gRightAfterStack);
+		//console.log("");
+		
+	}
+	
+	return gRightAfterStack[0];
+}
+
+
+//중위식을 후위식으로 변환하고 그 계산값을 출력한다.
+function show_calc_from_total_input_after() {
+	var user_output = document.getElementById('user_output');
+
+	try {
+		change_center2after();
+		
+		user_output.value = calc_after();
+	}
+	catch (e) {
+		my_error_msg = '';
+		my_error_msg += e.name + "\n";
+		my_error_msg += e.message;
+		user_output.value = my_error_msg;	
+	}
+	
+	
+	
+}
+
+
+</script>
+
+
+<script>
+
+function user_input_click(aClick) {
+	var part_input = document.getElementById('part_input');
+	part_input.value += aClick;
+	
+	var total_input_center = document.getElementById('total_input_center');
+	total_input_center.value += aClick;
+	
+	var total_after = document.getElementById('total_input_after');
+	total_input_after.value += aClick;
+}
+
+</script>
+
+<script>
+
+function user_test() {
+	var test_input_center = document.getElementById('test_input_center');
+	test_input_center.value = 2**3;
+}
+
+</script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="purple" alink="red">
+<script>
+
+
+</script>
+ 		<br>
+
+
+
+<form id='frm_calc'>
+<table id='tbl_calc' border='1' align='center' width="691">
+	<tr>
+		<td width="681" align="right">
+			
+			<textarea id='total_input_center' cols="52" style="font-size:20pt;text-align:right;" rows="5">2 * (( 3 + 5) + ((6 - 7) * (1 + 2))) + 6/2</textarea>
+			<!--<textarea>vaue: 중위식</textarea>-->
+			
+		</td>
+	</tr>
+	<tr>
+		<td width="681" align="right">
+			
+			<textarea id='total_input_after' cols="52" style="font-size:20pt;text-align:right;" rows="5" disabled></textarea>
+			<!--<textarea>vaue: 후위식</textarea>-->
+			
+		</td>
+	</tr>
+	<tr>
+		<td width="681" align="right">
+			
+			<textarea id='user_output' cols="48" rows='5' style="font-size:20pt;text-align: right;font-weight: bold;"></textarea>
+			<!--<textarea>vaue: 결과값</textarea>-->
+			
+		</td>
+	</tr>
+	<tr>
+		<td width="681" align="right">
+			
+			<input type='text' id='part_input' value='0' size="73" style="font-size:14pt;text-align: right;">
+			
+		</td>
+	</tr>
+	<tr>        
+        <td width="681" align="right">
+
+            <img src="calc2.jpg" width="746" height="320" border="1" usemap="#ImageMap1"><br>
+            <img src="calc_part_1.jpg" width="746" height="66" border="1" usemap="#ImageMap2">            <map name="ImageMap2">
+            <area shape="rect" coords="233, 3, 296, 60" href="javascript:user_input_click('[');">
+            <area shape="rect" coords="305, 5, 369, 60" href="javascript:user_input_click(']');">
+                <area shape="rect" coords="8, 7, 73, 57" href="javascript:user_test();">
+            </map><map name="ImageMap1">
+
+            <area shape="rect" coords="379, 266, 512, 314" href="javascript:user_input_click('0');">
+            <area shape="rect" coords="377, 196, 441, 256" href="javascript:user_input_click('1');">
+            <area shape="rect" coords="450, 196, 514, 255" href="javascript:user_input_click('2');">
+            <area shape="rect" coords="525, 196, 589, 255" href="javascript:user_input_click('3');">
+            <area shape="rect" coords="380, 139, 438, 185" href="javascript:user_input_click('4');">
+            <area shape="rect" coords="450, 139, 512, 186" href="javascript:user_input_click('5');">
+            <area shape="rect" coords="525, 139, 589, 185" href="javascript:user_input_click('6');">
+            <area shape="rect" coords="377, 68, 441, 125" href="javascript:user_input_click('7');">
+            <area shape="rect" coords="452, 68, 516, 124" href="javascript:user_input_click('8');">
+            <area shape="rect" coords="527, 68, 590, 125" href="javascript:user_input_click('9');">
+            <area shape="rect" coords="524, 267, 588, 313" href="javascript:user_input_click('.');">
+            <area shape="rect" coords="598, 267, 661, 313" href="javascript:user_input_click('+');">
+            <area shape="rect" coords="598, 196, 661, 255" href="javascript:user_input_click('-');">
+            <area shape="rect" coords="597, 139, 663, 186" href="javascript:user_input_click('*');">
+            <area shape="rect" coords="597, 68, 661, 126" href="javascript:user_input_click('/');">
+            <area shape="rect" coords="230, 8, 294, 55" href="javascript:user_input_click('(');">
+            <area shape="rect" coords="304, 8, 367, 56" href="javascript:user_input_click(')');">
+            <area shape="rect" coords="379, 8, 441, 55" href="javascript:user_input_click('<');">
+			<area shape="rect" coords="672, 197, 734, 314" href="javascript:show_calc_from_total_input_after('=');">
+			</map></p>
+		</td>
+	</tr>
+</table>
+</form>
+<p>&nbsp;</p>
+	<p align="center"><textarea id='test_input_center' cols="75" style="font-size:14pt;text-align:right;" rows="5">123, 45, 6789, *, +</textarea></p>
+<p align="center">&nbsp;</p>
+<hr>
+<br><br><br>
+덧셈: + 		<br>
+뺄셈: - 		<br>
+곱셈: * 		<br>
+나눗셈: / 		<br>
+거듭제곱: ^ 	<br>
+<br><br><br>
+<hr>
+<br><br><br>
+<table border="1" align="center">
+	<tr>
+		<td>중위식</td><td>후위식</td>
+	</tr>
+	<tr>
+		<td>A+B*C</td><td>ABC*+</td>
+	</tr>
+	<tr>
+		<td>(A+B)*(C+D)</td><td>AB+CD+*</td>
+	</tr>
+	<tr>
+		<td>A*B+C</td><td>AB*C+</td>
+	</tr>
+	<tr>
+		<td>A*(B+C)</td><td>ABC+*</td>
+	</tr>
+	<tr>
+		<td>(A*(B+C))-D</td><td>ABC+*D-</td>
+	</tr>
+</table>	
+
+</body>
+
+</html>
