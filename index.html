@@ -10,7 +10,7 @@
 	<meta name="Description" content="구성, 주역, 사주, 체질">
 
 	<SCRIPT LANGUAGE="JavaScript" SRC="juyeok_data.js"></SCRIPT>
-	<!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script-->
+		<!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script-->
 	<!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script-->
 	
 	<!--sheetjs create xlsx excel example(array of array)-->
@@ -437,7 +437,7 @@ var g_yyyy_mm_dd_hh = {"year":"year", "month":null, "day":null, "hour":null};
 //"204809":"백로070726추분070726",
 
 
-
+//참조: http://lifesci.net/pod/plugin/eclon24/
 var g_div24 = 
 {
 	"192012":"대설071830동지221217",
@@ -2005,6 +2005,8 @@ var g_div24 =
 
 	"205101":"소한061827대한201147" 
 };
+//도: "205101":"소한051827대한201147" 
+//도: "205101":"소한051901대한201218" 
 
 /**
 console.log();
@@ -16835,7 +16837,7 @@ block: 보이기
 
 			//월간, 연간에 없다면...
 			if (mok_idx==7 && to_idx==7) {
-				//mok_idx=3; to_idx=3;
+				mok_idx=3; to_idx=3;
 
 			}
 			else if (mok_idx<to_idx) {
@@ -16858,7 +16860,7 @@ block: 보이기
 
 			//월간, 연간에 없다면...
 			if (mok_idx==7 && geum_idx==7) {
-				//mok_idx=3; geum_idx=3;
+				mok_idx=3; geum_idx=3;
 
 			}
 			else if (mok_idx<geum_idx) {
@@ -16881,7 +16883,7 @@ block: 보이기
 
 			//월간, 연간에 없다면...
 			if (mok_idx==7 && su_idx==7) {
-				//mok_idx=3; su_idx=3;
+				mok_idx=3; su_idx=3;
 
 			}
 			else if (mok_idx<su_idx) {
@@ -16905,7 +16907,7 @@ block: 보이기
 
 			//월간, 연간에 없다면...
 			if (to_idx==7 && geum_idx==7) {
-				//to_idx=3; geum_idx=3;
+				to_idx=3; geum_idx=3;
 
 			}
 			else if (to_idx<geum_idx) {
@@ -16930,7 +16932,7 @@ block: 보이기
 
 			//월간, 연간에 없다면...
 			if (to_idx==7 && su_idx==7) {
-				//to_idx=3; su_idx=3;
+				to_idx=3; su_idx=3;
 
 			}
 			else if (to_idx<su_idx) {
@@ -16955,7 +16957,7 @@ block: 보이기
 
 			//월간, 연간에 없다면...
 			if (geum_idx==7 && su_idx==7) {
-				//geum_idx=3; su_idx=3;
+				geum_idx=3; su_idx=3;
 
 			}
 			else if (geum_idx<su_idx) {
@@ -17003,39 +17005,70 @@ block: 보이기
 
 		//idx 값이 작을수록 에너지 강도가 더 강함.
 
-		//상화가 없거나 (군화<상화)라면 
+		 
+		var MY_HTML= 1;
+		var MY_EXCEL = 2;
+		var HTML_OR_EXCEL = MY_HTML;
 
-		var TU1 = "⚏1"; //군화: 태음
-		var TU2 = "⚏2";
+		var TU1 = ""; //군화: 태음
+		var TU2 = "";
+		var SY1 = ""; //군화: 소양
+		var SY2 = ""; 
+		var TY1 = ""; //상화: 태양
+		var TY2 = "";
+		var SU1 = ""; //상화: 소음
+		var SU2 = "";
 
-		var SY1 = "⚎1"; //군화: 소양
-		var SY2 = "⚎2"; 
+		if (HTML_OR_EXCEL == MY_HTML) {
+			TU1 = "태음1"; //군화: 태음
+			TU2 = "태음2";
+			SY1 = "소양1"; //군화: 소양
+			SY2 = "소양2"; 
+			TY1 = "태양1"; //상화: 태양
+			TY2 = "태양2";
+			SU1 = "소음1"; //상화: 소음
+			SU2 = "소음2";
 
-		var TY1 = "⚌1"; //상화: 태양
-		var TY2 = "⚌2";
+		}
+		else if (HTML_OR_EXCEL == MY_EXCEL) {
+			TU1 = "⚏1"; //군화: 태음
+			TU2 = "⚏2";
+			SY1 = "⚎1"; //군화: 소양
+			SY2 = "⚎2"; 
+			TY1 = "⚌1"; //상화: 태양
+			TY2 = "⚌2";
+			SU1 = "⚍1"; //상화: 소음
+			SU2 = "⚍2";
 
-		var SU1 = "⚍1"; //상화: 소음
-		var SU2 = "⚍2"; 
+		}
 		
 
-					
+		//상화가 없거나 (군화>상화)라면
 		if ( (sang_hwa_idx==0) || (gun_hwa_idx>sang_hwa_idx) ) { //군화체질이라면 (상화=0 혹은 군화>상화)
-
-			if ( mok_idx==0 && to_idx==0 ) { //목토 없다면: 가장 강한 기운(목토) 없다면 가장 약한 기운(금수)으로 판별
-				if ( (geum_idx==0) && (su_idx==0) ) { //금수 없다면
+			//목토로 구분할 수 없다면, 금수로 구분 시도
+			if ( (mok_idx==0 && to_idx==0) ) { //목토 없다면: 가장 강한 기운(목토) 없다면 가장 약한 기운(금수)으로 판별
+				//금수로도 구분할 수 없다면
+				if ( (geum_idx==0 && su_idx==0) ) { 
 					//군화 강:태음1(목>화>(to_idx > su_idx) {>금) 혹은 소양2(토>화>(mok_idx > geum_idx) {>수)
 					//화극금: 금이 약함 -> 태음1 체질
-					my_body8_type = "태음1"; //TU1; //
+					my_body8_type = TU1; //"태음1"; //
 				}
-				else if (geum_idx > su_idx) { //금>수: 수가 약하면 소양1 혹은 소양2
+				else if ( (geum_idx==3 && su_idx==3) ) {
+					my_body8_type = TU1; //"태음1"; //금수 없을 때와 같음.
+				}
+				else if (geum_idx > su_idx) { //금수로 구분할 수 있다면...//금>수: 수가 약하면 소양1 혹은 소양2
 					//"소양1":"토>금>화>목>수" 
-					//"소양2":"토>화>(mok_idx > geum_idx) {>수"
+					//"소양2":"토>화>목>금>수"
 
-					if ( mok_idx==0 && geum_idx==0 ) { //목금 없다면
+					if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
 						my_body8_type = "없음"; //없음: 금 있으므로 금 없다면 
 					}
+					else if ( (mok_idx==3 && geum_idx==3) ) {
+						////새로 생긴 케이스(2020.11.06.)
+						my_body8_type = SY2 //화수 만을 가지고 판단. 강화 선택.
+					}
 					else if (geum_idx > mok_idx) {//(geum_idx > mok_idx) {
-						my_body8_type = "소양1"; //SY1; //
+						my_body8_type = SY1; //"소양1"; //
 					}
 					else if (mok_idx > geum_idx) { //(mok_idx > geum_idx) {
 						my_body8_type = "없음"; //없음: 목 없으므로 목 있다면 모순
@@ -17045,14 +17078,65 @@ block: 보이기
 					//"태음1":"목>화>(to_idx > su_idx) {>금" 
 					//"태음2":"목>수>화>토>금"
 
-					if (su_idx==0 && to_idx==0) { //태음체질은 수토 없다면
+					if ( (su_idx==0 && to_idx==0) ) { //태음체질은 수토 없다면
 						my_body8_type = "없음"; //없음: 수 있으므로 수 없다면 모순
+					}
+					else if ( (su_idx==3 && to_idx==3) ) {
+						////새로 생긴 케이스(2020.11.06.)
+						my_body8_type = TU1;
 					}
 					else if (to_idx > su_idx) { //(to_idx > su_idx) {
 						my_body8_type = "없음"; //없음 : 토 없으므로 토 있다면 모순
 					}
 					else if (su_idx > to_idx) { //(su_idx > to_idx) {
-						my_body8_type = "태음2"; //TU2; //
+						my_body8_type = TU2; //"태음2"; //
+					}
+				}
+			}
+			//군화체질이면...
+			else if ( (mok_idx==3 && to_idx==3) ) {
+				//금수로도 구분할 수 없다면
+				if ( (geum_idx==0 && su_idx==0) ) { 
+					//군화 강:태음1(목>화>(to_idx > su_idx) {>금) 혹은 소양2(토>화>(mok_idx > geum_idx) {>수)
+					//화극금: 금이 약함 -> 태음1 체질
+					my_body8_type = TU1; //"태음1"; //O
+				}
+				else if ( (geum_idx==3 && su_idx==3) ) {
+					my_body8_type = "없음"; //목토3 이므로, 금수3은 모순.
+				}
+				else if (geum_idx > su_idx) { //금수로 구분할 수 있다면...//금>수: 수가 약하면 소양1 혹은 소양2
+					//"소양1":"토>금>화>목>수" 
+					//"소양2":"토>화>목>금>수"
+
+					if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
+						my_body8_type = "없음"; //없음: 금 있으므로 금 없다면 
+					}
+					else if ( (mok_idx==3 && geum_idx==3) ) {
+						////새로 생긴 케이스(2020.11.06.)
+						my_body8_type = "없음"; // SY2; //화수 만을 가지고 판단. 강화 선택. 사실 존재 안함. 목토3이므로 목금3은 모순.
+					}
+					else if (geum_idx > mok_idx) {//(geum_idx > mok_idx) {
+						my_body8_type = SY1; //"소양1"; //
+					}
+					else if (mok_idx > geum_idx) { //(mok_idx > geum_idx) {
+						my_body8_type = SY2; //새로 생긴 케이스(2020.11.06.)
+					}
+				}
+				else if (su_idx > geum_idx) { //수>금: 금 약하면 태음1 혹은 태음2 
+					//"태음1":"목>화>(to_idx > su_idx) {>금" 
+					//"태음2":"목>수>화>토>금"
+
+					if ( (su_idx==0 && to_idx==0) ) { //태음체질은 수토 없다면
+						my_body8_type = "없음"; //없음: 수 있으므로 수 없다면 모순
+					}
+					else if ( (su_idx==3 && to_idx==3) ) {
+						my_body8_type = "없음"; //TU1; 목토3이므로 수토3은 모순.
+					}
+					else if (to_idx > su_idx) { //(to_idx > su_idx) {
+						my_body8_type = "없음"; //없음 : 토 없으므로 토 있다면 모순
+					}
+					else if (su_idx > to_idx) { //(su_idx > to_idx) {
+						my_body8_type = TU2; //"태음2"; //
 					}
 				}
 			}
@@ -17060,47 +17144,59 @@ block: 보이기
 				//"태음1":"목>화>(to_idx > su_idx) {>금" 
 				//"태음2":"목>수>화>토>금"
 				
-				if ( to_idx==0 && su_idx==0 ) { //토수가 없다면:
-					my_body8_type = "태음1"; //TU1; //  //강화 - 태음1
+				if ( (to_idx==0 && su_idx==0) ) { //토수가 없다면:
+					my_body8_type = TU1; //"태음1"; //  //강화 - 태음1
+				}
+				else if ( (to_idx==3 && su_idx==3)  ) {
+					my_body8_type = TU1;
 				}
 				else if (to_idx > su_idx) { //(to_idx > su_idx) {:
-					my_body8_type = "태음1"; //TU1; //"태음1";
+					my_body8_type = TU1; //"태음1";
 				}
 				else if (su_idx > to_idx) { //(su_idx > to_idx) {: 
-					my_body8_type = "태음2"; //TU2; //"태음2";
+					my_body8_type = TU2; //"태음2";"태음2"; //
 				}
 			}
 			else if (to_idx > mok_idx) { //소양1 혹은 소양2 
 				//"소양1":"토>금>화>목>수" 
 				//"소양2":"토>화>목>금>수"
 
-				if ( geum_idx==0 && mok_idx==0 ) { //금목이 없다면:
-					my_body8_type = "소양2"; //SY2; // //군화: 강화 -> 소양2
+				if ( (geum_idx==0 && mok_idx==0) ) { //금목이 없다면:
+					my_body8_type = SY2; //"소양2"; // //군화: 강화 -> 소양2
+				}
+				else if ( geum_idx==3 && mok_idx==3 ) {
+					my_body8_type = SY2;
 				}
 				else if (geum_idx > mok_idx) {
-					my_body8_type = "소양1"; //SY1; //"소양1";
+					my_body8_type = SY1; //"소양1";
 				}
 				else if (mok_idx > geum_idx) {
-					my_body8_type = "소양2"; //SY2; //"소양2";
+					my_body8_type = SY2; //"소양2";
 				}
 			}
 		} ///////////////////////////////////////////////////////////////
 		else if (sang_hwa_idx > gun_hwa_idx) { //상화체질이라면 (상화>군화)
-			if (geum_idx==0 && su_idx==0) { //금수 없다면: 가장 강한 기운(금수) 없다면 가장 약한 기운(목토)으로 판별
-				if (mok_idx==0 && to_idx==0) { //목토 없다면
+			if ( (geum_idx==0 && su_idx==0) ) { //금수 없다면: 가장 강한 기운(금수) 없다면 가장 약한 기운(목토)으로 판별
+				if ( (mok_idx==0 && to_idx==0) ) { //목토 없다면
 					// 상화 강: 군화 약:태양1(금>수>토>화>목) 혹은 소음2(수>금>목>화>토)
 					//화약 화극금: 금 강함 -> 태양1
-					my_body8_type = "태양1"; //TY1; //
+					my_body8_type = TY1; //"태양1"; //
+				}
+				else if ( (mok_idx==3 && to_idx==3)) {
+					my_body8_type = TY1; //"태양1"; //
 				}
 				else if (mok_idx > to_idx) { //토가 약하면 소음1 혹은 소음2
 					//"소음1":"수>목>화>금>토" 
 					//"소음2":"수>금>목>화>토"
 
-					if (mok_idx==0 && geum_idx==0) { //목금 없다면
+					if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
 						my_body8_type = "없음"; //: 목 있으므로 목 없다면 모순
 					}
+					else if ( (mok_idx==3 && geum_idx==3) ) {
+						my_body8_type = SU2; //수1, 수2 중에서 약화 선택: 소음2 체질
+					}
 					else if (mok_idx > geum_idx) {
-						my_body8_type = "소음1"; //SU1; //
+						my_body8_type = SU1; //"소음1"; //
 					}
 					else if (geum_idx > mok_idx) {
 						my_body8_type = "없음"; //: 금이 없으므로 금 있다면 모순
@@ -17110,14 +17206,466 @@ block: 보이기
 					//"태양1":"금>수>토>화>목" 
 					//"태양2":"금>토>화>수>목"
 
-					if (su_idx==0 && to_idx==0) { //태양체질은 수토 없다면
+					if ( (su_idx==0 && to_idx==0) ) { //태양체질은 수토 없다면
+						my_body8_type = "없음"; //토 있으므로 토 없다면 모순
+					}
+					else if ( (su_idx==3 && to_idx==3) ) {
+						my_body8_type = TY1;
+					}
+					else if (su_idx > to_idx) {
+						my_body8_type = "없음"; //수 없으므로 수 있다면 모순
+					}
+					else if (to_idx > su_idx) {
+						my_body8_type = TY2; //"태양2"; //
+					}
+				}
+			}
+			//코딩 필요
+			else if ( (geum_idx==3 && su_idx==3) ) {
+				if ( (mok_idx==0 && to_idx==0) ) { //목토 없다면
+					// 상화 강: 군화 약:태양1(금>수>토>화>목) 혹은 소음2(수>금>목>화>토)
+					//화약 화극금: 금 강함 -> 태양1
+					my_body8_type = TY1; //"태양1"; //
+				}
+				else if ( (mok_idx==3 && to_idx==3)) { //금수=3이므로 목토3은 모순
+					my_body8_type = "없음"; 
+				}
+				else if (mok_idx > to_idx) { //토가 약하면 소음1 혹은 소음2
+					//"소음1":"수>목>화>금>토" 
+					//"소음2":"수>금>목>화>토"
+
+					if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
+						my_body8_type = "없음"; //: 목 있으므로 목 없다면 모순
+					}
+					else if ( (mok_idx==3 && geum_idx==3) ) {
+						my_body8_type = "없음"; //SU2; //수1, 수2 중에서 약화 선택: 소음2 체질. 금수3이므로 목금3은 모순.
+					}
+					else if (mok_idx > geum_idx) {
+						my_body8_type = SU1; //"소음1"; //
+					}
+					else if (geum_idx > mok_idx) {
+						my_body8_type = SU2; //소음2
+					}
+				}
+				else if (to_idx > mok_idx) { //: 목 약하면 태양1 혹은 태양2 
+					//"태양1":"금>수>토>화>목" 
+					//"태양2":"금>토>화>수>목"
+
+					if ( (su_idx==0 && to_idx==0) ) { //태양체질은 수토 없다면
+						my_body8_type = "없음"; //토 있으므로 토 없다면 모순
+					}
+					else if ( (su_idx==3 && to_idx==3) ) {
+						my_body8_type = "없음"; //금수3이므로 수토3은 모순.
+					}
+					else if (su_idx > to_idx) {
+						my_body8_type = TY1; //태양1
+					}
+					else if (to_idx > su_idx) {
+						my_body8_type = TY2; //"태양2"; //
+					}
+				}
+			}
+			else if (geum_idx > su_idx) { //금>수: 태양
+				//"태양1":"금>수>토>화>목" 
+				//"태양2":"금>토>화>수>목"
+
+				if ( (su_idx==0 && to_idx==0) ) { //수토가 없다면:
+					my_body8_type = TY1; //"태양1"; // //상화 강, 군화 약: 태양1
+				}
+				else if ( (su_idx==3 && to_idx==3) ) {
+					my_body8_type = TY1; 
+				}
+				else if (su_idx > to_idx) {
+					my_body8_type = TY1; //"태양1"; //
+				}
+				else if (to_idx > su_idx) {
+					my_body8_type = TY2; //"태양2"; //
+				}
+			}
+			else if (su_idx > geum_idx) { //수>금: 소음
+				//"소음1":"수>목>화>금>토" 
+				//"소음2":"수>금>목>화>토"
+
+				if ( (mok_idx==0 && geum_idx==0) ) { //목금이 없다면:
+					my_body8_type = SU2; //"소음2"; // //상화 강, 군화 약: 소음2
+				}
+				else if ( (mok_idx==3 && geum_idx==3) ) {
+					my_body8_type = SU2; 
+				}
+				else if (mok_idx > geum_idx) {
+					my_body8_type = SU1; //"소음1"; //
+				}
+				else if (geum_idx > mok_idx) {
+					my_body8_type = SU2; //"소음2"; //
+				}
+			}
+		}
+
+		return [my_body8_type, sang_hwa_idx, gun_hwa_idx, mok_idx, hwa_idx, to_idx, geum_idx, su_idx];
+	}
+
+
+
+	//상화 ["未戌"], 삼주(연주, 월주, 일주)에 상화가 없으면 군화.
+	//군화 ["巳午丙丁"]
+	//중요도: day_ji > month_ji > year_ji >>> day_gan > month_gan > year_gan
+	function determineBody8Excel(day_ji, month_ji, year_ji, day_gan, month_gan, year_gan) {
+		var my_body8_type = "";
+
+		var my_ganji = `${day_ji}${month_ji}${year_ji}${day_gan}${month_gan}${year_gan}`;
+		var my_5haeng = `${GANJI_5HAENG[day_ji]}${GANJI_5HAENG[month_ji]}${GANJI_5HAENG[year_ji]}${GANJI_5HAENG[day_gan]}${GANJI_5HAENG[month_gan]}${GANJI_5HAENG[year_gan]}`;
+
+		//idx 값이 작을수록 앞에 우선하여 나타나는 것이며 
+		//상대적으로 다른 것보다 기운이 강함을 의미한다.
+
+		//기운이 사주에 나타나지 않는다면 idx=7 값을 갖는다.
+
+		var sang_hwa_idx = 7;
+		var gun_hwa_idx = 7;
+
+
+		var mok_idx = 7;
+		var hwa_idx = 7;
+		var to_idx = 7;
+		var geum_idx = 7;
+		var su_idx = 7;
+
+
+
+		//상화체질 혹은 군화체질 구분
+		//있으면 바뀌고 없으면 7로 유지됨.
+		sang_hwa_idx = get_5haeng_index(my_5haeng, "和");  // "未":"和", "戌":"和"
+		gun_hwa_idx = get_5haeng_index(my_5haeng, "火");
+
+		mok_idx = get_5haeng_index(my_5haeng, "木");
+		hwa_idx = get_5haeng_index(my_5haeng, "火");
+		to_idx = get_5haeng_index(my_5haeng, "土");
+		geum_idx = get_5haeng_index(my_5haeng, "金");
+		su_idx = get_5haeng_index(my_5haeng, "水");
+
+
+
+
+		////========================연지와 일간의 기운을 같게 본다. (2020.09.22)
+		//연지나 일간에 군화나 상화가 있는 경우는 제외
+		//목토금수 중 2개가 연지/일간에 오는 방법은 6가지
+		//월간/연간에 먼저 오면 그것으로 결정할 수 있다. 
+		//안오면 결정 안됨. 없는 것이나 마찬가지.
+		var my_monthgan_yeargan_5haeng = `${GANJI_5HAENG[month_gan]}${GANJI_5HAENG[year_gan]}`;
+		if ( (mok_idx==2 && to_idx==3) || (mok_idx==3 && to_idx==2) ) {
+			mok_idx=3; to_idx=3;
+
+			//없으면 7, 있으면 0 혹은 1
+			mok_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "木");
+			to_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "土");
+
+			//월간, 연간에 없다면...
+			if (mok_idx==7 && to_idx==7) {
+				mok_idx=3; to_idx=3;
+
+			}
+			else if (mok_idx<to_idx) {
+				mok_idx = 2;
+				to_idx = 3;
+
+			}
+			else if (mok_idx>to_idx) {
+				mok_idx = 3;
+				to_idx = 2;
+			}
+			
+		}
+		else if ( (mok_idx==2 && geum_idx==3) || (mok_idx==3 && geum_idx==2) ) {
+			mok_idx=3; geum_idx=3;
+
+			//없으면 7, 있으면 0 혹은 1
+			mok_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "木");
+			geum_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "金");
+
+			//월간, 연간에 없다면...
+			if (mok_idx==7 && geum_idx==7) {
+				mok_idx=3; geum_idx=3;
+
+			}
+			else if (mok_idx<geum_idx) {
+				mok_idx = 2;
+				geum_idx = 3;
+
+			}
+			else if (mok_idx>geum_idx) {
+				mok_idx = 3;
+				geum_idx = 2;
+			}
+
+		}
+		else if ( (mok_idx==2 && su_idx==3) || (mok_idx==3 && su_idx==2) ) {
+			mok_idx=3; su_idx=3;
+
+			//없으면 7, 있으면 0 혹은 1
+			mok_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "木");
+			su_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "水");
+
+			//월간, 연간에 없다면...
+			if (mok_idx==7 && su_idx==7) {
+				mok_idx=3; su_idx=3;
+
+			}
+			else if (mok_idx<su_idx) {
+				mok_idx = 2;
+				su_idx = 3;
+
+			}
+			else if (mok_idx>su_idx) {
+				mok_idx = 3;
+				su_idx = 2;
+			}
+
+		}
+		else if ( (to_idx==2 && geum_idx==3) || (to_idx==3 && geum_idx==2) ) {
+			to_idx=3; geum_idx=3;
+
+			//없으면 7, 있으면 0 혹은 1
+			to_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "土");
+			geum_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "金");
+			
+
+			//월간, 연간에 없다면...
+			if (to_idx==7 && geum_idx==7) {
+				to_idx=3; geum_idx=3;
+
+			}
+			else if (to_idx<geum_idx) {
+				to_idx = 2;
+				geum_idx = 3;
+
+			}
+			else if (to_idx>geum_idx) {
+				to_idx = 3;
+				geum_idx = 2;
+			}
+
+		}
+		else if ( (to_idx==2 && su_idx==3) || (to_idx==3 && su_idx==2) ) {
+			to_idx=3; su_idx=3;
+
+			//없으면 7, 있으면 0 혹은 1
+			to_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "土");
+			su_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "水");
+			
+			
+
+			//월간, 연간에 없다면...
+			if (to_idx==7 && su_idx==7) {
+				to_idx=3; su_idx=3;
+
+			}
+			else if (to_idx<su_idx) {
+				to_idx = 2;
+				su_idx = 3;
+
+			}
+			else if (to_idx>su_idx) {
+				to_idx = 3;
+				su_idx = 2;
+			}
+
+		}
+		else if ( (geum_idx==2 && su_idx==3) || (geum_idx==3 && su_idx==2) ) {
+			geum_idx=3; su_idx=3;
+
+			//없으면 7, 있으면 0 혹은 1
+			geum_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "金");
+			su_idx = get_5haeng_index(my_monthgan_yeargan_5haeng, "水");
+			
+			
+
+			//월간, 연간에 없다면...
+			if (geum_idx==7 && su_idx==7) {
+				geum_idx=3; su_idx=3;
+
+			}
+			else if (geum_idx<su_idx) {
+				geum_idx = 2;
+				su_idx = 3;
+
+			}
+			else if (geum_idx>su_idx) {
+				geum_idx = 3;
+				su_idx = 2;
+			}
+
+		}
+		////========================연지와 일간의 기운을 같게 본다. (2020.09.22)
+
+
+		//====================================================
+
+		//위에서 오행이 사주에 존재하지 않으면 7, 존재하면 0~5 사이의 값을 가짐.
+
+		//값이 크면 사주에서 에너지가 큰 오행이 되도록 보정(1~6 사이의 값을 갖게됨.)
+		//0이면 사주에 존재하지 않음.
+
+		sang_hwa_idx = (sang_hwa_idx == 7) ? 0 : (6 - sang_hwa_idx);
+		gun_hwa_idx = (gun_hwa_idx == 7) ? 0 : (6 - gun_hwa_idx);
+		mok_idx = (mok_idx == 7) ? 0 : (6 - mok_idx);
+		hwa_idx = (hwa_idx == 7) ? 0 : (6 - hwa_idx);
+		to_idx = (to_idx == 7) ? 0 : (6 - to_idx);
+		geum_idx = (geum_idx == 7) ? 0 : (6 - geum_idx);
+		su_idx = (su_idx == 7) ? 0 : (6 - su_idx);
+
+
+		//상화체질...
+		//"태양1":"금>(su_idx > to_idx) {>화>목" 
+		//"태양2":"금>토>화>수>목" 
+		//"소음1":"수>목>화>금>토" 
+		//"소음2":"수>(geum_idx > mok_idx) {>화>토"
+
+		//군화체질...
+		//"태음1":"목>화>(to_idx > su_idx) {>금" 
+		//"태음2":"목>수>화>토>금" 
+		//"소양1":"토>금>화>목>수" 
+		//"소양2":"토>화>(mok_idx > geum_idx) {>수" 
+
+
+		//idx 값이 작을수록 에너지 강도가 더 강함.
+
+
+		var MY_HTML= 1;
+		var MY_EXCEL = 2;
+		var HTML_OR_EXCEL = MY_EXCEL;
+
+		var TU1 = ""; //군화: 태음
+		var TU2 = "";
+		var SY1 = ""; //군화: 소양
+		var SY2 = ""; 
+		var TY1 = ""; //상화: 태양
+		var TY2 = "";
+		var SU1 = ""; //상화: 소음
+		var SU2 = "";
+
+		if (HTML_OR_EXCEL == MY_HTML) {
+			TU1 = "태음1"; //군화: 태음
+			TU2 = "태음2";
+			SY1 = "소양1"; //군화: 소양
+			SY2 = "소양2"; 
+			TY1 = "태양1"; //상화: 태양
+			TY2 = "태양2";
+			SU1 = "소음1"; //상화: 소음
+			SU2 = "소음2";
+
+		}
+		else if (HTML_OR_EXCEL == MY_EXCEL) {
+			TU1 = "⚏1"; //군화: 태음
+			TU2 = "⚏2";
+			SY1 = "⚎1"; //군화: 소양
+			SY2 = "⚎2"; 
+			TY1 = "⚌1"; //상화: 태양
+			TY2 = "⚌2";
+			SU1 = "⚍1"; //상화: 소음
+			SU2 = "⚍2";
+
+		}
+
+		//상화가 없거나 (군화<상화)라면 
+		if ( (sang_hwa_idx==0) || (gun_hwa_idx>sang_hwa_idx) ) { //군화체질이라면 (상화=0 혹은 군화>상화)
+
+			if ( (mok_idx==0 && to_idx==0) || (mok_idx==3 && to_idx==3) ) { //목토 없다면: 가장 강한 기운(목토) 없다면 가장 약한 기운(금수)으로 판별
+				if ( (geum_idx==0 && su_idx==0) || (geum_idx==3 && su_idx==3) ) { //금수 없다면
+					//군화 강:태음1(목>화>(to_idx > su_idx) {>금) 혹은 소양2(토>화>(mok_idx > geum_idx) {>수)
+					//화극금: 금이 약함 -> 태음1 체질
+					my_body8_type = TU1; //"태음1"; //
+				}
+				else if (geum_idx > su_idx) { //금>수: 수가 약하면 소양1 혹은 소양2
+					//"소양1":"토>금>화>목>수" 
+					//"소양2":"토>화>(mok_idx > geum_idx) {>수"
+
+					if ( (mok_idx==0 && geum_idx==0) || (mok_idx==3 && geum_idx==3) ) { //목금 없다면
+						my_body8_type = "없음"; //없음: 금 있으므로 금 없다면 
+					}
+					else if (geum_idx > mok_idx) {//(geum_idx > mok_idx) {
+						my_body8_type = SY1; //"소양1"; //
+					}
+					else if (mok_idx > geum_idx) { //(mok_idx > geum_idx) {
+						my_body8_type = "없음"; //없음: 목 없으므로 목 있다면 모순
+					}
+				}
+				else if (su_idx > geum_idx) { //수>금: 금 약하면 태음1 혹은 태음2 
+					//"태음1":"목>화>(to_idx > su_idx) {>금" 
+					//"태음2":"목>수>화>토>금"
+
+					if ( (su_idx==0 && to_idx==0) || (su_idx==3 && to_idx==3) ) { //태음체질은 수토 없다면
+						my_body8_type = "없음"; //없음: 수 있으므로 수 없다면 모순
+					}
+					else if (to_idx > su_idx) { //(to_idx > su_idx) {
+						my_body8_type = "없음"; //없음 : 토 없으므로 토 있다면 모순
+					}
+					else if (su_idx > to_idx) { //(su_idx > to_idx) {
+						my_body8_type = TU2; //"태음2"; //
+					}
+				}
+			}
+			else if ( mok_idx > to_idx ) { //(mok_idx > to_idx) {: 태음1 혹은 태음2
+				//"태음1":"목>화>(to_idx > su_idx) {>금" 
+				//"태음2":"목>수>화>토>금"
+				
+				if ( (to_idx==0 && su_idx==0) || (to_idx==3 && su_idx==3) ) { //토수가 없다면:
+					my_body8_type = TU1; //"태음1"; //  //강화 - 태음1
+				}
+				else if (to_idx > su_idx) { //(to_idx > su_idx) {:
+					my_body8_type = TU1; //"태음1";
+				}
+				else if (su_idx > to_idx) { //(su_idx > to_idx) {: 
+					my_body8_type = TU2; //"태음2";"태음2"; //
+				}
+			}
+			else if (to_idx > mok_idx) { //소양1 혹은 소양2 
+				//"소양1":"토>금>화>목>수" 
+				//"소양2":"토>화>목>금>수"
+
+				if ( (geum_idx==0 && mok_idx==0) || geum_idx==3 && mok_idx==3 ) { //금목이 없다면:
+					my_body8_type = SY2; //"소양2"; // //군화: 강화 -> 소양2
+				}
+				else if (geum_idx > mok_idx) {
+					my_body8_type = SY1; //"소양1";
+				}
+				else if (mok_idx > geum_idx) {
+					my_body8_type = SY2; //"소양2";
+				}
+			}
+		} ///////////////////////////////////////////////////////////////
+		else if (sang_hwa_idx > gun_hwa_idx) { //상화체질이라면 (상화>군화)
+			if ( (geum_idx==0 && su_idx==0) || (geum_idx==3 && su_idx==3) ) { //금수 없다면: 가장 강한 기운(금수) 없다면 가장 약한 기운(목토)으로 판별
+				if ( (mok_idx==0 && to_idx==0) || (mok_idx==3 && to_idx==3) ) { //목토 없다면
+					// 상화 강: 군화 약:태양1(금>수>토>화>목) 혹은 소음2(수>금>목>화>토)
+					//화약 화극금: 금 강함 -> 태양1
+					my_body8_type = TY1; //"태양1"; //
+				}
+				else if (mok_idx > to_idx) { //토가 약하면 소음1 혹은 소음2
+					//"소음1":"수>목>화>금>토" 
+					//"소음2":"수>금>목>화>토"
+
+					if ( (mok_idx==0 && geum_idx==0) || (mok_idx==3 && geum_idx==3) ) { //목금 없다면
+						my_body8_type = "없음"; //: 목 있으므로 목 없다면 모순
+					}
+					else if (mok_idx > geum_idx) {
+						my_body8_type = SU1; //"소음1"; //
+					}
+					else if (geum_idx > mok_idx) {
+						my_body8_type = "없음"; //: 금이 없으므로 금 있다면 모순
+					}
+				}
+				else if (to_idx > mok_idx) { //: 목 약하면 태양1 혹은 태양2 
+					//"태양1":"금>수>토>화>목" 
+					//"태양2":"금>토>화>수>목"
+
+					if ( (su_idx==0 && to_idx==0) || (su_idx==3 && to_idx==3) ) { //태양체질은 수토 없다면
 						my_body8_type = "없음"; //토 있으므로 토 없다면 모순
 					}
 					else if (su_idx > to_idx) {
 						my_body8_type = "없음"; //수 없으므로 수 있다면 모순
 					}
 					else if (to_idx > su_idx) {
-						my_body8_type = "태양2"; //TY2; //
+						my_body8_type = TY2; //"태양2"; //
 					}
 				}
 			}
@@ -17125,31 +17673,34 @@ block: 보이기
 				//"태양1":"금>수>토>화>목" 
 				//"태양2":"금>토>화>수>목"
 			
-				if (su_idx==0 && to_idx==0) { //수토가 없다면:
-					my_body8_type = "태양1"; //TY1; // //상화 강, 군화 약: 태양1
+				if ( (su_idx==0 && to_idx==0) || (su_idx==3 && to_idx==3) ) { //수토가 없다면:
+					my_body8_type = TY1; //"태양1"; // //상화 강, 군화 약: 태양1
 				}
 				else if (su_idx > to_idx) {
-					my_body8_type = "태양1"; //TY1; //
+					my_body8_type = TY1; //"태양1"; //
 				}
 				else if (to_idx > su_idx) {
-					my_body8_type = "태양2"; //TY2; //
+					my_body8_type = TY2; //"태양2"; //
 				}
 			}
 			else if (su_idx > geum_idx) { //수>금: 소음
 				//"소음1":"수>목>화>금>토" 
 				//"소음2":"수>금>목>화>토"
 
-				if (mok_idx==0 && geum_idx==0) { //목금이 없다면:
-					my_body8_type = "소음2"; //SU2; // //상화 강, 군화 약: 소음2
+				if ( (mok_idx==0 && geum_idx==0) || (mok_idx==3 && geum_idx==3) ) { //목금이 없다면:
+					my_body8_type = SU2; //"소음2"; // //상화 강, 군화 약: 소음2
 				}
 				else if (mok_idx > geum_idx) {
-					my_body8_type = "소음1"; //SU1; //
+					my_body8_type = SU1; //"소음1"; //
 				}
 				else if (geum_idx > mok_idx) {
-					my_body8_type = "소음2"; //SU2; //
+					my_body8_type = SU2; //"소음2"; //
 				}
 			}
 		}
+
+
+		console.log([day_ji, month_ji, year_ji, day_gan, month_gan, year_gan, ": \n", my_body8_type, sang_hwa_idx, gun_hwa_idx, mok_idx, hwa_idx, to_idx, geum_idx, su_idx]);
 
 		return [my_body8_type, sang_hwa_idx, gun_hwa_idx, mok_idx, hwa_idx, to_idx, geum_idx, su_idx];
 	}
@@ -18107,7 +18658,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 			var month_pole_list = get60GapJaMonth(yyyy, mm);
 			var day_pole_list = get60GapJaDay(yyyy, mm, dd);
 
-			var body8_type = determineBody8(day_pole_list[1], month_pole_list[1], year_pole_list[1], day_pole_list[0], month_pole_list[0], year_pole_list[0]);
+			var body8_type = determineBody8Excel(day_pole_list[1], month_pole_list[1], year_pole_list[1], day_pole_list[0], month_pole_list[0], year_pole_list[0]);
 			var my_body8_type = body8_type[0][0] + String.fromCharCode(10) + body8_type[0][1]; // + String.fromCharCode(10) + body8_type[0][2];
 			//var my_body8_type = body8_type[0][0] + "/" + body8_type[0][1] + "/" + body8_type[0][2];
 
@@ -18329,7 +18880,6 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 
 		function getBody8Excel(day_ji, month_ji, year_ji, day_gan, month_gan, year_gan) {
-
 			var my_body8_type = "";
 
 			var my_ganji = `${day_ji}${month_ji}${year_ji}${day_gan}${month_gan}${year_gan}`;
@@ -18353,8 +18903,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 
 			//상화체질 혹은 군화체질 구분
-			//있으면 0~5 사이의 값으로 바뀌고 
-			//없으면 7로 유지됨.
+			//있으면 바뀌고 없으면 7로 유지됨.
 			sang_hwa_idx = get_5haeng_index(my_5haeng, "和");  // "未":"和", "戌":"和"
 			gun_hwa_idx = get_5haeng_index(my_5haeng, "火");
 
@@ -18363,7 +18912,6 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 			to_idx = get_5haeng_index(my_5haeng, "土");
 			geum_idx = get_5haeng_index(my_5haeng, "金");
 			su_idx = get_5haeng_index(my_5haeng, "水");
-
 
 
 
@@ -18383,7 +18931,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 				//월간, 연간에 없다면...
 				if (mok_idx==7 && to_idx==7) {
-					//mok_idx=3; to_idx=3;
+					mok_idx=3; to_idx=3;
 
 				}
 				else if (mok_idx<to_idx) {
@@ -18406,7 +18954,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 				//월간, 연간에 없다면...
 				if (mok_idx==7 && geum_idx==7) {
-					//mok_idx=3; geum_idx=3;
+					mok_idx=3; geum_idx=3;
 
 				}
 				else if (mok_idx<geum_idx) {
@@ -18429,7 +18977,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 				//월간, 연간에 없다면...
 				if (mok_idx==7 && su_idx==7) {
-					//mok_idx=3; su_idx=3;
+					mok_idx=3; su_idx=3;
 
 				}
 				else if (mok_idx<su_idx) {
@@ -18453,7 +19001,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 				//월간, 연간에 없다면...
 				if (to_idx==7 && geum_idx==7) {
-					//to_idx=3; geum_idx=3;
+					to_idx=3; geum_idx=3;
 
 				}
 				else if (to_idx<geum_idx) {
@@ -18478,7 +19026,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 				//월간, 연간에 없다면...
 				if (to_idx==7 && su_idx==7) {
-					//to_idx=3; su_idx=3;
+					to_idx=3; su_idx=3;
 
 				}
 				else if (to_idx<su_idx) {
@@ -18503,7 +19051,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 				//월간, 연간에 없다면...
 				if (geum_idx==7 && su_idx==7) {
-					//geum_idx=3; su_idx=3;
+					geum_idx=3; su_idx=3;
 
 				}
 				else if (geum_idx<su_idx) {
@@ -18518,13 +19066,11 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 			}
 			////========================연지와 일간의 기운을 같게 본다. (2020.09.22)
-			
-
-
-
 
 
 			//====================================================
+
+			//위에서 오행이 사주에 존재하지 않으면 7, 존재하면 0~5 사이의 값을 가짐.
 
 			//값이 크면 사주에서 에너지가 큰 오행이 되도록 보정(1~6 사이의 값을 갖게됨.)
 			//0이면 사주에 존재하지 않음.
@@ -18553,49 +19099,70 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 			//idx 값이 작을수록 에너지 강도가 더 강함.
 
-			//상화가 없거나 (군화<상화)라면 
+			
+			var MY_HTML= 1;
+			var MY_EXCEL = 2;
+			var HTML_OR_EXCEL = MY_HTML;
 
+			var TU1 = ""; //군화: 태음
+			var TU2 = "";
+			var SY1 = ""; //군화: 소양
+			var SY2 = ""; 
+			var TY1 = ""; //상화: 태양
+			var TY2 = "";
+			var SU1 = ""; //상화: 소음
+			var SU2 = "";
 
+			if (HTML_OR_EXCEL == MY_HTML) {
+				TU1 = "태음1"; //군화: 태음
+				TU2 = "태음2";
+				SY1 = "소양1"; //군화: 소양
+				SY2 = "소양2"; 
+				TY1 = "태양1"; //상화: 태양
+				TY2 = "태양2";
+				SU1 = "소음1"; //상화: 소음
+				SU2 = "소음2";
 
-			//9868	 :  	⚌
-			//9869	 :  	⚍
-			//9870	 :  	⚎
-			//9871	 :  	⚏
+			}
+			else if (HTML_OR_EXCEL == MY_EXCEL) {
+				TU1 = "⚏1"; //군화: 태음
+				TU2 = "⚏2";
+				SY1 = "⚎1"; //군화: 소양
+				SY2 = "⚎2"; 
+				TY1 = "⚌1"; //상화: 태양
+				TY2 = "⚌2";
+				SU1 = "⚍1"; //상화: 소음
+				SU2 = "⚍2";
 
-
+			}
 			
 
-			var TU1 = "⚏1"; //군화: 태음
-			var TU2 = "⚏2";
-
-			var SY1 = "⚎1"; //군화: 소양
-			var SY2 = "⚎2"; 
-
-			var TY1 = "⚌1"; //상화: 태양
-			var TY2 = "⚌2";
-
-			var SU1 = "⚍1"; //상화: 소음
-			var SU2 = "⚍2"; 
-			
-
-						
+			//상화가 없거나 (군화>상화)라면
 			if ( (sang_hwa_idx==0) || (gun_hwa_idx>sang_hwa_idx) ) { //군화체질이라면 (상화=0 혹은 군화>상화)
-
-				if ( mok_idx==0 && to_idx==0 ) { //목토 없다면: 가장 강한 기운(목토) 없다면 가장 약한 기운(금수)으로 판별
-					if ( (geum_idx==0) && (su_idx==0) ) { //금수 없다면
+				//목토로 구분할 수 없다면, 금수로 구분 시도
+				if ( (mok_idx==0 && to_idx==0) ) { //목토 없다면: 가장 강한 기운(목토) 없다면 가장 약한 기운(금수)으로 판별
+					//금수로도 구분할 수 없다면
+					if ( (geum_idx==0 && su_idx==0) ) { 
 						//군화 강:태음1(목>화>(to_idx > su_idx) {>금) 혹은 소양2(토>화>(mok_idx > geum_idx) {>수)
 						//화극금: 금이 약함 -> 태음1 체질
-						my_body8_type = TU1; //"태음1";
+						my_body8_type = TU1; //"태음1"; //
 					}
-					else if (geum_idx > su_idx) { //금>수: 수가 약하면 소양1 혹은 소양2
+					else if ( (geum_idx==3 && su_idx==3) ) {
+						my_body8_type = TU1; //"태음1"; //금수 없을 때와 같음.
+					}
+					else if (geum_idx > su_idx) { //금수로 구분할 수 있다면...//금>수: 수가 약하면 소양1 혹은 소양2
 						//"소양1":"토>금>화>목>수" 
-						//"소양2":"토>화>(mok_idx > geum_idx) {>수"
+						//"소양2":"토>화>목>금>수"
 
-						if ( mok_idx==0 && geum_idx==0 ) { //목금 없다면
+						if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
 							my_body8_type = "없음"; //없음: 금 있으므로 금 없다면 
 						}
+						else if ( (mok_idx==3 && geum_idx==3) ) {
+							////새로 생긴 케이스(2020.11.06.)
+							my_body8_type = SY2 //화수 만을 가지고 판단. 강화 선택.
+						}
 						else if (geum_idx > mok_idx) {//(geum_idx > mok_idx) {
-							my_body8_type = SY1; //"소양1";
+							my_body8_type = SY1; //"소양1"; //
 						}
 						else if (mok_idx > geum_idx) { //(mok_idx > geum_idx) {
 							my_body8_type = "없음"; //없음: 목 없으므로 목 있다면 모순
@@ -18605,14 +19172,65 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 						//"태음1":"목>화>(to_idx > su_idx) {>금" 
 						//"태음2":"목>수>화>토>금"
 
-						if (su_idx==0 && to_idx==0) { //태음체질은 수토 없다면
+						if ( (su_idx==0 && to_idx==0) ) { //태음체질은 수토 없다면
 							my_body8_type = "없음"; //없음: 수 있으므로 수 없다면 모순
+						}
+						else if ( (su_idx==3 && to_idx==3) ) {
+							////새로 생긴 케이스(2020.11.06.)
+							my_body8_type = TU1;
 						}
 						else if (to_idx > su_idx) { //(to_idx > su_idx) {
 							my_body8_type = "없음"; //없음 : 토 없으므로 토 있다면 모순
 						}
 						else if (su_idx > to_idx) { //(su_idx > to_idx) {
-							my_body8_type = TU2; //"태음2";
+							my_body8_type = TU2; //"태음2"; //
+						}
+					}
+				}
+				//군화체질이면...
+				else if ( (mok_idx==3 && to_idx==3) ) {
+					//금수로도 구분할 수 없다면
+					if ( (geum_idx==0 && su_idx==0) ) { 
+						//군화 강:태음1(목>화>(to_idx > su_idx) {>금) 혹은 소양2(토>화>(mok_idx > geum_idx) {>수)
+						//화극금: 금이 약함 -> 태음1 체질
+						my_body8_type = TU1; //"태음1"; //O
+					}
+					else if ( (geum_idx==3 && su_idx==3) ) {
+						my_body8_type = "없음"; //목토3 이므로, 금수3은 모순.
+					}
+					else if (geum_idx > su_idx) { //금수로 구분할 수 있다면...//금>수: 수가 약하면 소양1 혹은 소양2
+						//"소양1":"토>금>화>목>수" 
+						//"소양2":"토>화>목>금>수"
+
+						if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
+							my_body8_type = "없음"; //없음: 금 있으므로 금 없다면 
+						}
+						else if ( (mok_idx==3 && geum_idx==3) ) {
+							////새로 생긴 케이스(2020.11.06.)
+							my_body8_type = "없음"; // SY2; //화수 만을 가지고 판단. 강화 선택. 사실 존재 안함. 목토3이므로 목금3은 모순.
+						}
+						else if (geum_idx > mok_idx) {//(geum_idx > mok_idx) {
+							my_body8_type = SY1; //"소양1"; //
+						}
+						else if (mok_idx > geum_idx) { //(mok_idx > geum_idx) {
+							my_body8_type = SY2; //새로 생긴 케이스(2020.11.06.)
+						}
+					}
+					else if (su_idx > geum_idx) { //수>금: 금 약하면 태음1 혹은 태음2 
+						//"태음1":"목>화>(to_idx > su_idx) {>금" 
+						//"태음2":"목>수>화>토>금"
+
+						if ( (su_idx==0 && to_idx==0) ) { //태음체질은 수토 없다면
+							my_body8_type = "없음"; //없음: 수 있으므로 수 없다면 모순
+						}
+						else if ( (su_idx==3 && to_idx==3) ) {
+							my_body8_type = "없음"; //TU1; 목토3이므로 수토3은 모순.
+						}
+						else if (to_idx > su_idx) { //(to_idx > su_idx) {
+							my_body8_type = "없음"; //없음 : 토 없으므로 토 있다면 모순
+						}
+						else if (su_idx > to_idx) { //(su_idx > to_idx) {
+							my_body8_type = TU2; //"태음2"; //
 						}
 					}
 				}
@@ -18620,22 +19238,28 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 					//"태음1":"목>화>(to_idx > su_idx) {>금" 
 					//"태음2":"목>수>화>토>금"
 					
-					if ( to_idx==0 && su_idx==0 ) { //토수가 없다면:
-						my_body8_type = TU1; // "태음1"; //강화 - 태음1
+					if ( (to_idx==0 && su_idx==0) ) { //토수가 없다면:
+						my_body8_type = TU1; //"태음1"; //  //강화 - 태음1
+					}
+					else if ( (to_idx==3 && su_idx==3)  ) {
+						my_body8_type = TU1;
 					}
 					else if (to_idx > su_idx) { //(to_idx > su_idx) {:
 						my_body8_type = TU1; //"태음1";
 					}
 					else if (su_idx > to_idx) { //(su_idx > to_idx) {: 
-						my_body8_type = TU2; //"태음2";
+						my_body8_type = TU2; //"태음2";"태음2"; //
 					}
 				}
 				else if (to_idx > mok_idx) { //소양1 혹은 소양2 
 					//"소양1":"토>금>화>목>수" 
 					//"소양2":"토>화>목>금>수"
 
-					if ( geum_idx==0 && mok_idx==0 ) { //금목이 없다면:
-						my_body8_type = SY2; //"소양2"; //군화: 강화 -> 소양2
+					if ( (geum_idx==0 && mok_idx==0) ) { //금목이 없다면:
+						my_body8_type = SY2; //"소양2"; // //군화: 강화 -> 소양2
+					}
+					else if ( geum_idx==3 && mok_idx==3 ) {
+						my_body8_type = SY2;
 					}
 					else if (geum_idx > mok_idx) {
 						my_body8_type = SY1; //"소양1";
@@ -18646,21 +19270,27 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 				}
 			} ///////////////////////////////////////////////////////////////
 			else if (sang_hwa_idx > gun_hwa_idx) { //상화체질이라면 (상화>군화)
-				if (geum_idx==0 && su_idx==0) { //금수 없다면: 가장 강한 기운(금수) 없다면 가장 약한 기운(목토)으로 판별
-					if (mok_idx==0 && to_idx==0) { //목토 없다면
+				if ( (geum_idx==0 && su_idx==0) ) { //금수 없다면: 가장 강한 기운(금수) 없다면 가장 약한 기운(목토)으로 판별
+					if ( (mok_idx==0 && to_idx==0) ) { //목토 없다면
 						// 상화 강: 군화 약:태양1(금>수>토>화>목) 혹은 소음2(수>금>목>화>토)
 						//화약 화극금: 금 강함 -> 태양1
-						my_body8_type = TY1; //"태양1";
+						my_body8_type = TY1; //"태양1"; //
+					}
+					else if ( (mok_idx==3 && to_idx==3)) {
+						my_body8_type = TY1; //"태양1"; //
 					}
 					else if (mok_idx > to_idx) { //토가 약하면 소음1 혹은 소음2
 						//"소음1":"수>목>화>금>토" 
 						//"소음2":"수>금>목>화>토"
 
-						if (mok_idx==0 && geum_idx==0) { //목금 없다면
+						if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
 							my_body8_type = "없음"; //: 목 있으므로 목 없다면 모순
 						}
+						else if ( (mok_idx==3 && geum_idx==3) ) {
+							my_body8_type = SU2; //수1, 수2 중에서 약화 선택: 소음2 체질
+						}
 						else if (mok_idx > geum_idx) {
-							my_body8_type = SU1; //"소음1";
+							my_body8_type = SU1; //"소음1"; //
 						}
 						else if (geum_idx > mok_idx) {
 							my_body8_type = "없음"; //: 금이 없으므로 금 있다면 모순
@@ -18670,51 +19300,103 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 						//"태양1":"금>수>토>화>목" 
 						//"태양2":"금>토>화>수>목"
 
-						if (su_idx==0 && to_idx==0) { //태양체질은 수토 없다면
+						if ( (su_idx==0 && to_idx==0) ) { //태양체질은 수토 없다면
 							my_body8_type = "없음"; //토 있으므로 토 없다면 모순
+						}
+						else if ( (su_idx==3 && to_idx==3) ) {
+							my_body8_type = TY1;
 						}
 						else if (su_idx > to_idx) {
 							my_body8_type = "없음"; //수 없으므로 수 있다면 모순
 						}
 						else if (to_idx > su_idx) {
-							my_body8_type = TY2; //"태양2";
+							my_body8_type = TY2; //"태양2"; //
+						}
+					}
+				}
+				//코딩 필요
+				else if ( (geum_idx==3 && su_idx==3) ) {
+					if ( (mok_idx==0 && to_idx==0) ) { //목토 없다면
+						// 상화 강: 군화 약:태양1(금>수>토>화>목) 혹은 소음2(수>금>목>화>토)
+						//화약 화극금: 금 강함 -> 태양1
+						my_body8_type = TY1; //"태양1"; //
+					}
+					else if ( (mok_idx==3 && to_idx==3)) { //금수=3이므로 목토3은 모순
+						my_body8_type = "없음"; 
+					}
+					else if (mok_idx > to_idx) { //토가 약하면 소음1 혹은 소음2
+						//"소음1":"수>목>화>금>토" 
+						//"소음2":"수>금>목>화>토"
+
+						if ( (mok_idx==0 && geum_idx==0) ) { //목금 없다면
+							my_body8_type = "없음"; //: 목 있으므로 목 없다면 모순
+						}
+						else if ( (mok_idx==3 && geum_idx==3) ) {
+							my_body8_type = "없음"; //SU2; //수1, 수2 중에서 약화 선택: 소음2 체질. 금수3이므로 목금3은 모순.
+						}
+						else if (mok_idx > geum_idx) {
+							my_body8_type = SU1; //"소음1"; //
+						}
+						else if (geum_idx > mok_idx) {
+							my_body8_type = SU2; //소음2
+						}
+					}
+					else if (to_idx > mok_idx) { //: 목 약하면 태양1 혹은 태양2 
+						//"태양1":"금>수>토>화>목" 
+						//"태양2":"금>토>화>수>목"
+
+						if ( (su_idx==0 && to_idx==0) ) { //태양체질은 수토 없다면
+							my_body8_type = "없음"; //토 있으므로 토 없다면 모순
+						}
+						else if ( (su_idx==3 && to_idx==3) ) {
+							my_body8_type = "없음"; //금수3이므로 수토3은 모순.
+						}
+						else if (su_idx > to_idx) {
+							my_body8_type = TY1; //태양1
+						}
+						else if (to_idx > su_idx) {
+							my_body8_type = TY2; //"태양2"; //
 						}
 					}
 				}
 				else if (geum_idx > su_idx) { //금>수: 태양
 					//"태양1":"금>수>토>화>목" 
 					//"태양2":"금>토>화>수>목"
-				
-					if (su_idx==0 && to_idx==0) { //수토가 없다면:
-						my_body8_type = TY1; //"태양1"; //상화 강, 군화 약: 태양1
+
+					if ( (su_idx==0 && to_idx==0) ) { //수토가 없다면:
+						my_body8_type = TY1; //"태양1"; // //상화 강, 군화 약: 태양1
+					}
+					else if ( (su_idx==3 && to_idx==3) ) {
+						my_body8_type = TY1; 
 					}
 					else if (su_idx > to_idx) {
-						my_body8_type = TY1; //"태양1";
+						my_body8_type = TY1; //"태양1"; //
 					}
 					else if (to_idx > su_idx) {
-						my_body8_type = TY2; //"태양2";
+						my_body8_type = TY2; //"태양2"; //
 					}
 				}
 				else if (su_idx > geum_idx) { //수>금: 소음
 					//"소음1":"수>목>화>금>토" 
 					//"소음2":"수>금>목>화>토"
 
-					if (mok_idx==0 && geum_idx==0) { //목금이 없다면:
-						my_body8_type = SU2; //"소음2"; //상화 강, 군화 약: 소음2
+					if ( (mok_idx==0 && geum_idx==0) ) { //목금이 없다면:
+						my_body8_type = SU2; //"소음2"; // //상화 강, 군화 약: 소음2
+					}
+					else if ( (mok_idx==3 && geum_idx==3) ) {
+						my_body8_type = SU2; 
 					}
 					else if (mok_idx > geum_idx) {
-						my_body8_type = SU1; //"소음1";
+						my_body8_type = SU1; //"소음1"; //
 					}
 					else if (geum_idx > mok_idx) {
-						my_body8_type = SU2; //"소음2";
+						my_body8_type = SU2; //"소음2"; //
 					}
 				}
 			}
 
 
-			var my_5haeng_sort = getSortJoinFrom5haeng(day_ji, month_ji, year_ji, day_gan, month_gan, year_gan);
-
-			return [`${day_gan}${day_ji}`, `${month_gan}${month_ji}`, `${year_gan}${year_ji}`, my_5haeng_sort, my_body8_type];
+			return [my_body8_type, sang_hwa_idx, gun_hwa_idx, mok_idx, hwa_idx, to_idx, geum_idx, su_idx];
 		}
 
 		
@@ -18757,7 +19439,7 @@ https://www.sajulink.com/ssMain/cal_1.jsp
 
 엑셀 파일 만들기(배열) : <br><br>
 시작 연도: <input type="text" id="10000_start_year" value="1921" /> <br>
-종료 연도: <input type="text" id="10000_end_year" value="2050" /><br><br>
+종료 연도: <input type="text" id="10000_end_year" value="1930" placeholder="최대값: 2050" /><br><br>
 출판: <input type="button" id="excelFileExport" value="만세력(배열)-엑셀" />
 
 <br><br><br>
