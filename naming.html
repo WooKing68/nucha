@@ -7999,6 +7999,14 @@ var g_jamo_num =
                 &nbsp;&nbsp;&nbsp;뜻: <input type="text" name="txtMeaning" size="5"> <input type="button" value='검색' onClick="searchHanjaByMeaning();"><br> 
                 &nbsp;&nbsp;&nbsp;음: <input type="text" name="txtSound" size="5"> <input type="button" value='검색' onClick="searchHanjaBySound();"><br> 
                 한자: <input type="text" name="txtHanja" size="5"> <input type="button" value='검색' onClick="searchHanjaByHanja();"><br>
+                오행: <select name="FiveUnSelect" style="width:120px;" onchange="searchHanjaByFiveUn(this);">
+                        <option value="">
+                        <option value="木">木
+                        <option value="火">火
+                        <option value="土">土
+                        <option value="金">金
+                        <option value="水">水
+                    </select><br>
                 
                 <table border=1>
                     <tr>
@@ -8283,6 +8291,51 @@ var g_jamo_num =
         }  
     }
 
+
+
+    function searchHanjaByFiveUn(aThis) {
+
+        clearSearchList();
+
+        //선택한 오운(오행)
+        var ii = -1;
+
+        var my_obj = document.getElementsByName("FiveUnSelect");
+
+        for (var i=0;i<my_obj.length;i++) {
+            if (my_obj[i]==aThis) {
+                ii = i;
+                break;
+            }
+        }
+
+        var idx = my_obj[ii].selectedIndex;
+        if (idx == 0) {
+            return;
+        }
+
+        var my_val = my_obj[ii].options[idx].value;
+
+
+        //선택한 오운(오행) my_val에 해당하는 한자 찾기
+        for (var i=0;i<g_hanja_list.length;i++) { //
+
+            var s = g_hanja_list[i].split("/");
+
+            var last_char = g_hanja_list[i].charAt(g_hanja_list[i].length - 1);
+
+            if ( my_val === last_char ) { //
+
+                var list_len = document.SearchHanjaForm.SearchHanjaResultList.length;
+
+                //document.SearchHanjaForm.SearchHanjaResultList.options[list_len] = new Option("key", "value");
+                document.SearchHanjaForm.SearchHanjaResultList.options[list_len] = new Option(s[0] +"/"+s[1]+"/"+s[2]+"/"+s[3]+"......"+s[4]+"/"+s[5], g_hanja_list[i]);
+
+            }
+        }
+    }
+
+
     function showHanja() {
         var sel_idx = document.SearchHanjaForm.SearchHanjaResultList.selectedIndex;
         if (sel_idx == 0) {return;}
@@ -8294,6 +8347,8 @@ var g_jamo_num =
         document.getElementById("p_hanja").style.fontSize = "100px";
         document.getElementById("p_hanja").innerHTML = s[3];
     }
+
+
 
     function name_given() {
         var sel_idx = document.SearchHanjaForm.SearchHanjaResultList.selectedIndex;
