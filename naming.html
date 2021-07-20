@@ -7988,10 +7988,48 @@ var g_chosung = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 
         <tr>
             <td>성씨 획수: <input type="text" name="txtCustomerGivenNum" size="5">&nbsp;<input type="button" value="생성" onclick="zenNum81();"></td>
             <td>&nbsp;&nbsp;81 길수:
-                <select name="ZenNum81List">
+                <select name="ZenNum81List" id="ZenNum81List" onchange="">
                     <option>(성씨, 가운데 이름, 끝 이름)</option>
                 </select>
             </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <b>가운데 이름</b> -
+                한자 오행:
+                    <select id="select_five_un_multi_1" style="width:50px;">
+                        <option value="">
+                        <option value="木">木
+                        <option value="火">火
+                        <option value="土">土
+                        <option value="金">金
+                        <option value="水">水
+                    </select>
+                한글 초성: <input type="text" id="txt_hangeul_head_sound_multi_1" size="1">
+            </td>
+            <td rowspan="2">
+                <input type="button" id="btn_search_auto" value="원형이정 검색" onclick="searchAutoHanjaName();">
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;끝 이름</b> -
+                한자 오행:
+                    <select id="select_five_un_multi_2" style="width:50px;">
+                        <option value="">
+                        <option value="木">木
+                        <option value="火">火
+                        <option value="土">土
+                        <option value="金">金
+                        <option value="水">水
+                    </select>
+                한글 초성: <input type="text" id="txt_hangeul_head_sound_multi_2" size="1">
+            </td>
+            <td></td>
+            <td></td>
         </tr>
     </table>
     <table>
@@ -8187,8 +8225,6 @@ var g_chosung = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 
     function zenNum81() {
         clearZenNum81();
 
-
-
         var i_customer_Given_num = my_opener.my_eval(document.SearchHanjaForm.txtCustomerGivenNum.value);
 
         //Chrome에서 콘솔창 보려면 <Ctrl+Shift+J>
@@ -8214,6 +8250,11 @@ var g_chosung = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 
 
                     if ( (s_won_gil == '吉') && (s_hyeong_gil == '吉') && (s_lee_gil == '吉') && (s_jung_gil == '吉') ) {
                         //console.log(i + ", " + j);
+
+                        if (i>=40 || j>=40) {
+                            continue;
+                        }
+
                         var list_len = document.SearchHanjaForm.ZenNum81List.length; 
                         document.SearchHanjaForm.ZenNum81List.options[list_len] = new Option(i_customer_Given_num + "획, " + i + "획, " + j + "획", "");
                         document.SearchHanjaForm.ZenNum81List.selectedIndex = list_len;
@@ -8221,6 +8262,88 @@ var g_chosung = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 
                 }
             }
         } 
+    }
+
+
+    function searchAutoHanjaName() {
+        clearSearchList();
+
+        var objZenNum81List = document.getElementById("ZenNum81List");
+        var idxZenNum81List = objZenNum81List.selectedIndex;
+
+        if (idxZenNum81List===0) {
+            return "";
+        }
+
+        var txtZenNum81List = objZenNum81List.options[idxZenNum81List].text;
+
+        var numZenNum81List = txtZenNum81List.split(", ");
+
+        //substr(시작인덱스, 길이)
+        //var hanjaNum_0 = numZenNum81List[0].substr(0, numZenNum81List[0].length - 1);
+
+        var hanjaNum_1 = numZenNum81List[1].substr(0, numZenNum81List[1].length - 1); //가운데 이름 한자 획수
+        var hanjaNum_2 = numZenNum81List[2].substr(0, numZenNum81List[2].length - 1); //끝 이름 한자 획수
+
+        //사용자가 입력한 [가운데 이름, 끝 이름] 정보들
+        var my_hanja_fiveun_1 = document.getElementById("select_five_un_multi_1").value;
+        var my_hangeul_head_sound_1 = document.getElementById("txt_hangeul_head_sound_multi_1").value; //한글 초성
+
+        var my_hanja_fiveun_2 = document.getElementById("select_five_un_multi_2").value;
+        var my_hangeul_head_sound_2 = document.getElementById("txt_hangeul_head_sound_multi_2").value; //한글 초성
+
+        if (my_hanja_fiveun_1 === "") {
+            alert("아래쪽에서 [가운데 이름]의 [한자 오행]을 선택하세요.");
+            return;
+        }
+
+        if (my_hangeul_head_sound_1 === "") {
+            alert("아래쪽에서 [가운데 이름]의 [한글 초성]을 입력하세요.");
+            return;
+        }
+
+        if (my_hanja_fiveun_2 === "") {
+            alert("아래쪽에서 [끝 이름]의 [한자 오행]을 선택하세요.");
+            return;
+        }
+
+        if (my_hangeul_head_sound_2 === "") {
+            alert("아래쪽에서 [끝 이름]의 [한글 초성]을 입력하세요.");
+            return;
+        }
+
+        //다중 조건을 만족하는 한자 찾기
+        var list_len = -1;
+        for (var i=0;i<g_hanja_list.length;i++) { //
+
+            var i_s = g_hanja_list[i].split("/");
+            var i_hanja_num_list = i_s[0]; //한자 획수
+            var i_hanja_five_un_list = i_s[5]; //한자 오행
+            var i_hangeul_sound = i_s[2]; //한자 음(한글)
+            var i_hangeul_head_sound_list = getChoSung(i_hangeul_sound);
+
+            if (hanjaNum_1 === i_hanja_num_list && my_hanja_fiveun_1 === i_hanja_five_un_list && my_hangeul_head_sound_1 === i_hangeul_head_sound_list) {
+                for (var j=0;j<g_hanja_list.length;j++) {
+                    var j_s = g_hanja_list[j].split("/");
+                    var j_hanja_num_list = j_s[0]; //한자 획수
+                    var j_hanja_five_un_list = j_s[5]; //한자 오행
+                    var j_hangeul_sound = j_s[2]; //한자 음(한글)
+                    var j_hangeul_head_sound_list = getChoSung(j_hangeul_sound);
+
+                    if (hanjaNum_2 === j_hanja_num_list && my_hanja_fiveun_2 === j_hanja_five_un_list && my_hangeul_head_sound_2 === j_hangeul_head_sound_list) {
+                        //document.SearchHanjaForm.SearchHanjaResultList.options[list_len] = new Option("key", "value");
+
+                        list_len = document.SearchHanjaForm.SearchHanjaResultList.length;
+                        document.SearchHanjaForm.SearchHanjaResultList.options[list_len] = new Option(i_s[0] +"/"+i_s[1]+"/"+i_s[2]+"/"+i_s[3]+"......"+i_s[4]+"/"+i_s[5], g_hanja_list[i]);
+
+                        list_len = document.SearchHanjaForm.SearchHanjaResultList.length;
+                        document.SearchHanjaForm.SearchHanjaResultList.options[list_len] = new Option(j_s[0] +"/"+j_s[1]+"/"+j_s[2]+"/"+j_s[3]+"......"+j_s[4]+"/"+j_s[5], g_hanja_list[j]);
+                    }
+                }
+            }
+
+
+        }
     }
     
 
