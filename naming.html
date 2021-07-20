@@ -13,6 +13,7 @@
 <script language="javascript" type="text/javascript">
 
 //획수/뜻/한글/한자/부수/자원오행/획오행
+//데이터 오류: 둥근옥 벽
 var g_hanja_list = [
     '1/새/을/乙/乙/木', 
     '1/새,굽을/을/乙/乙/木', 
@@ -7972,6 +7973,8 @@ var g_jamo_num =
         'ㄳ':3, 'ㄵ':4, 'ㄶ':4, 'ㄺ':4, 'ㄻ':6, 'ㄼ':7, 'ㄽ':5, 'ㄾ':6, 'ㄿ':7, 'ㅀ':6, 'ㅄ':6,
         'ㅐ':3, 'ㅒ':4, 'ㅔ':3, 'ㅖ':4, 'ㅘ':4, 'ㅙ':5, 'ㅚ':3, 'ㅝ':4, 'ㅞ':5, 'ㅟ':3, 'ㅢ':2
     };
+
+var g_chosung = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
 </script>
 
 
@@ -7999,7 +8002,7 @@ var g_jamo_num =
                 &nbsp;&nbsp;&nbsp;뜻: <input type="text" name="txtMeaning" size="5"> <input type="button" value='검색' onClick="searchHanjaByMeaning();"><br> 
                 &nbsp;&nbsp;&nbsp;음: <input type="text" name="txtSound" size="5"> <input type="button" value='검색' onClick="searchHanjaBySound();"><br> 
                 한자: <input type="text" name="txtHanja" size="5"> <input type="button" value='검색' onClick="searchHanjaByHanja();"><br>
-                오행: <select name="FiveUnSelect" style="width:120px;" onchange="searchHanjaByFiveUn(this);">
+                오행: <select id="FiveUnSelect" style="width:120px;" onchange="searchHanjaByFiveUn();">
                         <option value="">
                         <option value="木">木
                         <option value="火">火
@@ -8027,8 +8030,26 @@ var g_jamo_num =
                 </select>
         </td>
         </tr>
-            
-    
+    </table>
+    <br>
+    <table>
+        <tr>
+            <td align=left>
+                <b>교차검색</b><br>
+                한자 획수: <input type="text" id="txt_hanja_num_multi" size="3">
+                한자 오행:
+                    <select id="select_five_un_multi" style="width:50px;">
+                        <option value="">
+                        <option value="木">木
+                        <option value="火">火
+                        <option value="土">土
+                        <option value="金">金
+                        <option value="水">水
+                    </select>
+                한글 초성: <input type="text" id="txt_hangeul_head_sound_multi" size="3">
+                <input type="button" name="btn_search_hanja_multi" value="검색" onclick="searchHanjaByMulti()">
+            </td>
+        </tr>
     </table>
     <br>
     <table>
@@ -8093,6 +8114,8 @@ var g_jamo_num =
 -->
 
 <script language="javascript" type="text/javascript">
+
+
 
     var my_opener = window.opener;
     var pDoc = my_opener.document;
@@ -8164,10 +8187,12 @@ var g_jamo_num =
     function zenNum81() {
         clearZenNum81();
 
+
+
         var i_customer_Given_num = my_opener.my_eval(document.SearchHanjaForm.txtCustomerGivenNum.value);
 
         //Chrome에서 콘솔창 보려면 <Ctrl+Shift+J>
-        //console.log("성씨 획수: " + i_customer_Given_num);
+        console.log("성씨 획수: " + i_customer_Given_num);
 
         var dict_size = Object.keys(gg_name81su_dict).length;
         
@@ -8207,7 +8232,21 @@ var g_jamo_num =
         for(i = list_len - 1 ; i > 0 ; i--) {
             my_select.remove(i);
         }
-    } 
+    }
+
+
+    function getChoSung(src) {
+
+
+		var s = '';
+		for(var i=0; i<src.length; i++) {
+			var index = Math.floor(((src.charCodeAt(i) - 44032) /28) / 21);
+			if(index >= 0) {
+				s += g_chosung[index];
+			}
+		}
+		return s;
+    }
    
     
     function searchHanjaByNum() {
@@ -8291,30 +8330,27 @@ var g_jamo_num =
         }  
     }
 
-
-
-    function searchHanjaByFiveUn(aThis) {
-
-        clearSearchList();
-
+    function getFiveUnSelectValue() {
         //선택한 오운(오행)
         var ii = -1;
 
-        var my_obj = document.getElementsByName("FiveUnSelect");
+        var my_obj = document.getElementById("FiveUnSelect");
 
-        for (var i=0;i<my_obj.length;i++) {
-            if (my_obj[i]==aThis) {
-                ii = i;
-                break;
-            }
-        }
-
-        var idx = my_obj[ii].selectedIndex;
+        var idx = my_obj.selectedIndex;
         if (idx == 0) {
-            return;
+            return "";
         }
 
-        var my_val = my_obj[ii].options[idx].value;
+        var my_val = my_obj.options[idx].value;
+
+        return my_val;
+    }
+
+    function searchHanjaByFiveUn() {
+
+        clearSearchList();
+
+        var my_val = getFiveUnSelectValue();
 
 
         //선택한 오운(오행) my_val에 해당하는 한자 찾기
@@ -8333,6 +8369,44 @@ var g_jamo_num =
 
             }
         }
+    }
+
+    function searchHanjaByMulti() {
+        clearSearchList();
+
+
+
+        //사용자가 입력한 정보들
+        var hanja_num = document.getElementById('txt_hanja_num_multi').value.trim(); // 한자 획수
+        var hanja_five_un = document.getElementById('select_five_un_multi').value.trim(); //한자 오행
+        var hangeul_head_sound = document.getElementById('txt_hangeul_head_sound_multi').value.trim(); //한글 초성
+
+
+
+        //다중 조건을 만족하는 한자 찾기
+        for (var i=0;i<g_hanja_list.length;i++) { //
+
+            var s = g_hanja_list[i].split("/");
+
+            var hanja_num_list = s[0]; //한자 획수
+            var hanja_five_un_list = s[5]; //한자 오행
+            var hangeul_sound = s[2]; //한자 음(한글)
+            var hangeul_head_sound_list = getChoSung(hangeul_sound);
+
+            var b_hanja_num = (hanja_num==="") ? true : (hanja_num === hanja_num_list);
+            var b_hanja_five_un = (hanja_five_un==="") ? true : (hanja_five_un === hanja_five_un_list);
+            var b_hangeul_head_sound = (hangeul_head_sound==="") ? true : (hangeul_head_sound === hangeul_head_sound_list);
+
+            if ( b_hanja_num &&  b_hanja_five_un && b_hangeul_head_sound) { //
+
+                var list_len = document.SearchHanjaForm.SearchHanjaResultList.length;
+
+                //document.SearchHanjaForm.SearchHanjaResultList.options[list_len] = new Option("key", "value");
+                document.SearchHanjaForm.SearchHanjaResultList.options[list_len] = new Option(s[0] +"/"+s[1]+"/"+s[2]+"/"+s[3]+"......"+s[4]+"/"+s[5], g_hanja_list[i]);
+
+            }
+        }
+
     }
 
 
